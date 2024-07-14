@@ -7,20 +7,102 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C47C3452C395A5B00692E1D /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C47C3442C395A5B00692E1D /* CloudKitManager.swift */; };
 		2C5EFC602C07D6B4004B1AE0 /* DrinkWaterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC5F2C07D6B4004B1AE0 /* DrinkWaterApp.swift */; };
 		2C5EFC622C07D6B4004B1AE0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC612C07D6B4004B1AE0 /* ContentView.swift */; };
-		2C5EFC642C07D6B4004B1AE0 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC632C07D6B4004B1AE0 /* Item.swift */; };
 		2C5EFC662C07D6B6004B1AE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C5EFC652C07D6B6004B1AE0 /* Assets.xcassets */; };
 		2C5EFC692C07D6B6004B1AE0 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C5EFC682C07D6B6004B1AE0 /* Preview Assets.xcassets */; };
+		2C5EFC752C07D732004B1AE0 /* SelectDrinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC6F2C07D732004B1AE0 /* SelectDrinkView.swift */; };
+		2C5EFC762C07D732004B1AE0 /* AdditionalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC702C07D732004B1AE0 /* AdditionalInfoView.swift */; };
+		2C5EFC772C07D732004B1AE0 /* SelectGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC712C07D732004B1AE0 /* SelectGenderView.swift */; };
+		2C5EFC782C07D732004B1AE0 /* StatisticsDrinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC722C07D732004B1AE0 /* StatisticsDrinkView.swift */; };
+		2C5EFC792C07D732004B1AE0 /* CustomAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC732C07D732004B1AE0 /* CustomAmountView.swift */; };
+		2C5EFC7A2C07D732004B1AE0 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC742C07D732004B1AE0 /* MainView.swift */; };
+		2C5EFC7C2C086C4B004B1AE0 /* HistoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC7B2C086C4B004B1AE0 /* HistoryItemView.swift */; };
+		2C5EFC7E2C09BA28004B1AE0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC7D2C09BA28004B1AE0 /* Constants.swift */; };
+		2C6CB4672C31C867004E4FA6 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CB4662C31C867004E4FA6 /* UserDefaultsManager.swift */; };
+		2C6CB4692C349D47004E4FA6 /* MailComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CB4682C349D47004E4FA6 /* MailComposeViewController.swift */; };
+		2C6CB46D2C349F3C004E4FA6 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CB46C2C349F3C004E4FA6 /* HealthKitManager.swift */; };
+		2C725E932C10F92D005359CB /* AchievementsModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725E922C10F92D005359CB /* AchievementsModalView.swift */; };
+		2C725E9A2C178539005359CB /* PurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725E992C178539005359CB /* PurchaseView.swift */; };
+		2C725E9E2C1A17B3005359CB /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725E9D2C1A17B3005359CB /* Profile.swift */; };
+		2C725EA02C1A2665005359CB /* DataDrinking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725E9F2C1A2665005359CB /* DataDrinking.swift */; };
+		2C725EA22C1A273D005359CB /* DataDrinkingOfTheDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EA12C1A273D005359CB /* DataDrinkingOfTheDay.swift */; };
+		2C725EA42C1A285B005359CB /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EA32C1A285B005359CB /* Reminder.swift */; };
+		2C725EA62C1A292D005359CB /* Date+toString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EA52C1A292D005359CB /* Date+toString.swift */; };
+		2C725EA82C1A2A5D005359CB /* Calender+Dates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EA72C1A2A5D005359CB /* Calender+Dates.swift */; };
+		2C725EAA2C1A2AC9005359CB /* DateForDrinkWater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EA92C1A2AC9005359CB /* DateForDrinkWater.swift */; };
+		2C725EAE2C1A3855005359CB /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EAD2C1A3855005359CB /* ProfileViewModel.swift */; };
+		2C725EB02C1A3869005359CB /* DataDrinkingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EAF2C1A3869005359CB /* DataDrinkingViewModel.swift */; };
+		2C725EB22C1A3875005359CB /* DataDrinkingOfTheDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EB12C1A3875005359CB /* DataDrinkingOfTheDayViewModel.swift */; };
+		2C725EB42C1A3880005359CB /* RemindersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EB32C1A3880005359CB /* RemindersViewModel.swift */; };
+		2CA3CC2E2C44396A003BC364 /* Sound-3.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC282C44396A003BC364 /* Sound-3.aiff */; };
+		2CA3CC2F2C44396A003BC364 /* Sound-4.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC292C44396A003BC364 /* Sound-4.aiff */; };
+		2CA3CC302C44396A003BC364 /* Sound-2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC2A2C44396A003BC364 /* Sound-2.aiff */; };
+		2CA3CC312C44396A003BC364 /* Sound-5.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC2B2C44396A003BC364 /* Sound-5.aiff */; };
+		2CA3CC322C44396A003BC364 /* Sound-6.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC2C2C44396A003BC364 /* Sound-6.aiff */; };
+		2CA3CC332C44396A003BC364 /* Sound-1.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC2D2C44396A003BC364 /* Sound-1.aiff */; };
+		2CA3CC352C445104003BC364 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3CC342C445104003BC364 /* StoreManager.swift */; };
+		2CBB29B42C0CA4F800C8C2FA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29B32C0CA4F800C8C2FA /* SettingsView.swift */; };
+		2CBB29B62C0CAF3E00C8C2FA /* WeightModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29B52C0CAF3E00C8C2FA /* WeightModalView.swift */; };
+		2CBB29B82C0CAF5600C8C2FA /* NormModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29B72C0CAF5600C8C2FA /* NormModalView.swift */; };
+		2CBB29BA2C0CC96D00C8C2FA /* HydrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29B92C0CC96D00C8C2FA /* HydrationView.swift */; };
+		2CBB29BC2C0CC9A600C8C2FA /* RemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29BB2C0CC9A600C8C2FA /* RemindersView.swift */; };
+		2CBB29BE2C0CCFDD00C8C2FA /* HydrationItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29BD2C0CCFDD00C8C2FA /* HydrationItemView.swift */; };
+		2CBB29C02C0F420A00C8C2FA /* SoundModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29BF2C0F420A00C8C2FA /* SoundModalView.swift */; };
+		2CBB29C22C0F441200C8C2FA /* IntervalModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29C12C0F441200C8C2FA /* IntervalModalView.swift */; };
+		2CBB29C42C0F4A0300C8C2FA /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29C32C0F4A0300C8C2FA /* AchievementsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2C0E975E2C35F3CE0034B237 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C47C33F2C373EA100692E1D /* DrinkWater.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = DrinkWater.entitlements; sourceTree = "<group>"; };
+		2C47C3442C395A5B00692E1D /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		2C5EFC5C2C07D6B4004B1AE0 /* DrinkWater.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrinkWater.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C5EFC5F2C07D6B4004B1AE0 /* DrinkWaterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkWaterApp.swift; sourceTree = "<group>"; };
 		2C5EFC612C07D6B4004B1AE0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		2C5EFC632C07D6B4004B1AE0 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		2C5EFC652C07D6B6004B1AE0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C5EFC682C07D6B6004B1AE0 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2C5EFC6F2C07D732004B1AE0 /* SelectDrinkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectDrinkView.swift; sourceTree = "<group>"; };
+		2C5EFC702C07D732004B1AE0 /* AdditionalInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdditionalInfoView.swift; sourceTree = "<group>"; };
+		2C5EFC712C07D732004B1AE0 /* SelectGenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectGenderView.swift; sourceTree = "<group>"; };
+		2C5EFC722C07D732004B1AE0 /* StatisticsDrinkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsDrinkView.swift; sourceTree = "<group>"; };
+		2C5EFC732C07D732004B1AE0 /* CustomAmountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAmountView.swift; sourceTree = "<group>"; };
+		2C5EFC742C07D732004B1AE0 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		2C5EFC7B2C086C4B004B1AE0 /* HistoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItemView.swift; sourceTree = "<group>"; };
+		2C5EFC7D2C09BA28004B1AE0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2C6CB4662C31C867004E4FA6 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
+		2C6CB4682C349D47004E4FA6 /* MailComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailComposeViewController.swift; sourceTree = "<group>"; };
+		2C6CB46C2C349F3C004E4FA6 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		2C725E922C10F92D005359CB /* AchievementsModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsModalView.swift; sourceTree = "<group>"; };
+		2C725E992C178539005359CB /* PurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseView.swift; sourceTree = "<group>"; };
+		2C725E9D2C1A17B3005359CB /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		2C725E9F2C1A2665005359CB /* DataDrinking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDrinking.swift; sourceTree = "<group>"; };
+		2C725EA12C1A273D005359CB /* DataDrinkingOfTheDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDrinkingOfTheDay.swift; sourceTree = "<group>"; };
+		2C725EA32C1A285B005359CB /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		2C725EA52C1A292D005359CB /* Date+toString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+toString.swift"; sourceTree = "<group>"; };
+		2C725EA72C1A2A5D005359CB /* Calender+Dates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calender+Dates.swift"; sourceTree = "<group>"; };
+		2C725EA92C1A2AC9005359CB /* DateForDrinkWater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateForDrinkWater.swift; sourceTree = "<group>"; };
+		2C725EAD2C1A3855005359CB /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		2C725EAF2C1A3869005359CB /* DataDrinkingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDrinkingViewModel.swift; sourceTree = "<group>"; };
+		2C725EB12C1A3875005359CB /* DataDrinkingOfTheDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDrinkingOfTheDayViewModel.swift; sourceTree = "<group>"; };
+		2C725EB32C1A3880005359CB /* RemindersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersViewModel.swift; sourceTree = "<group>"; };
+		2CA3CC282C44396A003BC364 /* Sound-3.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-3.aiff"; sourceTree = "<group>"; };
+		2CA3CC292C44396A003BC364 /* Sound-4.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-4.aiff"; sourceTree = "<group>"; };
+		2CA3CC2A2C44396A003BC364 /* Sound-2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-2.aiff"; sourceTree = "<group>"; };
+		2CA3CC2B2C44396A003BC364 /* Sound-5.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-5.aiff"; sourceTree = "<group>"; };
+		2CA3CC2C2C44396A003BC364 /* Sound-6.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-6.aiff"; sourceTree = "<group>"; };
+		2CA3CC2D2C44396A003BC364 /* Sound-1.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-1.aiff"; sourceTree = "<group>"; };
+		2CA3CC342C445104003BC364 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		2CBB29B32C0CA4F800C8C2FA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2CBB29B52C0CAF3E00C8C2FA /* WeightModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightModalView.swift; sourceTree = "<group>"; };
+		2CBB29B72C0CAF5600C8C2FA /* NormModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormModalView.swift; sourceTree = "<group>"; };
+		2CBB29B92C0CC96D00C8C2FA /* HydrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationView.swift; sourceTree = "<group>"; };
+		2CBB29BB2C0CC9A600C8C2FA /* RemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersView.swift; sourceTree = "<group>"; };
+		2CBB29BD2C0CCFDD00C8C2FA /* HydrationItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HydrationItemView.swift; sourceTree = "<group>"; };
+		2CBB29BF2C0F420A00C8C2FA /* SoundModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundModalView.swift; sourceTree = "<group>"; };
+		2CBB29C12C0F441200C8C2FA /* IntervalModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalModalView.swift; sourceTree = "<group>"; };
+		2CBB29C32C0F4A0300C8C2FA /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +116,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C0E97622C373B1B0034B237 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2C47C33F2C373EA100692E1D /* DrinkWater.entitlements */,
+				2C0E975E2C35F3CE0034B237 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		2C5EFC532C07D6B4004B1AE0 = {
 			isa = PBXGroup;
 			children = (
@@ -53,9 +144,15 @@
 		2C5EFC5E2C07D6B4004B1AE0 /* DrinkWater */ = {
 			isa = PBXGroup;
 			children = (
-				2C5EFC5F2C07D6B4004B1AE0 /* DrinkWaterApp.swift */,
+				2C5EFC7D2C09BA28004B1AE0 /* Constants.swift */,
 				2C5EFC612C07D6B4004B1AE0 /* ContentView.swift */,
-				2C5EFC632C07D6B4004B1AE0 /* Item.swift */,
+				2C6CB4652C31C848004E4FA6 /* Helpers */,
+				2C725E9B2C1A1785005359CB /* Persistence */,
+				2C725E962C13157F005359CB /* Extensions */,
+				2C725EAB2C1A381A005359CB /* ViewModel */,
+				2C725EAC2C1A382B005359CB /* View */,
+				2CA3CC272C443947003BC364 /* Resources */,
+				2C0E97622C373B1B0034B237 /* Supporting Files */,
 				2C5EFC652C07D6B6004B1AE0 /* Assets.xcassets */,
 				2C5EFC672C07D6B6004B1AE0 /* Preview Content */,
 			);
@@ -68,6 +165,97 @@
 				2C5EFC682C07D6B6004B1AE0 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		2C6CB4652C31C848004E4FA6 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				2C6CB46C2C349F3C004E4FA6 /* HealthKitManager.swift */,
+				2C6CB4662C31C867004E4FA6 /* UserDefaultsManager.swift */,
+				2C6CB4682C349D47004E4FA6 /* MailComposeViewController.swift */,
+				2C47C3442C395A5B00692E1D /* CloudKitManager.swift */,
+				2CA3CC342C445104003BC364 /* StoreManager.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		2C725E962C13157F005359CB /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2C725EA72C1A2A5D005359CB /* Calender+Dates.swift */,
+				2C725EA52C1A292D005359CB /* Date+toString.swift */,
+				2C725EA92C1A2AC9005359CB /* DateForDrinkWater.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		2C725E9B2C1A1785005359CB /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				2C725E9C2C1A179B005359CB /* SwiftDataModel */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		2C725E9C2C1A179B005359CB /* SwiftDataModel */ = {
+			isa = PBXGroup;
+			children = (
+				2C725E9D2C1A17B3005359CB /* Profile.swift */,
+				2C725E9F2C1A2665005359CB /* DataDrinking.swift */,
+				2C725EA12C1A273D005359CB /* DataDrinkingOfTheDay.swift */,
+				2C725EA32C1A285B005359CB /* Reminder.swift */,
+			);
+			path = SwiftDataModel;
+			sourceTree = "<group>";
+		};
+		2C725EAB2C1A381A005359CB /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				2C725EAD2C1A3855005359CB /* ProfileViewModel.swift */,
+				2C725EAF2C1A3869005359CB /* DataDrinkingViewModel.swift */,
+				2C725EB12C1A3875005359CB /* DataDrinkingOfTheDayViewModel.swift */,
+				2C725EB32C1A3880005359CB /* RemindersViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		2C725EAC2C1A382B005359CB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2C5EFC712C07D732004B1AE0 /* SelectGenderView.swift */,
+				2C5EFC702C07D732004B1AE0 /* AdditionalInfoView.swift */,
+				2C5EFC742C07D732004B1AE0 /* MainView.swift */,
+				2C5EFC6F2C07D732004B1AE0 /* SelectDrinkView.swift */,
+				2C5EFC732C07D732004B1AE0 /* CustomAmountView.swift */,
+				2C5EFC722C07D732004B1AE0 /* StatisticsDrinkView.swift */,
+				2C5EFC7B2C086C4B004B1AE0 /* HistoryItemView.swift */,
+				2CBB29B32C0CA4F800C8C2FA /* SettingsView.swift */,
+				2CBB29BB2C0CC9A600C8C2FA /* RemindersView.swift */,
+				2CBB29B92C0CC96D00C8C2FA /* HydrationView.swift */,
+				2CBB29BD2C0CCFDD00C8C2FA /* HydrationItemView.swift */,
+				2C5EFC5F2C07D6B4004B1AE0 /* DrinkWaterApp.swift */,
+				2CBB29B52C0CAF3E00C8C2FA /* WeightModalView.swift */,
+				2CBB29B72C0CAF5600C8C2FA /* NormModalView.swift */,
+				2CBB29BF2C0F420A00C8C2FA /* SoundModalView.swift */,
+				2CBB29C12C0F441200C8C2FA /* IntervalModalView.swift */,
+				2CBB29C32C0F4A0300C8C2FA /* AchievementsView.swift */,
+				2C725E922C10F92D005359CB /* AchievementsModalView.swift */,
+				2C725E992C178539005359CB /* PurchaseView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2CA3CC272C443947003BC364 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2CA3CC2D2C44396A003BC364 /* Sound-1.aiff */,
+				2CA3CC2A2C44396A003BC364 /* Sound-2.aiff */,
+				2CA3CC282C44396A003BC364 /* Sound-3.aiff */,
+				2CA3CC292C44396A003BC364 /* Sound-4.aiff */,
+				2CA3CC2B2C44396A003BC364 /* Sound-5.aiff */,
+				2CA3CC2C2C44396A003BC364 /* Sound-6.aiff */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -107,11 +295,12 @@
 			};
 			buildConfigurationList = 2C5EFC572C07D6B4004B1AE0 /* Build configuration list for PBXProject "DrinkWater" */;
 			compatibilityVersion = "Xcode 14.0";
-			developmentRegion = en;
+			developmentRegion = ru;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 2C5EFC532C07D6B4004B1AE0;
 			productRefGroup = 2C5EFC5D2C07D6B4004B1AE0 /* Products */;
@@ -129,7 +318,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				2C5EFC692C07D6B6004B1AE0 /* Preview Assets.xcassets in Resources */,
+				2CA3CC312C44396A003BC364 /* Sound-5.aiff in Resources */,
+				2CA3CC2E2C44396A003BC364 /* Sound-3.aiff in Resources */,
+				2CA3CC322C44396A003BC364 /* Sound-6.aiff in Resources */,
+				2CA3CC302C44396A003BC364 /* Sound-2.aiff in Resources */,
+				2CA3CC2F2C44396A003BC364 /* Sound-4.aiff in Resources */,
 				2C5EFC662C07D6B6004B1AE0 /* Assets.xcassets in Resources */,
+				2CA3CC332C44396A003BC364 /* Sound-1.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,9 +335,43 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C725EA02C1A2665005359CB /* DataDrinking.swift in Sources */,
+				2C725EA22C1A273D005359CB /* DataDrinkingOfTheDay.swift in Sources */,
+				2C725EAE2C1A3855005359CB /* ProfileViewModel.swift in Sources */,
+				2C725EAA2C1A2AC9005359CB /* DateForDrinkWater.swift in Sources */,
+				2C725E9A2C178539005359CB /* PurchaseView.swift in Sources */,
+				2CBB29C02C0F420A00C8C2FA /* SoundModalView.swift in Sources */,
+				2CBB29C42C0F4A0300C8C2FA /* AchievementsView.swift in Sources */,
+				2C725E932C10F92D005359CB /* AchievementsModalView.swift in Sources */,
+				2C5EFC762C07D732004B1AE0 /* AdditionalInfoView.swift in Sources */,
+				2C5EFC7C2C086C4B004B1AE0 /* HistoryItemView.swift in Sources */,
+				2C5EFC7A2C07D732004B1AE0 /* MainView.swift in Sources */,
+				2CA3CC352C445104003BC364 /* StoreManager.swift in Sources */,
+				2C725EA82C1A2A5D005359CB /* Calender+Dates.swift in Sources */,
+				2CBB29B82C0CAF5600C8C2FA /* NormModalView.swift in Sources */,
+				2C725EB02C1A3869005359CB /* DataDrinkingViewModel.swift in Sources */,
+				2CBB29C22C0F441200C8C2FA /* IntervalModalView.swift in Sources */,
 				2C5EFC622C07D6B4004B1AE0 /* ContentView.swift in Sources */,
-				2C5EFC642C07D6B4004B1AE0 /* Item.swift in Sources */,
+				2C5EFC792C07D732004B1AE0 /* CustomAmountView.swift in Sources */,
+				2C5EFC7E2C09BA28004B1AE0 /* Constants.swift in Sources */,
 				2C5EFC602C07D6B4004B1AE0 /* DrinkWaterApp.swift in Sources */,
+				2C6CB46D2C349F3C004E4FA6 /* HealthKitManager.swift in Sources */,
+				2C47C3452C395A5B00692E1D /* CloudKitManager.swift in Sources */,
+				2C725EA42C1A285B005359CB /* Reminder.swift in Sources */,
+				2C5EFC782C07D732004B1AE0 /* StatisticsDrinkView.swift in Sources */,
+				2CBB29BA2C0CC96D00C8C2FA /* HydrationView.swift in Sources */,
+				2CBB29B62C0CAF3E00C8C2FA /* WeightModalView.swift in Sources */,
+				2CBB29BC2C0CC9A600C8C2FA /* RemindersView.swift in Sources */,
+				2C5EFC752C07D732004B1AE0 /* SelectDrinkView.swift in Sources */,
+				2C5EFC772C07D732004B1AE0 /* SelectGenderView.swift in Sources */,
+				2C6CB4692C349D47004E4FA6 /* MailComposeViewController.swift in Sources */,
+				2C6CB4672C31C867004E4FA6 /* UserDefaultsManager.swift in Sources */,
+				2C725E9E2C1A17B3005359CB /* Profile.swift in Sources */,
+				2C725EA62C1A292D005359CB /* Date+toString.swift in Sources */,
+				2C725EB22C1A3875005359CB /* DataDrinkingOfTheDayViewModel.swift in Sources */,
+				2C725EB42C1A3880005359CB /* RemindersViewModel.swift in Sources */,
+				2CBB29BE2C0CCFDD00C8C2FA /* HydrationItemView.swift in Sources */,
+				2CBB29B42C0CA4F800C8C2FA /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,7 +430,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -258,7 +487,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -273,27 +502,37 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "DrinkWater/Supporting Files/DrinkWater.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWater/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DrinkWater/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Попей Водички";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We will use your health information to better calculate your daily goal";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We will enter information about the amount of drink consumed so that all information is stored in Apple Health";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -302,27 +541,37 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "DrinkWater/Supporting Files/DrinkWater.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWater/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DrinkWater/Supporting Files/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Попей Водички";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "We will use your health information to better calculate your daily goal";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We will enter information about the amount of drink consumed so that all information is stored in Apple Health";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater2;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
