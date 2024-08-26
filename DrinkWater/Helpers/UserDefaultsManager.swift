@@ -13,12 +13,27 @@ class UserDefaultsManager {
 
     static let shared = UserDefaultsManager()
 
+    private let userDefaults: UserDefaults
+    
+    private init() {
+        userDefaults = UserDefaults(suiteName: "group.com.alexander.l.DrinkWater")!
+    }
+    
     var isFirstSign: Bool {
         get {
             return getBoolForKey(Keys.isFirstSign, defaultValue: false)
         }
         set {
             setValueForKey(newValue, forKey: Keys.isFirstSign)
+        }
+    }
+    
+    var isMigration: Bool {
+        get {
+            return getBoolForKey(Keys.isMigration, defaultValue: false)
+        }
+        set {
+            setValueForKey(newValue, forKey: Keys.isMigration)
         }
     }
 
@@ -49,6 +64,15 @@ class UserDefaultsManager {
         }
     }
     
+    var hasPremium: Bool {
+        get {
+            return getBoolForKey(Keys.hasPremium, defaultValue: false)
+        }
+        set {
+            setValueForKey(newValue, forKey: Keys.hasPremium)
+        }
+    }
+    
     func setValueForUserDefaults(_ value: Any, _ key: String) {
         setValueForKey(value, forKey: key)
         widgetReloadAllTimelines()
@@ -58,6 +82,10 @@ class UserDefaultsManager {
         setValueForKey(value, forKey: key)
     }
 
+    func getStringValueForUserDefaults(_ key: String) -> String? {
+        return getStringForKey(key)
+    }
+    
     func getValueForUserDefaults(_ key: String) -> Int? {
         return getIntegerForKey(key)
     }
@@ -69,42 +97,32 @@ class UserDefaultsManager {
     private func widgetReloadAllTimelines() {
         WidgetCenter.shared.reloadAllTimelines()
     }
-
-    private init() {}
 }
 
 private extension UserDefaultsManager {
 
-    struct Suites {
-        static let suiteName = "group.com.alexander.l.DrinkWater"
-    }
-
     struct Keys {
+        static let isMigration = "isMigration"
         static let isFirstSign = "isFirstSign"
         static let isAuthorizationHealthKit = "authorizationHealthKit"
         static let isAuthorizationICloud = "isAuthorizationICloud"
         static let isAuthorizationSystemNotifications = "isAuthorizationSystemNotifications"
+        static let hasPremium = "com.alexander.l.DrinkWater.subscription.forever"
     }
 
     func setValueForKey(_ value: Any, forKey key: String) {
-        if let userDefaults = UserDefaults(suiteName: Suites.suiteName) {
-            userDefaults.set(value, forKey: key)
-        }
+        userDefaults.set(value, forKey: key)
     }
 
+    func getStringForKey(_ key: String) -> String {
+        userDefaults.string(forKey: key) ?? ""
+    }
+    
     func getIntegerForKey(_ key: String) -> Int {
-        if let userDefaults = UserDefaults(suiteName: Suites.suiteName) {
-            return userDefaults.integer(forKey: key)
-        } else {
-            return 0
-        }
+        userDefaults.integer(forKey: key)
     }
 
     func getBoolForKey(_ key: String, defaultValue: Bool) -> Bool {
-        if let userDefaults = UserDefaults(suiteName: Suites.suiteName) {
-            return userDefaults.bool(forKey: key)
-        } else {
-            return defaultValue
-        }
+        userDefaults.bool(forKey: key)
     }
 }

@@ -8,9 +8,11 @@
 
 import SwiftUI
 import SwiftData
+import AppMetricaCore
 
 struct MainView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
     
     @Query var profile: [Profile]
     @Query(sort: \DataDrinking.dateDrink, order: .forward) var dataDrinking: [DataDrinking]
@@ -23,12 +25,12 @@ struct MainView: View {
     var dataDrinkingViewModel = DataDrinkingViewModel()
     var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
-    @State private var  lastAmountDrink: Int = 250
-    @State private var  lastNameDrink: String = "Water"
-    @State private var  autoNormMl: Double = 2000
-    @State private var  unit: Int = 0
+    @State private var lastAmountDrink: Int = 250
+    @State private var lastNameDrink: String = "Water"
+    @State private var normDrink: Double = 2000
+    @State private var normDrinkLabel:  String = ""
+    @State private var unit: Int = 0
     
-    @State private var unitVolume = "мл."
     @State private var stopNorm = 0
     @State private var isShowingModal = false
     @State private var isAchievementShowingModal = false
@@ -37,9 +39,16 @@ struct MainView: View {
     @State private var isDrinkedPressed = false
     @State private var isPressedImpact = false
     @State private var isNormExceeding = false
-    @State private var isStopNorm = false
+    @State private var isNormExceedingModal = false
     
-    let hydration: [String: Double] = ["Water": 1.0, "Coffee": 0.8, "Tea": 0.9, "Milk": 0.9, "Juice": 0.8, "Soda": 0.9, "Cocoa": 0.7, "Smoothie": 0.3, "Yogurt": 0.5, "Beer": -0.6, "NonalcoholicBeer": 0.6, "Wine": -1.6]
+    private let backgroundExternalCircleColor: Color = Color(#colorLiteral(red: 0.631372549, green: 0.7921568627, blue: 0.9725490196, alpha: 1))
+    private let backgroundInternalCircleColor: Color = Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 1))
+    private let backgroundDrinkValueColor: Color = Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 1))
+    private let backgroundDrinkHeaderValueColor: Color = Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 0.6))
+    
+    @State private var isPurchaseViewModal = false
+    
+    let hydration: [String: Double] = Constants.Back.Drink.hydration
     
     enum DrinkAction {
         case drink
@@ -59,25 +68,25 @@ struct MainView: View {
                             // Базовый полукруглый путь для фона
                             Circle()
                                 .trim(from: 0.5, to: 1.0)
-                                .stroke(Color(#colorLiteral(red: 0.631372549, green: 0.7921568627, blue: 0.9725490196, alpha: 1)), lineWidth: 20)
+                                .stroke(backgroundExternalCircleColor, lineWidth: 20)
                                 .rotationEffect(.degrees(270))
                             // Заполняющаяся часть
                             Circle()
                                 .trim(from: 0.5, to: 0.5 + ((dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.percentDrinking ?? 0) / 100) / 2)
-                                .stroke(Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 1)), lineWidth: 15)
+                                .stroke(backgroundInternalCircleColor, lineWidth: 15)
                                 .rotationEffect(.degrees(270))
                                 .animation(.easeInOut(duration: 1.0), value: (dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.percentDrinking ?? 0) / 100)
                         }
-                        .frame(width: 645, height: 645)
+                        .frame(width: geometry.size.width * 1.7, height: geometry.size.width * 1.7)
                         .position(x: geometry.size.width / 0.99, y: geometry.size.height / 3)
                     }
                 }
                 GeometryReader { geometry in
                     HStack(alignment: .center) {
-                        if isShowingCancelButton {
+                        if dataDrinkingViewModel.isAvailiableRecordOfTheCurrentDay(dataDrinking: dataDrinking) {
                             Button(action: {
                                 isPressedImpact.toggle()
-                                drinkWaterAction(action: .cancel)
+                                drinkWaterAction(action: .cancel, nameDrink: nil, amountDrink: nil)
                             }) {
                                 Image("cancelButton")
                                     .resizable()
@@ -102,10 +111,13 @@ struct MainView: View {
                 GeometryReader { geometry in
                     VStack(spacing: 10) {
                         Text("Выпито")
-                            .font(Constants.Design.AppFont.BodyMainFont)
-                        Text("\(Int(dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.amountDrinkOfTheDay ?? 0)) мл")
-                            .font(Constants.Design.AppFont.BodyTitle1Font)
+                            .font(Constants.Design.Fonts.BodyMainFont)
+                        let amountDrinkOfTheDay = Double(dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.amountDrinkOfTheDay ?? 0)
+                        Text("\(unit == 0 ? amountDrinkOfTheDay.toStringMilli : amountDrinkOfTheDay.toStringOunces)")
+                            .contentTransition(.numericText(value: amountDrinkOfTheDay))
+                            .font(Constants.Design.Fonts.BodyTitle1Font)
                             .bold()
+                            .animation(.easeInOut, value: amountDrinkOfTheDay)
                     }
                     .foregroundStyle(.white)
                     .position(x: geometry.size.width / 1.45, y: geometry.size.height / 5)
@@ -113,17 +125,23 @@ struct MainView: View {
                 GeometryReader { geometry in
                     VStack(spacing: 7) {
                         Text("Цель")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
-                            .foregroundStyle(Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 0.6)))
-                        Text("\(Int(profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl))")
-                            .font(Constants.Design.AppFont.BodyMainFont)
-                            .foregroundStyle(Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 1)))
+                            .font(Constants.Design.Fonts.BodyMediumFont)
+                            .foregroundStyle(backgroundDrinkHeaderValueColor)
+                        Text("\(normDrinkLabel)")
+                            .font(Constants.Design.Fonts.BodyMainFont)
+                            .foregroundStyle(backgroundDrinkValueColor)
                     }
                     .position(x: geometry.size.width / 2.7, y: geometry.size.height / 2.7)
                 }
                 GeometryReader { geometry in
                     Button(action: {
-                        isAchievementShowingModal = true
+                        if purchaseManager.hasPremium {
+                            AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "AchievementsView"])
+                            isAchievementShowingModal = true
+                        } else {
+                            AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "AchievementsPurchaseView"])
+                            isPurchaseViewModal = true
+                        }
                     }) {
                         Image("1DayAchiev")
                             .resizable()
@@ -138,68 +156,69 @@ struct MainView: View {
                 GeometryReader { geometry in
                     VStack(spacing: 7) {
                         Text("Завершено")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
-                            .foregroundStyle(Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 0.6)))
-                        Text("\(Int(dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0))%")
-                            .font(Constants.Design.AppFont.BodyMainFont)
-                            .foregroundStyle(Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 1)))
+                            .font(Constants.Design.Fonts.BodyMediumFont)
+                            .foregroundStyle(backgroundDrinkHeaderValueColor)
+                        let percentDrink = dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0
+                        Text("\(Int(percentDrink).formatted(.percent))")
+                            .contentTransition(.numericText(value: percentDrink))
+                            .font(Constants.Design.Fonts.BodyMainFont)
+                            .foregroundStyle(backgroundDrinkValueColor)
+                            .animation(.easeInOut, value: percentDrink)
                     }
                     .position(x: geometry.size.width / 1.8, y: geometry.size.height / 1.9)
                 }
                 GeometryReader { geometry in
-                    HStack(alignment: .center) {
-                        Button(action: {
-                            isShowingModal = true
-                        }) {
-                            Image("WaterMain")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 60, height: 60)
-                        }
-                        Spacer()
-                        Button(action: {
-                            isDrinkedPressed = true
-                            isPressedImpact.toggle()
-                            drinkWaterAction(action: .drink)
-                        }) {
-                            Image("drinkWateButton")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 100, height: 100)
-                        }
-                        .sensoryFeedback(.impact, trigger: isPressedImpact)
-                        .scaleEffect(isDrinkedPressed ? 0.5 : 1.0)
-                        .animation(.linear(duration: 0.2), value: isDrinkedPressed)
-                        .alert("Предупреждение", isPresented: $isNormExceeding) {
-                            Button(role: .cancel) {} label: {
-                                Text("OK")
+                    VStack(alignment: .leading, spacing: -20) {
+                        HStack(alignment: .center) {
+                            Button(action: {
+                                isShowingModal = true
+                                AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "SelectDrinkView"])
+                            }) {
+                                Image("WaterMain")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 60, height: 60)
                             }
-                        } message: {
-                            Text("Не рекомендуется превышать объём ежедневной нормы. Это может вызвать недомогание и повышенную утомляемость.")
-                        }
-                        .alert("Внимание", isPresented: $isStopNorm) {
-                            Button(role: .cancel) {
-                                isStopNorm = false
+                            Spacer()
+                            Button(action: {
+                                isDrinkedPressed = true
+                                isPressedImpact.toggle()
+                                drinkWaterAction(action: .drink, nameDrink: nil, amountDrink: nil)
+                            }) {
+                                VStack {
+                                    Image("drinkWateButton")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 100, height: 100)
+                                    Text(profile[0].unit == 0 ? Double(profile[0].lastAmountDrink).toStringMilli : Double(profile[0].lastAmountDrink).toStringOunces)
+                                        .font(Constants.Design.Fonts.BodyMediumFont)
+                                        .foregroundStyle(.white)
+                                }
+                            }
+                            .sensoryFeedback(.impact, trigger: isPressedImpact)
+                            .scaleEffect(isDrinkedPressed ? 0.5 : 1.0)
+                            .animation(.linear(duration: 0.2), value: isDrinkedPressed)
+                            .alert("Предупреждение", isPresented: $isNormExceedingModal) {
+                                Button(role: .cancel) {} label: {
+                                    Text("OK")
+                                }
+                            } message: {
+                                Text("Не рекомендуется превышать объём ежедневной нормы. Это может вызвать недомогание и повышенную утомляемость.")
+                            }
+                            Spacer()
+                            NavigationLink {
+                                StatisticsView()
                             } label: {
-                                Text("OK")
+                                Image("historyButton")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 60, height: 60)
                             }
-                        } message: {
-                            Text("Не рекомендуется пить более \(stopNorm) \(unitVolume) в день!")
                         }
-                        Spacer()
-                        NavigationLink {
-                            StatisticsDrinkView()
-                        } label: {
-                            Image("historyButton")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 60, height: 60)
-                        }
+                        .padding(.bottom, 50)
+                        .padding(.horizontal, 30)
+                        .position(x: geometry.size.width / 2, y: geometry.size.height / 1.1)
                     }
-                    .padding()
-                    .padding(.bottom, 50)
-                    .padding(.horizontal)
-                    .position(x: geometry.size.width / 2, y: geometry.size.height / 1.1)
                 }
             }
             .blur(radius: isShowingModal ? 10 : 0)
@@ -207,22 +226,46 @@ struct MainView: View {
                 SelectDrinkView(isShowingModal: $isShowingModal)
                     .presentationDetents([.medium])
             }
+            .sheet(isPresented: $isPurchaseViewModal) {
+                PurchaseView(isPurchaseViewModal: $isPurchaseViewModal)
+            }
+            .onChange(of: PhoneSessionManager.shared.idOperation, {
+                let drinkName = PhoneSessionManager.shared.nameDrink
+                let amountDrink = PhoneSessionManager.shared.amountDrink
+                AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "DrinkWaterFromWatch"])
+                drinkWaterAction(action: .drink, nameDrink: drinkName, amountDrink: Int(amountDrink))
+            })
             .onAppear {
-                if let dataDrinkingOfTheDayLast  = dataDrinkingOfTheDay.last,  dataDrinkingOfTheDayLast.dateDrinkOfTheDay.yearMonthDay == Date().yearMonthDay {
-                    isShowingCancelButton = dataDrinkingOfTheDayLast.amountDrinkOfTheDay > 0 ? true : false
-                }
+                AppMetrica.reportEvent(name: "OpenView", parameters: ["MainView": ""])
+                
                 if !dataDrinkingOfTheDay.contains(where: { $0.dateDrinkOfTheDay.yearMonthDay == Date().yearMonthDay } ) {
                     userDefaultsManager.setValueForUserDefaults(false, "normDone")
                     userDefaultsManager.setValueForUserDefaults(false, "normExceeding")
                 }
                 
+                if let isNormExceeding = userDefaultsManager.getBoolValueForUserDefaults("normExceeding") {
+                    self.isNormExceeding = isNormExceeding
+                }
+                
                 lastAmountDrink = profile[0].lastAmountDrink
                 lastNameDrink = profile[0].lastNameDrink
-                autoNormMl = profile[0].autoNormMl
                 unit = profile[0].unit
                 
+                if unit == 0 {
+                    normDrink = profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl
+                } else {
+                    normDrink = profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz
+                }
+                
                 stopNorm = unit == 0 ? 4000 : 140
-                unitVolume = unit == 0 ? "мл." : "унц."
+                
+                normDrinkLabel = unit == 0 ? normDrink.toStringMilli : normDrink.toStringOunces
+            }
+            .onOpenURL { url in
+                if url.scheme == "drinkwaterapp" {
+                    AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "DrinkWaterFromWidget"])
+                    drinkWaterAction(action: .drink, nameDrink: nil, amountDrink: Int(url.host!))
+                }
             }
             .animation(.easeInOut, value: isShowingModal)
             .blur(radius: showAchievementsModal ? 10 : 0)
@@ -242,17 +285,36 @@ struct MainView: View {
         .navigationBarBackButtonHidden()
     }
     
-    private func drinkWater(lastNameDrink: String, lastAmountDrink: Int, unit: Int,  amountDrinkOfTheDay: Int, percentDrinking: Double) {
+    private func sendDataToWidgetAndWatch(amountDrinkingOfTheDay: Int, percentDrink: Double) {
+        let isPremium = purchaseManager.hasPremium
+        WidgetManager.sendDataToWidget(normDrink, amountDrinkingOfTheDay, percentDrink, lastNameDrink, unit, isPremium)
+        
+        let dateLastDrink = Date().dateFormatForWidgetAndWatch
+        let amountUnit = unit == 0 ? "250" : "8"
+        let iPhoneAppContext = ["normDrink": String(Int(normDrink)),
+                                "amountDrink": String(amountDrinkingOfTheDay),
+                                "percentDrink": String(Int(percentDrink)),
+                                "amountUnit": amountUnit,
+                                "unit": unit,
+                                "dateLastDrink": dateLastDrink,
+                                "isPremium": isPremium] as [String: Any]
+        PhoneSessionManager.shared.sendAppContextToWatch(iPhoneAppContext)
+        PhoneSessionManager.shared.transferCurrentComplicationUserInfo(iPhoneAppContext)
+    }
+    
+    private func drinkWater(lastNameDrink: String, lastAmountDrink: Int, amountDrinkOfTheDay: Int, percentDrinking: Double) {
         let now = Date()
+        let todayID = now.yearMonthDay
+        
+        profileViewModel.updateProfileDrinkData(profile: profile, lastNameDrink: lastNameDrink, lastAmountDrink: lastAmountDrink)
+        dataDrinkingViewModel.updateDataDrinking(modelContext: modelContext, nameDrink: lastNameDrink, amountDrink: lastAmountDrink, dateDrink: now)
+        dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: amountDrinkOfTheDay, dateDrinkOfTheDay: now, percentDrinking: percentDrinking)
+        
+        AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "DrinkWater"])
         DispatchQueue.main.async {
-            dataDrinkingViewModel.updateDataDrinking(modelContext: modelContext, nameDrink: lastNameDrink, amountDrink: lastAmountDrink, dateDrink: now)
-            dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: amountDrinkOfTheDay, dateDrinkOfTheDay: now, percentDrinking: percentDrinking)
-            
-            isShowingCancelButton = dataDrinkingOfTheDay.last?.amountDrinkOfTheDay ?? 0 > 0 ? true : false
             isDrinkedPressed = false
             
-            let percentDrinkNew = (dataDrinkingOfTheDay.last?.percentDrinking ?? 0).rounded(.toNearestOrAwayFromZero)
-            
+            // Сохраняем данные в HealthKit, если разрешение получено
             if userDefaultsManager.isAuthorizationHealthKit {
                 healthKitManager.saveWaterIntake(amount: Double(amountDrinkOfTheDay), date: now, unit: unit) { (success, error) in
                     let successMessage = "Water intake saved successfully"
@@ -261,12 +323,22 @@ struct MainView: View {
                 }
             }
             
+            // Получаем актуальные данные для отправки в виджет и на часы
+            let amountDrinkingOfTheDay: Int = dataDrinkingOfTheDay.first(where: { $0.dayID == todayID } )?.amountDrinkOfTheDay ?? 0
+            let percentDrink: Double = dataDrinkingOfTheDay.first(where: { $0.dayID == todayID } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0
+            
+            // Отправка данных на виджет и Apple Watch
+            sendDataToWidgetAndWatch(amountDrinkingOfTheDay: amountDrinkingOfTheDay, percentDrink: percentDrink)
+            
+            // Проверка на превышение нормы
+            let percentDrinkNew: Double = dataDrinkingOfTheDay.first(where: { $0.dayID == todayID } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0
             if percentDrinkNew >= 140 && !isNormExceeding {
                 isNormExceeding = true
+                isNormExceedingModal = true
                 userDefaultsManager.setValueForUserDefaults(true, "normExceeding")
-                isNormExceeding = false
             }
             
+            // Проверка на достижение нормы
             let normDone = userDefaultsManager.getBoolValueForUserDefaults("normDone") ?? false
             if percentDrinkNew >= 100 && !normDone {
                 if let numberOfTheNorm = userDefaultsManager.getValueForUserDefaults("numberNorm") {
@@ -279,52 +351,53 @@ struct MainView: View {
     }
     
     private func cancelDrinkWater(amountDrinkOfTheDay: Int, percentDrinking: Double, lastNameDrinkProfile: String, lastAmountDrinkProfile: Int) {
+        let now = Date()
+        let todayID = now.yearMonthDay
+        
+        dataDrinkingOfTheDayViewModel.cancelDataDrinkingOfTheDay(dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking)
+        profileViewModel.updateProfileDrinkData(profile: profile, lastNameDrink: lastNameDrinkProfile, lastAmountDrink: lastAmountDrinkProfile)
+        dataDrinkingViewModel.deleteItemDataDrinking(modelContext: modelContext, itemDataDrinking: dataDrinking.last!)
+        
+        AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "CancelDrinkWater"])
         DispatchQueue.main.async {
-            dataDrinkingOfTheDayViewModel.cancelDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking)
-            profileViewModel.updateProfileDrinkData(profile: profile, lastNameDrink: lastNameDrinkProfile, lastAmountDrink: lastAmountDrinkProfile)
-            dataDrinkingViewModel.deleteItemDataDrinking(modelContext: modelContext, itemDataDrinking: dataDrinking.last!)
-            
-            isShowingCancelButton = dataDrinkingOfTheDay.last!.amountDrinkOfTheDay > 0 ? true : false
-            
+            // Сохраняем данные в HealthKit, если разрешение получено
             if userDefaultsManager.isAuthorizationHealthKit {
                 healthKitManager.deleteWaterIntake(date: dataDrinking.last!.dateDrink)
             }
+            
+            // Получаем актуальные данные для отправки в виджет и на часы
+            let amountDrinkingOfTheDay: Int = dataDrinkingOfTheDay.first(where: { $0.dayID == todayID } )?.amountDrinkOfTheDay ?? 0
+            let percentDrink: Double = dataDrinkingOfTheDay.first(where: { $0.dayID == todayID } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0
+            
+            // Отправка данных на виджет и Apple Watch
+            sendDataToWidgetAndWatch(amountDrinkingOfTheDay: amountDrinkingOfTheDay, percentDrink: percentDrink)
         }
     }
     
-    private func drinkWaterAction(action: DrinkAction) {
-        let amountDrinkOfTheDay = Int(Double(lastAmountDrink) * (hydration[lastNameDrink] ?? 1.0))
-        let percentDrinking = (Double(lastAmountDrink) * (hydration[lastNameDrink] ?? 1.0)) / autoNormMl * 100
+    private func drinkWaterAction(action: DrinkAction, nameDrink: String?, amountDrink: Int?) {
+        lastNameDrink = profile[0].lastNameDrink
+        lastAmountDrink = profile[0].lastAmountDrink
+        
+        if let nameDrink = nameDrink {
+            lastNameDrink = nameDrink
+        }
+        
+        var amountDrinkOfTheDay = Int(Double(lastAmountDrink) * (hydration[lastNameDrink] ?? 1.0))
+        if let amountDrink = amountDrink {
+            lastAmountDrink = amountDrink
+            amountDrinkOfTheDay = Int(Double(amountDrink) * (hydration[lastNameDrink] ?? 1.0))
+        }
+        
+        let percentDrinking = (Double(lastAmountDrink) * (hydration[lastNameDrink] ?? 1.0)) / normDrink * 100
         let lastNameDrinkProfile = dataDrinking.count > 1 ? dataDrinking[dataDrinking.count - 2].nameDrink : dataDrinking.last?.nameDrink ?? "Water"
         let lastAmountDrinkProfile = dataDrinking.count > 1 ? dataDrinking[dataDrinking.count - 2].amountDrink : dataDrinking.last?.amountDrink ?? 100
-        let isAvailiableRecordOfTheCurrentDay = dataDrinkingOfTheDayViewModel.isAvailiableRecordOfTheCurrentDay(dataDrinkingOfTheDay: dataDrinkingOfTheDay)
         
         switch action {
         case .drink:
-            if dataDrinkingOfTheDay.isEmpty {
-                drinkWater(lastNameDrink: lastNameDrink, lastAmountDrink: lastAmountDrink, unit: unit, amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking)
+            if dataDrinkingOfTheDay.last?.amountDrinkOfTheDay ?? 0 < stopNorm {
+                drinkWater(lastNameDrink: lastNameDrink, lastAmountDrink: lastAmountDrink, amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking)
             } else {
-                if isAvailiableRecordOfTheCurrentDay {
-                    if dataDrinkingOfTheDay.last!.amountDrinkOfTheDay < stopNorm {
-                        drinkWater(lastNameDrink: lastNameDrink, lastAmountDrink: lastAmountDrink, unit: unit, amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking)
-                    } else if dataDrinkingOfTheDay.last!.amountDrinkOfTheDay >= stopNorm {
-                        isStopNorm = true
-                        isDrinkedPressed = false
-                    }
-                } else {
-                    drinkWater(lastNameDrink: lastNameDrink, lastAmountDrink: lastAmountDrink, unit: unit, amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking)
-                }
-                
-                
-//            } else {
-//                if let dataDrinkingOfTheDayViewItem = dataDrinkingOfTheDayViewModel.getLastRecordOfTheCurrentDay(dataDrinkingOfTheDay: dataDrinkingOfTheDay), dataDrinkingOfTheDayViewItem.amountDrinkOfTheDay < stopNorm {
-//                    print("222")
-//                    drinkWater(lastNameDrink: lastNameDrink, lastAmountDrink: lastAmountDrink, unit: unit, amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking)
-//                } else if dataDrinkingOfTheDay.last!.amountDrinkOfTheDay >= stopNorm {
-//                    print("333")
-//                    isStopNorm = true
-//                    isDrinkedPressed = false
-//                }
+                isDrinkedPressed = false
             }
         case .cancel:
             cancelDrinkWater(amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking, lastNameDrinkProfile: lastNameDrinkProfile, lastAmountDrinkProfile: lastAmountDrinkProfile)
@@ -334,4 +407,6 @@ struct MainView: View {
 
 #Preview {
     MainView()
+        .modelContainer(PreviewContainer.previewContainer)
+        .environment(PurchaseManager())
 }

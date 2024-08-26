@@ -6,27 +6,33 @@
 //
 
 import SwiftUI
+import AppMetricaCore
 
 struct PurchaseView: View {
-    private let title1 = ["Достижения", "Стильные виджеты", "Дополнительные напитки", "Интеграция с Apple Health", "Выбор звука уведомлений", "Приложение для Apple Watch", "Импорт/экспорт данных в iCloud", "Поддержите нас"]
-    private let title2 = ["Пейте воду регулярно и достигайте новых высот", "Отслеживайте показатели выпитого за день не открывая приложение", "Какао, Смузи, Йогурт и другие напитки", "Автоматическое внесение данных в Apple Health", "Добавьте индивидуальности вашему уведомлению", "Вносите информацию и следите за количеством выпитого через Apple Watch", "Перенесите все данные, до последней капли, на новое устройство", "Ваша подписка очень мотивирует нас и помогает развитию Drink Water"]
+    private let purchaseTitle1 = Constants.Back.Purchase.purchaseTitle1
+    private let purchaseTitle2 = Constants.Back.Purchase.purchaseTitle2
+    
+    @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
+    @Binding var isPurchaseViewModal: Bool
+    
+    private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     
     var body: some View {
         ZStack {
-            Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
+            backgroundViewColor
                 .ignoresSafeArea()
             ScrollView {
                 Image("LogoPro")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                 Text("Полный доступ ко всем функциям приложения Drink Water")
-                    .font(Constants.Design.AppFont.BodyLargeFont)
+                    .font(Constants.Design.Fonts.BodyLargeFont)
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                     .padding(.bottom)
                 VStack(alignment: .leading) {
-                    ForEach(0..<title1.count, id: \.self) { index in
+                    ForEach(0..<purchaseTitle1.count, id: \.self) { index in
                         HStack {
                             Image(systemName: "checkmark.seal")
                                 .resizable()
@@ -34,12 +40,12 @@ struct PurchaseView: View {
                                 .foregroundStyle(.yellow)
                                 .frame(width: 50)
                             VStack(alignment: .leading) {
-                                Text(title1[index])
-                                    .font(Constants.Design.AppFont.BodyMediumFont)
+                                Text(purchaseTitle1[index])
+                                    .font(Constants.Design.Fonts.BodyMediumFont)
                                     .bold()
                                     .foregroundStyle(.yellow)
-                                Text(title2[index])
-                                    .font(Constants.Design.AppFont.BodySmallFont)
+                                Text(purchaseTitle2[index])
+                                    .font(Constants.Design.Fonts.BodySmallFont)
                                     .foregroundStyle(.white)
                             }
                         }
@@ -54,16 +60,19 @@ struct PurchaseView: View {
                         .frame(width: 170)
                     VStack(spacing: 5) {
                         Text("Drink Water Pro")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                             .foregroundStyle(.white)
-                        Text("277,00 р")
-                            .font(Constants.Design.AppFont.BodyLargeFont)
+                        Text("\(purchaseManager.displayPrice)")
+                            .font(Constants.Design.Fonts.BodyLargeFont)
                             .bold()
                             .foregroundStyle(.white)
                         Text("Единоразово")
-                            .font(Constants.Design.AppFont.BodyMiniFont)
+                            .font(Constants.Design.Fonts.BodyMiniFont)
                             .foregroundStyle(.white)
-                        Button(action: {}, label: {
+                        Button(action: {
+                            joinPremium()
+                            AppMetrica.reportEvent(name: "PurchaseView", parameters: ["Press button": "JoinPremium"])
+                        }, label: {
                             ZStack {
                                 Image("PurchaseButton")
                                     .resizable()
@@ -78,16 +87,53 @@ struct PurchaseView: View {
                 VStack(spacing: 10) {
                     Text("Восстановить покупки")
                         .foregroundStyle(.link)
-                    Text("Условия использования")
-                        .foregroundStyle(.link)
-                    Text("Политика конфиденциальности")
-                        .foregroundStyle(.link)
+                        .onTapGesture {
+                            restore()
+                            AppMetrica.reportEvent(name: "PurchaseView", parameters: ["Press button": "Restore"])
+                        }
+                    Link("Условия использования", destination: URL(string: "https://telegra.ph/Terms--Conditions-02-17")!)
+                        .font(Constants.Design.Fonts.BodyMediumFont)
+                    Link("Политика конфиденциальности", destination: URL(string: "https://telegra.ph/Privacy-Policy-02-17-9")!)
+                        .font(Constants.Design.Fonts.BodyMediumFont)
                 }
+            }
+        }
+        .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["PurchaseView": ""]) }
+    }
+    
+    private func joinPremium() {
+        Task {
+            do {
+                if try await purchaseManager.purchasePremium() {
+                    withAnimation {
+                        isPurchaseViewModal = false
+//                        showWelcome.toggle()
+                    }
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    private func restore() {
+        Task {
+            do {
+                try await purchaseManager.restorePurchases()
+                
+                if purchaseManager.hasPremium {
+                    withAnimation {
+//                        showWelcome.toggle()
+                    }
+                }
+            } catch {
+                print(error)
             }
         }
     }
 }
 
 #Preview {
-    PurchaseView()
+    PurchaseView(isPurchaseViewModal: .constant(false))
+        .environment(PurchaseManager())
 }

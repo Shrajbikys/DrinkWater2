@@ -10,6 +10,8 @@ import SwiftData
 import HealthKit
 import PushKit
 import CloudKit
+import StoreKit
+import AppMetricaCore
 
 struct SettingsView: View {
     @Query var profile: [Profile]
@@ -17,8 +19,11 @@ struct SettingsView: View {
     @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
     @Query var reminder: [Reminder]
     
+    @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
     @Environment(\.modelContext) private var modelContext
     @Environment(\.colorScheme) var colorScheme
+    
+    typealias SKTransaction = StoreKit.Transaction
     
     @State private var profileViewModel = ProfileViewModel()
     @State private var dataDrinkingViewModel = DataDrinkingViewModel()
@@ -28,6 +33,7 @@ struct SettingsView: View {
     @StateObject private var cloudKitManager = CloudKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
     
+    private let settingsListRowBackground = Constants.Design.Colors.settingsListRowBackground
     @State private var isWeightShowingModal = false
     @State private var isNormShowingModal = false
     @State private var selectedWeight: Double = 50
@@ -39,26 +45,29 @@ struct SettingsView: View {
     @State private var isActivateAutoCalcSwitch = true
     @State private var isRemindersEnabled = false
     
-    @State private var alertCloudMessage = ""
+    @State private var alertCloudMessage: LocalizedStringKey = ""
     
     @State private var isCloudExportAlert = false
     @State private var isCloudExportedAlert = false
     @State private var isCloudExported = false
     @State private var exportToCloudProgress = 0
     @State private var totalRecordsExportToCloud = 0
-    @State private var progressExportCloudMessage = ""
+    @State private var progressExportCloudMessage: LocalizedStringKey = ""
     
     @State private var isCloudImportAlert = false
     @State private var isCloudImportedAlert = false
     @State private var isCloudImported = false
     @State private var importFromCloudProgress = 0
     @State private var totalRecordsImportFromCloud = 0
-    @State private var progressImportCloudMessage = ""
-    
+    @State private var progressImportCloudMessage: LocalizedStringKey = ""
     @State private var sliderValue: Double = 2200
     
-    let genderSegments: Array<String> = ["Женский", "Мужской"]
-    let unitSegments: Array<String> = ["кг | мл", "фн | унц"]
+    private let healthPickerColor: Color = Color(#colorLiteral(red: 0.9215686275, green: 0.5058823529, blue: 0.4823529412, alpha: 1))
+    
+    @State private var isPurchaseViewModal = false
+    
+    let genderSegments: Array<LocalizedStringKey> = ["Женский", "Мужской"]
+    let unitSegments: Array<LocalizedStringKey> = ["кг | мл", "фн | унц"]
     
     var body: some View {
         NavigationStack {
@@ -66,29 +75,24 @@ struct SettingsView: View {
                 Section {
                     HStack {
                         Text("Вес")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                         Spacer()
                         Button(action: {
                             isWeightShowingModal = true
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SelectedWeight"])
                         }) {
-                            if profile[0].unit == 0 {
-                                Text("\(Int(profile[0].weightKg)) кг")
-                                    .bold()
-                                    .foregroundStyle(.link)
-                            } else {
-                                Text("\(Int(profile[0].weightPounds)) фн")
-                                    .bold()
-                                    .foregroundStyle(.link)
-                            }
+                            Text(profile[0].unit == 0 ? profile[0].weightKg.toStringKg : profile[0].weightPounds.toStringPounds)
+                                .bold()
+                                .foregroundStyle(.link)
                         }
                         .sheet(isPresented: $isWeightShowingModal) {
-                            WeightModalView(profile: profile, dataDrinkingOfTheDay:  dataDrinkingOfTheDay, isWeightShowingModal: $isWeightShowingModal, selectedWeight: $selectedWeight, unitValue: selectedUnitSegment)
+                            WeightModalView(profile: profile, dataDrinkingOfTheDay: dataDrinkingOfTheDay, isWeightShowingModal: $isWeightShowingModal, selectedWeight: $selectedWeight, unitValue: selectedUnitSegment)
                                 .presentationDetents([.height(250)])
                         }
                     }
                     HStack {
                         Text("Пол")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                         Spacer()
                         Picker("Пол", selection: $selectedGenderSegment) {
                             ForEach(0..<genderSegments.count, id: \.self) { index in
@@ -99,15 +103,22 @@ struct SettingsView: View {
                         .frame(width: 150)
                         .pickerStyle(.segmented)
                         .onChange(of: selectedGenderSegment) { _, index in
-                            profileViewModel.updateProfileGenderData(profile: profile, gender: index == 0 ? Gender.girl : Gender.man)
+                            profileViewModel.updateProfileGenderData(profile: profile, gender: index == 0 ? .girl : .man)
                             let autoNorm = profile[0].unit == 0 ? profile[0].autoNormMl : profile[0].autoNormOz
-                            let percentDrinking = Double(dataDrinkingOfTheDay.last!.amountDrinkOfTheDay) / autoNorm * 100
+                            let customNorm = profile[0].unit == 0 ? profile[0].customNormMl : profile[0].customNormOz
+                            let percentDrinking = Double(dataDrinkingOfTheDay.last!.amountDrinkOfTheDay) / (profile[0].autoCalc ? autoNorm : customNorm) * 100
                             dataDrinkingOfTheDayViewModel.updatePercentToDataDrinkingOfTheDay(dataDrinkingOfTheDay: dataDrinkingOfTheDay, percentDrinking: percentDrinking)
+                            if profile[0].autoCalc {
+                                sliderValue = profile[0].unit == 0 ? profile[0].autoNormMl : profile[0].autoNormOz
+                            } else {
+                                sliderValue = profile[0].unit == 0 ? profile[0].customNormMl : profile[0].customNormOz
+                            }
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SelectedGender"])
                         }
                     }
                     HStack {
                         Text("Единицы измерения:")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                         Spacer()
                         Picker("Ед. измерения", selection: $selectedUnitSegment) {
                             ForEach(0..<unitSegments.count, id: \.self) { index in
@@ -119,28 +130,32 @@ struct SettingsView: View {
                         .pickerStyle(.segmented)
                         .onChange(of: selectedUnitSegment) { _, index in
                             profileViewModel.updateProfileUnitData(profile: profile, unit: index)
+                            selectedWeight = index == 0 ? profile[0].weightKg : profile[0].weightPounds.rounded(.toNearestOrAwayFromZero)
                             if profile[0].autoCalc {
-                                sliderValue = profile[0].unit == 0 ? profile[0].autoNormMl : profile[0].autoNormOz
+                                selectedNorm = index == 0 ? Int(profile[0].autoNormMl) : Int(profile[0].autoNormOz)
+                                sliderValue = index == 0 ? profile[0].autoNormMl : profile[0].autoNormOz
                             } else {
-                                sliderValue = profile[0].unit == 0 ? profile[0].customNormMl : profile[0].customNormOz
+                                selectedNorm = index == 0 ? Int(profile[0].customNormMl) : Int(profile[0].customNormOz)
+                                sliderValue = index == 0 ? profile[0].customNormMl : profile[0].customNormOz
                             }
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SelectedUnit"])
                         }
                     }
                 } header: {
                     Text("Основные настройки")
                         .textCase(.uppercase)
                 }
-                .listRowBackground(colorScheme == .dark ?  Color(#colorLiteral(red: 0.8374214172, green: 0.8374213576, blue: 0.8374213576, alpha: 0.1)) : .clear)
+                .listRowBackground(colorScheme == .dark ?  settingsListRowBackground : .clear)
                 Section {
                     NavigationLink {
                         RemindersView(isRemindersEnabled: $isRemindersEnabled)
                     } label: {
                         HStack {
                             Text("Настройка уведомлений")
-                                .font(Constants.Design.AppFont.BodyMediumFont)
+                                .font(Constants.Design.Fonts.BodyMediumFont)
                             Spacer()
                             Text(isRemindersEnabled ? "Вкл" : "Выкл")
-                                .font(Constants.Design.AppFont.BodySmallFont)
+                                .font(Constants.Design.Fonts.BodySmallFont)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -148,12 +163,12 @@ struct SettingsView: View {
                     Text("Уведомления")
                         .textCase(.uppercase)
                 }
-                .listRowBackground(colorScheme == .dark ?  Color(#colorLiteral(red: 0.8374214172, green: 0.8374213576, blue: 0.8374213576, alpha: 0.1)) : .clear)
+                .listRowBackground(colorScheme == .dark ? settingsListRowBackground : .clear)
                 Section {
                     HStack {
                         Toggle(isOn: $isActivateAutoCalcSwitch) {
                             Text("Рассчитать автоматически")
-                                .font(Constants.Design.AppFont.BodyMediumFont)
+                                .font(Constants.Design.Fonts.BodyMediumFont)
                         }
                         .onChange(of: isActivateAutoCalcSwitch) { _, value in
                             profileViewModel.updateProfileAutoCalcData(profile: profile, autoCalc: value)
@@ -163,23 +178,25 @@ struct SettingsView: View {
                             } else {
                                 sliderValue = profile[0].unit == 0 ? profile[0].customNormMl : profile[0].customNormOz
                             }
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "AutoCalcSwitch"])
                         }
                     }
                     HStack {
                         Text("Ваша норма")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                         Spacer()
                         Button(action: {
                             if !isActivateAutoCalcSwitch {
                                 isNormShowingModal = true
+                                AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SelectedNorm"])
                             }
                         }) {
                             if profile[0].unit == 0 {
-                                Text("\(Int(profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl)) мл")
+                                Text("\((profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl).toStringMilli)")
                                     .bold()
                                     .foregroundStyle(.link)
                             } else {
-                                Text("\(Int(profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz)) унц")
+                                Text("\((profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz).toStringOunces)")
                                     .bold()
                                     .foregroundStyle(.link)
                             }
@@ -202,40 +219,47 @@ struct SettingsView: View {
                     profileViewModel.updateProfileCustomNormData(profile: profile, customNorm: sliderValue)
                     selectedNorm = Int(profile[0].unit == 0 ? profile[0].customNormMl : profile[0].customNormOz)
                     let customNorm = profile[0].unit == 0 ? profile[0].customNormMl : profile[0].customNormOz
-                    let percentDrinking = Double(dataDrinkingOfTheDay.last!.amountDrinkOfTheDay) / customNorm * 100
+                    let percentDrinking = Double(dataDrinkingOfTheDay.last?.amountDrinkOfTheDay ?? 0) / customNorm * 100
                     dataDrinkingOfTheDayViewModel.updatePercentToDataDrinkingOfTheDay(dataDrinkingOfTheDay: dataDrinkingOfTheDay, percentDrinking: percentDrinking)
                 }
-                .listRowBackground(colorScheme == .dark ?  Color(#colorLiteral(red: 0.8374214172, green: 0.8374213576, blue: 0.8374213576, alpha: 0.1)) : .clear)
+                .listRowBackground(colorScheme == .dark ?  settingsListRowBackground : .clear)
                 Section {
                     NavigationLink {
                         HydrationView()
                     } label: {
                         Text("Коэффициенты гидратации")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                     }
                 } header: {
                     Text("Информация о напитках")
                         .textCase(.uppercase)
                 }
-                .listRowBackground(colorScheme == .dark ?  Color(#colorLiteral(red: 0.8374214172, green: 0.8374213576, blue: 0.8374213576, alpha: 0.1)) : .clear)
+                .listRowBackground(colorScheme == .dark ?  settingsListRowBackground : .clear)
                 Section {
                     HStack {
                         Toggle(isOn: $isAuthorizationHealthKit) {
                             Text("Здоровье")
-                                .font(Constants.Design.AppFont.BodyMediumFont)
+                                .font(Constants.Design.Fonts.BodyMediumFont)
                         }
-                        .tint(Color(#colorLiteral(red: 0.9215686275, green: 0.5058823529, blue: 0.4823529412, alpha: 1)))
+                        .tint(healthPickerColor)
                     }
                 } header: {
                     Text("Подключение Apple Health")
                         .textCase(.uppercase)
                 }
-                .listRowBackground(colorScheme == .dark ?  Color(#colorLiteral(red: 0.8374214172, green: 0.8374213576, blue: 0.8374213576, alpha: 0.1)) : .clear)
+                .listRowBackground(colorScheme == .dark ?  settingsListRowBackground : .clear)
                 .onChange(of: isAuthorizationHealthKit) { _, newValue in
-                    userDefaultsManager.isAuthorizationHealthKit = newValue
-                    isAuthorizationHealthKit = userDefaultsManager.isAuthorizationHealthKit
-                    if isAuthorizationHealthKit {
-                        requestHealthKitAuthorization()
+                    if purchaseManager.hasPremium {
+                        userDefaultsManager.isAuthorizationHealthKit = newValue
+                        isAuthorizationHealthKit = userDefaultsManager.isAuthorizationHealthKit
+                        if isAuthorizationHealthKit {
+                            requestHealthKitAuthorization()
+                        }
+                        AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "ActivateAppleHealth"])
+                    } else {
+                        isPurchaseViewModal = true
+                        isAuthorizationHealthKit = false
+                        AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "ActivateAppleHealthPurchase"])
                     }
                 }
                 .alert("Apple Health", isPresented: $isAppleHealthPermissionAlert) {
@@ -247,9 +271,15 @@ struct SettingsView: View {
                 }
                 Section {
                     Button("Экспорт в iCloud") {
-                        isCloudExportAlert = true
+                        if purchaseManager.hasPremium {
+                            isCloudExportAlert = true
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "isCloudExport"])
+                        } else {
+                            isPurchaseViewModal = true
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "isCloudExportPurchase"])
+                        }
                     }
-                    .font(Constants.Design.AppFont.BodyMediumFont)
+                    .font(Constants.Design.Fonts.BodyMediumFont)
                     .foregroundStyle(.link)
                     .alert("Предупреждение", isPresented: $isCloudExportAlert) {
                         Button("Да", role: .destructive) {
@@ -260,7 +290,7 @@ struct SettingsView: View {
                             isCloudExportAlert = false
                         }
                     } message: {
-                        Text("All previously saved data will be cleared. Do you want to continue?")
+                        Text("Сейчас будет запущен процесс экспорта данных в iCloud. Вы хотите продолжить?")
                     }
                     .alert("iCloud", isPresented: $isCloudExportedAlert, actions: {
                         Button("OK", role: .cancel) {
@@ -270,9 +300,15 @@ struct SettingsView: View {
                         Text(alertCloudMessage)
                     })
                     Button("Импорт из iCloud") {
-                        isCloudImportAlert = true
+                        if purchaseManager.hasPremium {
+                            isCloudImportAlert = true
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "isCloudImport"])
+                        } else {
+                            isPurchaseViewModal = true
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "isCloudImportPurchase"])
+                        }
                     }
-                    .font(Constants.Design.AppFont.BodyMediumFont)
+                    .font(Constants.Design.Fonts.BodyMediumFont)
                     .foregroundStyle(.link)
                     .alert("Предупреждение", isPresented: $isCloudImportAlert) {
                         Button("Да", role: .destructive) {
@@ -283,7 +319,9 @@ struct SettingsView: View {
                             isCloudImportAlert = false
                         }
                     } message: {
-                        Text("All previously saved data will be cleared. Do you want to continue?")
+                        VStack {
+                            Text("Сейчас будет запущен процесс импорта данных из iCloud. Убедитесь, что ранее вы сделали экспорт в iCloud. Иначе вы можете потерять не сохраненные данные. Вы хотите продолжить?")
+                        }
                     }
                     .alert("iCloud", isPresented: $isCloudImportedAlert, actions: {
                         Button("OK", role: .cancel) {
@@ -296,39 +334,47 @@ struct SettingsView: View {
                     Text("Синхронизация с ICloud")
                         .textCase(.uppercase)
                 }
-                .listRowBackground(colorScheme == .dark ?  Color(#colorLiteral(red: 0.8374214172, green: 0.8374213576, blue: 0.8374213576, alpha: 0.1)) : .clear)
+                .listRowBackground(colorScheme == .dark ?  settingsListRowBackground : .clear)
                 Section {
                     Text("Восстановить покупки")
-                        .font(Constants.Design.AppFont.BodyMediumFont)
+                        .font(Constants.Design.Fonts.BodyMediumFont)
+                        .onTapGesture {
+                            restore()
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "Restore"])
+                        }
                     Text("Оценить приложение")
-                        .font(Constants.Design.AppFont.BodyMediumFont)
+                        .font(Constants.Design.Fonts.BodyMediumFont)
                         .onTapGesture {
                             openAppStore()
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "Rate"])
                         }
                     ShareLink(item: "https://apple.co/3tB5ofx", message: Text("Приложение Drink Water помогает мне поддерживать необходимый уровень воды в организме. Рекомендую!")) {
                         Text("Поделиться")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                     }
                     Text("Написать в поддержку")
-                        .font(Constants.Design.AppFont.BodyMediumFont)
+                        .font(Constants.Design.Fonts.BodyMediumFont)
                         .onTapGesture {
                             MailComposeViewController.shared.sendEmail()
+                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SendEmail"])
                         }
-                    Link("Конфиденциальность", destination: URL(string: "https://telegra.ph/Privacy-Policy-02-17-9")!)
-                        .font(Constants.Design.AppFont.BodyMediumFont)
+                    Link("Политика конфиденциальности", destination: URL(string: "https://telegra.ph/Privacy-Policy-02-17-9")!)
+                        .font(Constants.Design.Fonts.BodyMediumFont)
                     Link("Условия использования", destination: URL(string: "https://telegra.ph/Terms--Conditions-02-17")!)
-                        .font(Constants.Design.AppFont.BodyMediumFont)
+                        .font(Constants.Design.Fonts.BodyMediumFont)
                 } header: {
                     Text("О приложении")
                         .textCase(.uppercase)
                 }
-                .listRowBackground(colorScheme == .dark ?  Color(#colorLiteral(red: 0.8374214172, green: 0.8374213576, blue: 0.8374213576, alpha: 0.1)) : .clear)
+                .listRowBackground(colorScheme == .dark ?  settingsListRowBackground : .clear)
             }
             .listStyle(.plain)
             .navigationTitle("Настройки")
             .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["SettingsView": ""])
+            
             selectedUnitSegment = profile[0].unit
             isActivateAutoCalcSwitch = profile[0].autoCalc
             isAuthorizationHealthKit = userDefaultsManager.isAuthorizationHealthKit
@@ -336,49 +382,54 @@ struct SettingsView: View {
             
             selectedGenderSegment = profile[0].gender == .girl ? 0 : 1
             if profile[0].unit == 0 {
-                selectedNorm = Int(profile[0].autoNormMl)
+                selectedNorm = profile[0].autoCalc ? Int(profile[0].autoNormMl) : Int(profile[0].customNormMl)
                 sliderValue = profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl
-                selectedWeight = profile[0].weightKg
+                selectedWeight = profile[0].weightKg.rounded(.toNearestOrAwayFromZero)
             } else {
-                selectedNorm = Int(profile[0].autoNormOz)
+                selectedNorm = profile[0].autoCalc ? Int(profile[0].autoNormOz) : Int(profile[0].customNormOz)
                 sliderValue = profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz
-                selectedWeight = profile[0].weightPounds
+                selectedWeight = profile[0].weightPounds.rounded(.toNearestOrAwayFromZero)
             }
         }
+        .sheet(isPresented: $isPurchaseViewModal) {
+            PurchaseView(isPurchaseViewModal: $isPurchaseViewModal)
+        }
+        .overlay(content: {
+            if isCloudExported || isCloudImported {
+                Rectangle()
+                    .foregroundStyle(Color.white.opacity(0.05))
+            }
+        })
+        .blur(radius: isCloudExported || isCloudImported ? 5 : 0)
         .overlay(
             Group {
-                if isCloudExported {
-                    VStack(spacing: 20) {
-                        Text(progressExportCloudMessage)
-                        Text("Сохранено записей: \(exportToCloudProgress)/\(totalRecordsExportToCloud)")
+                if isCloudExported || isCloudImported {
+                    VStack(spacing: 10) {
+                        if isCloudExported {
+                            Text(progressExportCloudMessage)
+                                .bold()
+                            Text("Сохранено записей: \(exportToCloudProgress)/\(totalRecordsExportToCloud)")
+                        } else if isCloudImported {
+                            Text(progressImportCloudMessage)
+                                .bold()
+                            Text("Сохранено записей: \(importFromCloudProgress)/\(totalRecordsImportFromCloud)")
+                        }
                         ProgressView()
-                        Text("Не закрывайте приложение")
+                        VStack(spacing: 2) {
+                            Text("Пожалуйста, не закрывайте")
+                                .foregroundStyle(.red)
+                            Text("приложение")
+                                .foregroundStyle(.red)
+                        }
                     }
                     .padding()
-                    .background(Color.white)
+                    .background(colorScheme == .dark ? Color.black : Color.white)
                     .cornerRadius(10)
                     .shadow(radius: 10)
                 }
             }
         )
-        .animation(.easeInOut, value: isCloudExported)
-        .overlay(
-            Group {
-                if isCloudImported {
-                    VStack(spacing: 20) {
-                        Text(progressImportCloudMessage)
-                        Text("Сохранено записей: \(importFromCloudProgress)/\(totalRecordsImportFromCloud)")
-                        ProgressView()
-                        Text("Не закрывайте приложение")
-                    }
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(10)
-                    .shadow(radius: 10)
-                }
-            }
-        )
-        .animation(.easeInOut, value: isCloudImported)
+        .animation(.easeInOut, value: isCloudExported || isCloudImported)
     }
     
     func openAppStore() {
@@ -431,7 +482,7 @@ struct SettingsView: View {
             isCloudExported = false
             if success {
                 print("Data exported successfully")
-                alertCloudMessage = "Экспорт успешно завершен!"
+                alertCloudMessage = "Экспорт успешно завершён!"
                 isCloudExportedAlert = true
             } else {
                 print("Error saving data: \(error?.localizedDescription ?? "Unknown error")")
@@ -448,18 +499,44 @@ struct SettingsView: View {
         dataDrinkingViewModel.deleteAllDataDataDrinking(modelContext: modelContext)
         dataDrinkingOfTheDayViewModel.deleteAllDataDataDrinkingOfTheDay(modelContext: modelContext)
         
+        cloudKitManager.fetchAllRecords(recordType: "DrinkData") { records, error in
+            totalRecordsImportFromCloud += records?.count ?? 0
+        }
+        
+        cloudKitManager.fetchAllRecords(recordType: "DrinkDataOfDay") { records, error in
+            totalRecordsImportFromCloud += records?.count ?? 0
+        }
+        
         cloudKitManager.fetchAllDataAndSave(dataDrinkingOfTheDay: dataDrinkingOfTheDay, modelContext: modelContext, progress: { savedCount in
             progressImportCloudMessage = "Копируем данные..."
             importFromCloudProgress += savedCount
         }) { (success, error) in
             isCloudImported = false
             print("Data imported successfully")
-            alertCloudMessage = "Импорт успешно завершен!"
+            alertCloudMessage = "Импорт успешно завершён!"
             isCloudImportedAlert = true
+        }
+    }
+    
+    private func restore() {
+        Task {
+            do {
+                try await purchaseManager.restorePurchases()
+                
+                if purchaseManager.hasPremium {
+                    withAnimation {
+                        print("Purchases restored")
+                    }
+                }
+            } catch {
+                print(error)
+            }
         }
     }
 }
 
 #Preview {
     SettingsView()
+        .modelContainer(PreviewContainer.previewContainer)
+        .environment(PurchaseManager())
 }

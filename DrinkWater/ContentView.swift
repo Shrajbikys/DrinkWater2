@@ -10,13 +10,23 @@ import SwiftData
 
 struct ContentView: View {
     private let userDefaultsManager = UserDefaultsManager.shared
+    @State private var showLaunchScreen = true
     
     var body: some View {
         Group {
-            if !userDefaultsManager.isFirstSign {
-                SelectGenderView()
+            if showLaunchScreen {
+                LaunchScreenView()
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            showLaunchScreen = false
+                        }
+                    }
             } else {
-                MainView()
+                if !userDefaultsManager.isFirstSign || !userDefaultsManager.isMigration {
+                    SelectGenderView()
+                } else {
+                    MainView()
+                }
             }
         }
     }

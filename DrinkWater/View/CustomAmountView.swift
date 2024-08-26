@@ -8,10 +8,12 @@
 
 import SwiftUI
 import SwiftData
+import AppMetricaCore
 
 struct CustomAmountView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
     
     @Query var profile: [Profile]
     @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
@@ -27,18 +29,26 @@ struct CustomAmountView: View {
     @State private var selectedNumber: Int = 250
     @State private var selectedDrink: String = ""
     @State private var isImageDisabled: Bool = true
-    let imageDrink = ["WaterSD", "CoffeeSD", "TeaSD", "MilkSD", "JuiceSD", "SodaSD", "CocoaSD", "SmoothieSD", "YogurtSD", "BeerSD", "NonalcoholicBeerSD", "WineSD"]
-    let imageSelectedDrink = ["WaterHighlightedSD", "CoffeeHighlightedSD", "TeaHighlightedSD", "MilkHighlightedSD", "JuiceHighlightedSD", "SodaHighlightedSD", "CocoaHighlightedSD", "SmoothieHighlightedSD", "YogurtHighlightedSD", "BeerHighlightedSD", "NonalcoholicBeerHighlightedSD", "WineHighlightedSD"]
-    let nameDrink = ["Water", "Coffee", "Tea", "Milk", "Juice", "Soda", "Cocoa", "Smoothie", "Yogurt", "Beer", "Non alc. beer", "Wine"]
-    let valuesMl = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1050, 1100, 1150, 1200, 1250, 1300, 1350, 1400, 1450, 1500, 1550, 1600, 1650, 1700, 1750, 1800, 1850, 1900, 1950, 2000]
-    @State private var selectedImages: [String] = ["WaterSD", "CoffeeSD", "TeaSD", "MilkSD", "JuiceSD", "SodaSD", "CocoaSD", "SmoothieSD", "YogurtSD", "BeerSD", "NonalcoholicBeerSD", "WineSD"]
-    let hydration: [String: Double] = ["Water": 1.0, "Coffee": 0.8, "Tea": 0.9, "Milk": 0.9, "Juice": 0.8, "Soda": 0.9, "Cocoa": 0.7, "Smoothie": 0.3, "Yogurt": 0.5, "Beer": -0.6, "NonalcoholicBeer": 0.6, "Wine": -1.6]
+    @State private var isPremium: Bool = false
+    @State private var isPressedImpact: Bool = false
+    @State private var normDrink: Double = 2000
+    @State private var unit: Int = 0
     
+    @State private var imageDrink: [String] = Constants.Back.Drink.imageDrink
+    @State private var imageDrinkPremium: [String] = Constants.Back.Drink.imageDrinkPremium
+    @State private var nameDrink: [String] = Constants.Back.Drink.nameDrink
+    private let nameDrinkPremium: [String] = Constants.Back.Drink.nameDrinkPremium
+    @State private var localizedNameDrink: [LocalizedStringKey] = Constants.Back.Drink.localizedNameDrink
+    @State private var localizedNameDrinkPremium: [LocalizedStringKey] = Constants.Back.Drink.localizedNameDrinkPremium
+    @State private var selectedImages: [String] = Constants.Back.Drink.imageDrinkPremium
+    private let hydration: [String: Double] = Constants.Back.Drink.hydration
+    
+    private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
+                backgroundViewColor
                     .ignoresSafeArea()
                 VStack {
                     Rectangle()
@@ -46,19 +56,20 @@ struct CustomAmountView: View {
                         .foregroundStyle(.white)
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 15) {
-                            ForEach(imageDrink.indices, id: \.self) { index in
+                            ForEach(nameDrink.indices, id: \.self) { index in
                                 Button(action: {
-                                    selectedImages = ["WaterSD", "CoffeeSD", "TeaSD", "MilkSD", "JuiceSD", "SodaSD", "CocoaSD", "SmoothieSD", "YogurtSD", "BeerSD", "NonalcoholicBeerSD", "WineSD"]
-                                    selectedImages[index] = imageDrink[index] == imageDrink[index] ? imageSelectedDrink[index] : imageDrink[index]
+                                    selectedImages = isPremium ? imageDrinkPremium : imageDrink
+                                    selectedImages[index] = "\(nameDrink[index])SD" == "\(nameDrink[index])SD" ? "\(nameDrink[index])HighlightedSD" : "\(nameDrink[index])SD"
                                     selectedDrink = nameDrink[index]
                                     isImageDisabled = false
+                                    AppMetrica.reportEvent(name: "CustomAmountView", parameters: ["Press button": "SelectedDrink"])
                                 }) {
                                     VStack(spacing: 10) {
                                         Image(selectedImages[index])
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(width: 70, height: 70)
-                                        Text(nameDrink[index])
+                                        Text(localizedNameDrink[index])
                                             .font(.subheadline)
                                             .foregroundStyle(.white)
                                     }
@@ -67,9 +78,6 @@ struct CustomAmountView: View {
                         }
                         .padding(.vertical, 5)
                         .padding(.horizontal, 10)
-                    }
-                    .onAppear {
-                        selectedImages = imageDrink
                     }
                     Rectangle()
                         .frame(height: 1)
@@ -80,18 +88,25 @@ struct CustomAmountView: View {
                             .foregroundStyle(.white)
                             .padding(.top, 30)
                         Picker("Выберите объём:", selection: $selectedNumber) {
-                            ForEach(0..<valuesMl.count, id: \.self) { index in
-                                Text("\(valuesMl[index])")
-                                    .tag(valuesMl[index])
+                            ForEach(Array(stride(
+                                from: profile[0].unit == 0 ? 50 : 2,
+                                to: profile[0].unit == 0 ? 2050 : 70,
+                                by: profile[0].unit == 0 ? 50 : 2
+                            )), id: \.self) { number in
+                                Text("\(number)")
+                                    .tag(number)
                                     .foregroundStyle(.white)
                             }
                         }
                         .pickerStyle(.wheel)
                         .frame(height: 100)
                         Button("Добавить напиток") {
-                            drinkWater(selectedNumber: selectedNumber)
+                            isPressedImpact.toggle()
+                            drinkWater(amountDrink: selectedNumber)
+                            AppMetrica.reportEvent(name: "CustomAmountView", parameters: ["Press button": "DrinkWater"])
                             isShowingModal = false
                         }
+                        .sensoryFeedback(.impact, trigger: isPressedImpact)
                         .disabled(isImageDisabled)
                         .font(.custom("Palatino", size: 17))
                         .padding(.horizontal, 27)
@@ -104,6 +119,24 @@ struct CustomAmountView: View {
                     }
                     Spacer()
                 }
+            }
+            .onAppear {
+                AppMetrica.reportEvent(name: "OpenView", parameters: ["CustomAmountView": ""])
+                
+                unit = profile[0].unit
+                
+                if unit == 0 {
+                    normDrink = profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl
+                } else {
+                    normDrink = profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz
+                }
+                
+                isPremium = purchaseManager.hasPremium
+                if isPremium {
+                    nameDrink = nameDrinkPremium
+                    localizedNameDrink = localizedNameDrinkPremium
+                }
+                selectedImages = imageDrinkPremium
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden()
@@ -129,16 +162,33 @@ struct CustomAmountView: View {
         }
     }
     
-    private func drinkWater(selectedNumber: Int) {
+    private func drinkWater(amountDrink: Int) {
         let now = Date()
         DispatchQueue.main.async {
-            profileViewModel.updateProfileDrinkData(profile: profile, lastNameDrink: selectedDrink, lastAmountDrink: selectedNumber)
-            dataDrinkingViewModel.updateDataDrinking(modelContext: modelContext, nameDrink: selectedDrink, amountDrink: selectedNumber, dateDrink: now)
-            dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: Int(Double(selectedNumber) * (hydration[profile[0].lastNameDrink] ?? 1.0)), dateDrinkOfTheDay: now, percentDrinking: (Double(selectedNumber) * (hydration[profile[0].lastNameDrink] ?? 1.0) / profile[0].autoNormMl * 100))
+            profileViewModel.updateProfileDrinkData(profile: profile, lastNameDrink: selectedDrink, lastAmountDrink: amountDrink)
+            dataDrinkingViewModel.updateDataDrinking(modelContext: modelContext, nameDrink: selectedDrink, amountDrink: amountDrink, dateDrink: now)
+            dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: Int(Double(amountDrink) * (hydration[selectedDrink] ?? 1.0)), dateDrinkOfTheDay: now, percentDrinking: (Double(amountDrink) * (hydration[selectedDrink] ?? 1.0) / normDrink * 100))
+            
+            let percentDrinkNew = (dataDrinkingOfTheDay.last?.percentDrinking ?? 0).rounded(.toNearestOrAwayFromZero)
+            let amountDrinkingOfTheDay = dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.amountDrinkOfTheDay ?? 0
+            let lastNameDrink = profile[0].lastNameDrink
+            WidgetManager.sendDataToWidget(normDrink, amountDrinkingOfTheDay, percentDrinkNew, lastNameDrink, unit, isPremium)
+            
+            let dateLastDrink = Date().dateFormatForWidgetAndWatch
+            let amountUnit = unit == 0 ? "250" : "8"
+            let iPhoneAppContext = ["normDrink": String(Int(normDrink)),
+                                    "amountDrink": String(amountDrinkingOfTheDay),
+                                    "percentDrink": String(Int(percentDrinkNew)),
+                                    "amountUnit": amountUnit,
+                                    "unit": unit,
+                                    "dateLastDrink": dateLastDrink,
+                                    "isPremium": isPremium] as [String: Any]
+            PhoneSessionManager.shared.sendAppContextToWatch(iPhoneAppContext)
+            PhoneSessionManager.shared.transferCurrentComplicationUserInfo(iPhoneAppContext)
             
             if userDefaultsManager.isAuthorizationHealthKit {
-                let amountOfTheHealthKit = Double(profile[0].lastAmountDrink) * (hydration[profile[0].lastNameDrink] ?? 1.0)
-                healthKitManager.saveWaterIntake(amount: amountOfTheHealthKit, date: now, unit: profile[0].unit) { (success, error) in
+                let amountOfTheHealthKit = Double(amountDrink) * (hydration[selectedDrink] ?? 1.0)
+                healthKitManager.saveWaterIntake(amount: amountOfTheHealthKit, date: now, unit: unit) { (success, error) in
                     let successMessage = "Water intake saved successfully"
                     let errorMessage = "Error saving water intake: \(error?.localizedDescription ?? "Unknown error")"
                     if success {print(successMessage) } else { print(errorMessage) }
@@ -150,4 +200,6 @@ struct CustomAmountView: View {
 
 #Preview {
     CustomAmountView(isShowingModal: .constant(false))
+        .modelContainer(PreviewContainer.previewContainer)
+        .environment(PurchaseManager())
 }

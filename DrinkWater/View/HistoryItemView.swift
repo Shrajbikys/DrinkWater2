@@ -10,6 +10,10 @@ import SwiftUI
 struct HistoryItemView: View {
     @State var dataDrinking: DataDrinking
     @State var hydration: Double
+    @State var unit: Int
+    
+    private let localizedNameDrinkHistory: [String: LocalizedStringKey] = Constants.Back.Drink.localizedNameDrinkHistory
+    private let backgroundDateDrinkTimeColor: Color = Color(#colorLiteral(red: 0.3333333433, green: 0.3333333433, blue: 0.3333333433, alpha: 1))
     
     var body: some View {
         ZStack {
@@ -24,22 +28,22 @@ struct HistoryItemView: View {
                         .frame(height: 50)
                 }.padding(.leading, 5)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(dataDrinking.nameDrink)
+                    Text(localizedNameDrinkHistory[dataDrinking.nameDrink]!)
                         .lineLimit(1)
-                        .font(Constants.Design.AppFont.BodyMediumFont)
+                        .font(Constants.Design.Fonts.BodyMediumFont)
                         .foregroundStyle(.white)
                     Text(dataDrinking.dateDrink.timeOfHourAndMinutes)
-                        .font(Constants.Design.AppFont.BodyMiniFont)
-                        .foregroundStyle(Color(#colorLiteral(red: 0.3333333433, green: 0.3333333433, blue: 0.3333333433, alpha: 1)))
+                        .font(Constants.Design.Fonts.BodyMiniFont)
+                        .foregroundStyle(backgroundDateDrinkTimeColor)
                 }
                         Spacer()
                 VStack(alignment: .trailing, spacing: 5) {
-                    Text("\(dataDrinking.amountDrink) мл")
-                        .font(Constants.Design.AppFont.BodyMediumFont)
+                    Text(unit == 0 ? Double(dataDrinking.amountDrink).toStringMilli : Double(dataDrinking.amountDrink).toStringOunces)
+                        .font(Constants.Design.Fonts.BodyMediumFont)
                         .foregroundStyle(.white)
                         .padding(.trailing, 5)
-                    Text("Гидратация = \(Int(hydration*100))%")
-                        .font(Constants.Design.AppFont.BodyMiniFont)
+                    Text("Гидратация = \(hydration.formatted(.percent))")
+                        .font(Constants.Design.Fonts.BodyMiniFont)
                         .foregroundStyle(.white)
                 }
             }
@@ -50,5 +54,5 @@ struct HistoryItemView: View {
 }
 
 #Preview {
-    HistoryItemView(dataDrinking: DataDrinking(nameDrink: "Water", amountDrink: 250, dateDrink: Date()), hydration: 1.0)
+    HistoryItemView(dataDrinking: DataDrinking(nameDrink: "Water", amountDrink: 250, dateDrink: Date()), hydration: 1.0, unit: 0)
 }

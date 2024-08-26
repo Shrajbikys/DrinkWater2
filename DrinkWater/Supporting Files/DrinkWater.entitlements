@@ -20,5 +20,9 @@
 	<array>
 		<string>CloudKit</string>
 	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.alexander.l.DrinkWater</string>
+	</array>
 </dict>
 </plist>

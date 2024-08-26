@@ -6,13 +6,16 @@
 //
 
 import SwiftUI
+import AppMetricaCore
 
 struct AchievementsModalView: View {
     @Binding var showAchievementsModal: Bool
     
     var imageAchievement: String
-    var nameAchievementFirst: String
-    var nameAchievementSecond: String
+    var nameAchievementFirst: LocalizedStringKey
+    var nameAchievementSecond: LocalizedStringKey
+    
+    private let backgroundShareLinkColor: Color = Color(#colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1))
     
     var body: some View {
         VStack {
@@ -31,11 +34,11 @@ struct AchievementsModalView: View {
             }
             VStack(spacing: 10) {
                 Text(nameAchievementFirst)
-                    .font(Constants.Design.AppFont.BodyTitle2Font)
+                    .font(Constants.Design.Fonts.BodyTitle2Font)
                     .foregroundStyle(.white)
                     .bold()
                 Text(nameAchievementSecond)
-                    .font(Constants.Design.AppFont.BodyMainFont)
+                    .font(Constants.Design.Fonts.BodyMainFont)
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.white)
                     .bold()
@@ -44,8 +47,8 @@ struct AchievementsModalView: View {
                 Text("Поделиться")
                     .frame(maxWidth: .infinity, maxHeight: 10)
                     .padding()
-                    .background(Color(#colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)))
-                    .font(Constants.Design.AppFont.BodyMainFont)
+                    .background(backgroundShareLinkColor)
+                    .font(Constants.Design.Fonts.BodyMainFont)
                     .foregroundStyle(.white)
                     .bold()
                     .cornerRadius(20)
@@ -58,8 +61,8 @@ struct AchievementsModalView: View {
                     Text("Оценить приложение")
                         .frame(maxWidth: .infinity, maxHeight: 10)
                         .padding()
-                        .background(Color(#colorLiteral(red: 0.9411764741, green: 0.4980392158, blue: 0.3529411852, alpha: 1)))
-                        .font(Constants.Design.AppFont.BodyMainFont)
+                        .background(backgroundShareLinkColor)
+                        .font(Constants.Design.Fonts.BodyMainFont)
                         .foregroundStyle(.white)
                         .bold()
                         .cornerRadius(20)
@@ -71,6 +74,7 @@ struct AchievementsModalView: View {
         .background(Gradient(colors: [Color(#colorLiteral(red: 0.2219799757, green: 0.7046170831, blue: 0.9977453351, alpha: 1)), Color(#colorLiteral(red: 0.3222017288, green: 0.522277236, blue: 0.7342401743, alpha: 1))]))
         .cornerRadius(20)
         .shadow(radius: 20)
+        .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["AchievementsModalView": ""]) }
     }
 }
 

@@ -6,30 +6,33 @@
 //
 
 import SwiftUI
+import AppMetricaCore
 
 struct AchievementsView: View {
     @Binding var isAchievementShowingModal: Bool
-    let chooseIndexImageArray = [1, 7, 14, 30, 60, 90, 180, 270, 365]
-    let imagesAchievement = ["1DayAchiev", "7DaysAchiev", "14DaysAchiev", "30DaysAchiev", "60DaysAchiev", "90DaysAchiev", "180DaysAchiev", "270DaysAchiev", "365DaysAchiev"]
-    let imagesAchievementOff = ["1DayAchievOff", "7DaysAchievOff", "14DaysAchievOff", "30DaysAchievOff", "60DaysAchievOff", "90DaysAchievOff", "180DaysAchievOff", "270DaysAchievOff", "365DaysAchievOff"]
-    let namesAchievementFirst = ["Первый день", "7 дней", "14 дней", "30 дней", "60 дней", "90 дней", "180 дней", "270 дней", "365 дней"]
-    let namesAchievementSecond = ["Начало положено!", "Смотри как легко!", "Только вперёд!", "Не останавливайся!", "Всегда стремись выше!", "Мотивация на уровне!", "Ты можешь больше!", "Всё возможно!", "Ты на вершине!"]
+    private let chooseIndexImageArray = [1, 7, 14, 30, 60, 90, 180, 270, 365]
+    private let imagesAchievement = Constants.Back.Achievement.imagesAchievement
+    private let imagesAchievementOff = Constants.Back.Achievement.imagesAchievementOff
+    private let namesAchievementFirst = Constants.Back.Achievement.namesAchievementFirst
+    private let namesAchievementSecond = Constants.Back.Achievement.namesAchievementSecond
     
     @State private var imageAchievement = ""
-    @State private var nameAchievementFirst = ""
-    @State private var nameAchievementSecond = ""
+    @State private var nameAchievementFirst: LocalizedStringKey = ""
+    @State private var nameAchievementSecond: LocalizedStringKey = ""
     
     @State private var showAchievementsModal = false
     
     private let  userDefaultsManager = UserDefaultsManager.shared
     
+    private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
+    
     var body: some View {
         ZStack {
-            Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
+            backgroundViewColor
                 .ignoresSafeArea()
             VStack {
                 Text("Достижения")
-                    .font(Constants.Design.AppFont.BodyLargeFont)
+                    .font(Constants.Design.Fonts.BodyLargeFont)
                     .bold()
                     .foregroundStyle(.white)
                     .padding(.top)
@@ -37,7 +40,7 @@ struct AchievementsView: View {
                     .frame(height: 1)
                     .foregroundStyle(.white)
                 Text("Ежедневная цель")
-                    .font(Constants.Design.AppFont.BodyMainFont)
+                    .font(Constants.Design.Fonts.BodyMainFont)
                     .bold()
                     .foregroundStyle(.white)
                     .padding(.top)
@@ -48,7 +51,7 @@ struct AchievementsView: View {
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 100)
                         Text("Цель достигнута!")
-                            .font(Constants.Design.AppFont.BodySmallFont)
+                            .font(Constants.Design.Fonts.BodySmallFont)
                             .foregroundStyle(.white)
                             .bold()
                     }
@@ -60,7 +63,7 @@ struct AchievementsView: View {
                     .frame(height: 0.5)
                     .foregroundStyle(.white)
                 Text("Награды")
-                    .font(Constants.Design.AppFont.BodyMainFont)
+                    .font(Constants.Design.Fonts.BodyMainFont)
                     .bold()
                     .foregroundStyle(.white)
                     .padding(.top)
@@ -86,12 +89,12 @@ struct AchievementsView: View {
                                                 }
                                             if userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0 < chooseIndexImageArray[innerIndex] {
                                                 Text("\(userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0)/\(chooseIndexImageArray[innerIndex])")
-                                                    .font(Constants.Design.AppFont.BodyMiniFont)
+                                                    .font(Constants.Design.Fonts.BodyMiniFont)
                                                     .foregroundStyle(.white)
                                             }
                                         }
                                         Text(namesAchievementFirst[innerIndex])
-                                            .font(Constants.Design.AppFont.BodySmallFont)
+                                            .font(Constants.Design.Fonts.BodySmallFont)
                                             .foregroundStyle(.white)
                                             .bold()
                                     }
@@ -116,6 +119,7 @@ struct AchievementsView: View {
                 AchievementsModalView(showAchievementsModal: $showAchievementsModal, imageAchievement: imageAchievement, nameAchievementFirst: nameAchievementFirst, nameAchievementSecond: nameAchievementSecond)
             }
         })
+        .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["AchievementsView": ""]) }
     }
 }
 

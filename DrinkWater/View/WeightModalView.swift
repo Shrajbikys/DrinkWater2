@@ -17,15 +17,15 @@ struct WeightModalView: View {
     @Binding var isWeightShowingModal: Bool
     @Binding var selectedWeight: Double
     
-    var unitValue: Int
+    @State var unitValue: Int
     
     var body: some View {
         VStack {
             Text("Выберите ваш вес:")
-                .font(.headline)
+                .font(Constants.Design.Fonts.BodyMainFont)
                 .padding(.top, 30)
             Picker("Выберите ваш вес:", selection: $selectedWeight) {
-                ForEach(unitValue == 0 ? (1...200).map { Double($0) } : (1...400).map { Double($0) }, id: \.self) { number in
+                ForEach(unitValue == 0 ? (20...200).map { Double($0) } : (44...400).map { Double($0) }, id: \.self) { number in
                     Text("\(Int(number))").tag(number)
                 }
             }.pickerStyle(.wheel)
@@ -44,11 +44,13 @@ struct WeightModalView: View {
                 }
                 isWeightShowingModal = false
             }
+            .font(Constants.Design.Fonts.BodyMainFont)
             .bold()
         }
     }
 }
 
-//#Preview {
-//    WeightModalView(isShowingModal: .constant(false), selectedNumber: .constant(0))
-//}
+#Preview {
+    WeightModalView(isWeightShowingModal: .constant(false), selectedWeight: .constant(50), unitValue: 0)
+        .modelContainer(PreviewContainer.previewContainer)
+}

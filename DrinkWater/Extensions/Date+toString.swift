@@ -72,7 +72,7 @@ extension DateFormatter {
 
     static var fullMonth: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM"
+        formatter.dateFormat = "LLLL"
         return formatter
     }
     

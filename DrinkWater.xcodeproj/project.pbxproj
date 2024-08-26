@@ -7,6 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2C0099BF2C56D8530077E477 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C02FFEB2C4D0C8F00F8BD73 /* WidgetKit.framework */; };
+		2C0099C02C56D8530077E477 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C02FFED2C4D0C8F00F8BD73 /* SwiftUI.framework */; };
+		2C0099C32C56D8530077E477 /* DrinkWaterComplications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0099C22C56D8530077E477 /* DrinkWaterComplications.swift */; };
+		2C0099C52C56D8530077E477 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0099C42C56D8530077E477 /* AppIntent.swift */; };
+		2C0099C72C56D8550077E477 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C0099C62C56D8550077E477 /* Assets.xcassets */; };
+		2C0099CB2C56D8550077E477 /* DrinkWaterWatch ComplicationsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2C0099BE2C56D8530077E477 /* DrinkWaterWatch ComplicationsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2C0099D12C56DF5D0077E477 /* CornerComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0099D02C56DF5D0077E477 /* CornerComplication.swift */; };
+		2C0099D32C56E2640077E477 /* CircularComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0099D22C56E2640077E477 /* CircularComplication.swift */; };
+		2C0099D52C56E35C0077E477 /* InlineComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0099D42C56E35C0077E477 /* InlineComplication.swift */; };
+		2C0099D72C56E5CB0077E477 /* RectangularComplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0099D62C56E5CB0077E477 /* RectangularComplication.swift */; };
+		2C0099D92C5832CB0077E477 /* DrinkWaterComplicationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0099D82C5832CB0077E477 /* DrinkWaterComplicationsView.swift */; };
+		2C0200032C4D716A00F8BD73 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C0200022C4D716A00F8BD73 /* StoreKit.framework */; };
+		2C0200092C4D857E00F8BD73 /* WidgetEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0200072C4D843C00F8BD73 /* WidgetEntry.swift */; };
+		2C02000A2C4D858300F8BD73 /* SmallWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0200052C4D828600F8BD73 /* SmallWidgetView.swift */; };
+		2C02FFE22C4A56E200F8BD73 /* MeasurementManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02FFE12C4A56E200F8BD73 /* MeasurementManager.swift */; };
+		2C02FFE42C4A5A3B00F8BD73 /* Double+Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02FFE32C4A5A3B00F8BD73 /* Double+Measurement.swift */; };
+		2C02FFEC2C4D0C8F00F8BD73 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C02FFEB2C4D0C8F00F8BD73 /* WidgetKit.framework */; };
+		2C02FFEE2C4D0C8F00F8BD73 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C02FFED2C4D0C8F00F8BD73 /* SwiftUI.framework */; };
+		2C02FFF12C4D0C8F00F8BD73 /* DrinkWaterWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02FFF02C4D0C8F00F8BD73 /* DrinkWaterWidgetBundle.swift */; };
+		2C02FFF32C4D0C8F00F8BD73 /* DrinkWaterWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02FFF22C4D0C8F00F8BD73 /* DrinkWaterWidgetLiveActivity.swift */; };
+		2C02FFF52C4D0C8F00F8BD73 /* DrinkWaterWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02FFF42C4D0C8F00F8BD73 /* DrinkWaterWidget.swift */; };
+		2C02FFF72C4D0C8F00F8BD73 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02FFF62C4D0C8F00F8BD73 /* AppIntent.swift */; };
+		2C02FFF92C4D0C9100F8BD73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C02FFF82C4D0C9100F8BD73 /* Assets.xcassets */; };
+		2C02FFFD2C4D0C9100F8BD73 /* DrinkWaterWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 2C02FFE92C4D0C8F00F8BD73 /* DrinkWaterWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2C0869152C5008A400FFC519 /* DrinkWaterWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869142C5008A400FFC519 /* DrinkWaterWatchApp.swift */; };
+		2C0869172C5008A400FFC519 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869162C5008A400FFC519 /* ContentView.swift */; };
+		2C0869192C5008A500FFC519 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C0869182C5008A500FFC519 /* Assets.xcassets */; };
+		2C08691C2C5008A500FFC519 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C08691B2C5008A500FFC519 /* Preview Assets.xcassets */; };
+		2C08691F2C5008A500FFC519 /* DrinkWaterWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2C0869122C5008A400FFC519 /* DrinkWaterWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2C0869282C5008E600FFC519 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869232C5008E600FFC519 /* WatchSessionManager.swift */; };
+		2C0869292C5008E600FFC519 /* SelectAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869242C5008E600FFC519 /* SelectAmountView.swift */; };
+		2C08692A2C5008E600FFC519 /* MainWatchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869252C5008E600FFC519 /* MainWatchView.swift */; };
+		2C08692B2C5008E600FFC519 /* SelectDrinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869262C5008E600FFC519 /* SelectDrinkView.swift */; };
+		2C08692C2C5008E600FFC519 /* SheetNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869272C5008E600FFC519 /* SheetNavigator.swift */; };
+		2C0869372C5590AE00FFC519 /* DrinkWaterProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869352C5590A500FFC519 /* DrinkWaterProvider.swift */; };
+		2C0869392C5595DC00FFC519 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CB4662C31C867004E4FA6 /* UserDefaultsManager.swift */; };
+		2C1ADC9B2C724BF7004D9203 /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2C1ADC9A2C724BF7004D9203 /* AppMetricaCore */; };
+		2C1ADC9D2C724BF7004D9203 /* AppMetricaCrashes in Frameworks */ = {isa = PBXBuildFile; productRef = 2C1ADC9C2C724BF7004D9203 /* AppMetricaCrashes */; };
+		2C3AB4062C5975E4002A7DDD /* ComplicationsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3AB4052C5975E4002A7DDD /* ComplicationsProvider.swift */; };
+		2C3AB4092C5978B4002A7DDD /* ComplicationsEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3AB4082C5978B4002A7DDD /* ComplicationsEntry.swift */; };
+		2C3E585A2C66542E00A92A5C /* PreviewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3E58592C66542E00A92A5C /* PreviewContainer.swift */; };
 		2C47C3452C395A5B00692E1D /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C47C3442C395A5B00692E1D /* CloudKitManager.swift */; };
 		2C5EFC602C07D6B4004B1AE0 /* DrinkWaterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC5F2C07D6B4004B1AE0 /* DrinkWaterApp.swift */; };
 		2C5EFC622C07D6B4004B1AE0 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC612C07D6B4004B1AE0 /* ContentView.swift */; };
@@ -15,7 +56,7 @@
 		2C5EFC752C07D732004B1AE0 /* SelectDrinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC6F2C07D732004B1AE0 /* SelectDrinkView.swift */; };
 		2C5EFC762C07D732004B1AE0 /* AdditionalInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC702C07D732004B1AE0 /* AdditionalInfoView.swift */; };
 		2C5EFC772C07D732004B1AE0 /* SelectGenderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC712C07D732004B1AE0 /* SelectGenderView.swift */; };
-		2C5EFC782C07D732004B1AE0 /* StatisticsDrinkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC722C07D732004B1AE0 /* StatisticsDrinkView.swift */; };
+		2C5EFC782C07D732004B1AE0 /* StatisticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC722C07D732004B1AE0 /* StatisticsView.swift */; };
 		2C5EFC792C07D732004B1AE0 /* CustomAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC732C07D732004B1AE0 /* CustomAmountView.swift */; };
 		2C5EFC7A2C07D732004B1AE0 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC742C07D732004B1AE0 /* MainView.swift */; };
 		2C5EFC7C2C086C4B004B1AE0 /* HistoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC7B2C086C4B004B1AE0 /* HistoryItemView.swift */; };
@@ -36,13 +77,17 @@
 		2C725EB02C1A3869005359CB /* DataDrinkingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EAF2C1A3869005359CB /* DataDrinkingViewModel.swift */; };
 		2C725EB22C1A3875005359CB /* DataDrinkingOfTheDayViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EB12C1A3875005359CB /* DataDrinkingOfTheDayViewModel.swift */; };
 		2C725EB42C1A3880005359CB /* RemindersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C725EB32C1A3880005359CB /* RemindersViewModel.swift */; };
+		2C812D3C2C4D8C0300CB8111 /* MediumWidgetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C812D3A2C4D8BFC00CB8111 /* MediumWidgetView.swift */; };
+		2C9B91822C4E6A0F00947007 /* WidgetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9B91812C4E6A0F00947007 /* WidgetManager.swift */; };
+		2C9B91842C4E800200947007 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02FFF62C4D0C8F00F8BD73 /* AppIntent.swift */; };
+		2C9B91B12C4FA20E00947007 /* PhoneSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C9B91B02C4FA20E00947007 /* PhoneSessionManager.swift */; };
 		2CA3CC2E2C44396A003BC364 /* Sound-3.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC282C44396A003BC364 /* Sound-3.aiff */; };
 		2CA3CC2F2C44396A003BC364 /* Sound-4.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC292C44396A003BC364 /* Sound-4.aiff */; };
 		2CA3CC302C44396A003BC364 /* Sound-2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC2A2C44396A003BC364 /* Sound-2.aiff */; };
 		2CA3CC312C44396A003BC364 /* Sound-5.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC2B2C44396A003BC364 /* Sound-5.aiff */; };
 		2CA3CC322C44396A003BC364 /* Sound-6.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC2C2C44396A003BC364 /* Sound-6.aiff */; };
 		2CA3CC332C44396A003BC364 /* Sound-1.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2CA3CC2D2C44396A003BC364 /* Sound-1.aiff */; };
-		2CA3CC352C445104003BC364 /* StoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3CC342C445104003BC364 /* StoreManager.swift */; };
+		2CA3CC352C445104003BC364 /* PurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CA3CC342C445104003BC364 /* PurchaseManager.swift */; };
 		2CBB29B42C0CA4F800C8C2FA /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29B32C0CA4F800C8C2FA /* SettingsView.swift */; };
 		2CBB29B62C0CAF3E00C8C2FA /* WeightModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29B52C0CAF3E00C8C2FA /* WeightModalView.swift */; };
 		2CBB29B82C0CAF5600C8C2FA /* NormModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29B72C0CAF5600C8C2FA /* NormModalView.swift */; };
@@ -52,10 +97,117 @@
 		2CBB29C02C0F420A00C8C2FA /* SoundModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29BF2C0F420A00C8C2FA /* SoundModalView.swift */; };
 		2CBB29C22C0F441200C8C2FA /* IntervalModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29C12C0F441200C8C2FA /* IntervalModalView.swift */; };
 		2CBB29C42C0F4A0300C8C2FA /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBB29C32C0F4A0300C8C2FA /* AchievementsView.swift */; };
+		2CFC0D2D2C7C910200DBAF62 /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFC0D2C2C7C910200DBAF62 /* LaunchScreenView.swift */; };
+		2CFCE4C52C6E8F5500EA5393 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CFCE4C42C6E8F5500EA5393 /* Localizable.xcstrings */; };
+		2CFCE4C82C70A6DD00EA5393 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CFCE4C62C70A6C900EA5393 /* Localizable.xcstrings */; };
+		2CFCE4CC2C70B80300EA5393 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CFCE4CB2C70B80300EA5393 /* Localizable.xcstrings */; };
+		2CFCE4CD2C70D79300EA5393 /* Double+Measurement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C02FFE32C4A5A3B00F8BD73 /* Double+Measurement.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		2C0099C92C56D8550077E477 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C5EFC542C07D6B4004B1AE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2C0099BD2C56D8530077E477;
+			remoteInfo = "DrinkWaterWatch ComplicationsExtension";
+		};
+		2C02FFFB2C4D0C9100F8BD73 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C5EFC542C07D6B4004B1AE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2C02FFE82C4D0C8F00F8BD73;
+			remoteInfo = DrinkWaterWidgetExtension;
+		};
+		2C08691D2C5008A500FFC519 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2C5EFC542C07D6B4004B1AE0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2C0869112C5008A400FFC519;
+			remoteInfo = "DrinkWaterWatch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2C0099CF2C56D8550077E477 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2C0099CB2C56D8550077E477 /* DrinkWaterWatch ComplicationsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2C0200012C4D0C9100F8BD73 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2C02FFFD2C4D0C9100F8BD73 /* DrinkWaterWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2C0869062C50077800FFC519 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				2C08691F2C5008A500FFC519 /* DrinkWaterWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		2C0099BE2C56D8530077E477 /* DrinkWaterWatch ComplicationsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "DrinkWaterWatch ComplicationsExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C0099C22C56D8530077E477 /* DrinkWaterComplications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkWaterComplications.swift; sourceTree = "<group>"; };
+		2C0099C42C56D8530077E477 /* AppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntent.swift; sourceTree = "<group>"; };
+		2C0099C62C56D8550077E477 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2C0099C82C56D8550077E477 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C0099D02C56DF5D0077E477 /* CornerComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerComplication.swift; sourceTree = "<group>"; };
+		2C0099D22C56E2640077E477 /* CircularComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularComplication.swift; sourceTree = "<group>"; };
+		2C0099D42C56E35C0077E477 /* InlineComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InlineComplication.swift; sourceTree = "<group>"; };
+		2C0099D62C56E5CB0077E477 /* RectangularComplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangularComplication.swift; sourceTree = "<group>"; };
+		2C0099D82C5832CB0077E477 /* DrinkWaterComplicationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkWaterComplicationsView.swift; sourceTree = "<group>"; };
+		2C0200022C4D716A00F8BD73 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		2C0200042C4D718A00F8BD73 /* DrinkWaterWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DrinkWaterWidgetExtension.entitlements; sourceTree = "<group>"; };
+		2C0200052C4D828600F8BD73 /* SmallWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallWidgetView.swift; sourceTree = "<group>"; };
+		2C0200072C4D843C00F8BD73 /* WidgetEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetEntry.swift; sourceTree = "<group>"; };
+		2C02FFE12C4A56E200F8BD73 /* MeasurementManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeasurementManager.swift; sourceTree = "<group>"; };
+		2C02FFE32C4A5A3B00F8BD73 /* Double+Measurement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Measurement.swift"; sourceTree = "<group>"; };
+		2C02FFE92C4D0C8F00F8BD73 /* DrinkWaterWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DrinkWaterWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C02FFEB2C4D0C8F00F8BD73 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		2C02FFED2C4D0C8F00F8BD73 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		2C02FFF02C4D0C8F00F8BD73 /* DrinkWaterWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkWaterWidgetBundle.swift; sourceTree = "<group>"; };
+		2C02FFF22C4D0C8F00F8BD73 /* DrinkWaterWidgetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkWaterWidgetLiveActivity.swift; sourceTree = "<group>"; };
+		2C02FFF42C4D0C8F00F8BD73 /* DrinkWaterWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkWaterWidget.swift; sourceTree = "<group>"; };
+		2C02FFF62C4D0C8F00F8BD73 /* AppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntent.swift; sourceTree = "<group>"; };
+		2C02FFF82C4D0C9100F8BD73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2C02FFFA2C4D0C9100F8BD73 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C0869122C5008A400FFC519 /* DrinkWaterWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DrinkWaterWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2C0869142C5008A400FFC519 /* DrinkWaterWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkWaterWatchApp.swift; sourceTree = "<group>"; };
+		2C0869162C5008A400FFC519 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		2C0869182C5008A500FFC519 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2C08691B2C5008A500FFC519 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		2C0869232C5008E600FFC519 /* WatchSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
+		2C0869242C5008E600FFC519 /* SelectAmountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectAmountView.swift; sourceTree = "<group>"; };
+		2C0869252C5008E600FFC519 /* MainWatchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWatchView.swift; sourceTree = "<group>"; };
+		2C0869262C5008E600FFC519 /* SelectDrinkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectDrinkView.swift; sourceTree = "<group>"; };
+		2C0869272C5008E600FFC519 /* SheetNavigator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetNavigator.swift; sourceTree = "<group>"; };
+		2C08692D2C5008F900FFC519 /* DrinkWaterWatch Watch App.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "DrinkWaterWatch Watch App.entitlements"; sourceTree = "<group>"; };
+		2C0869342C55629D00FFC519 /* DrinkWaterWatch-Watch-App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DrinkWaterWatch-Watch-App-Info.plist"; sourceTree = SOURCE_ROOT; };
+		2C0869352C5590A500FFC519 /* DrinkWaterProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkWaterProvider.swift; sourceTree = "<group>"; };
 		2C0E975E2C35F3CE0034B237 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C3AB4052C5975E4002A7DDD /* ComplicationsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationsProvider.swift; sourceTree = "<group>"; };
+		2C3AB4072C5976BF002A7DDD /* DrinkWaterWatch ComplicationsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "DrinkWaterWatch ComplicationsExtension.entitlements"; sourceTree = "<group>"; };
+		2C3AB4082C5978B4002A7DDD /* ComplicationsEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationsEntry.swift; sourceTree = "<group>"; };
+		2C3E58592C66542E00A92A5C /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
 		2C47C33F2C373EA100692E1D /* DrinkWater.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = DrinkWater.entitlements; sourceTree = "<group>"; };
 		2C47C3442C395A5B00692E1D /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		2C5EFC5C2C07D6B4004B1AE0 /* DrinkWater.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrinkWater.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -66,7 +218,7 @@
 		2C5EFC6F2C07D732004B1AE0 /* SelectDrinkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectDrinkView.swift; sourceTree = "<group>"; };
 		2C5EFC702C07D732004B1AE0 /* AdditionalInfoView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdditionalInfoView.swift; sourceTree = "<group>"; };
 		2C5EFC712C07D732004B1AE0 /* SelectGenderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectGenderView.swift; sourceTree = "<group>"; };
-		2C5EFC722C07D732004B1AE0 /* StatisticsDrinkView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsDrinkView.swift; sourceTree = "<group>"; };
+		2C5EFC722C07D732004B1AE0 /* StatisticsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatisticsView.swift; sourceTree = "<group>"; };
 		2C5EFC732C07D732004B1AE0 /* CustomAmountView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAmountView.swift; sourceTree = "<group>"; };
 		2C5EFC742C07D732004B1AE0 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		2C5EFC7B2C086C4B004B1AE0 /* HistoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItemView.swift; sourceTree = "<group>"; };
@@ -87,13 +239,17 @@
 		2C725EAF2C1A3869005359CB /* DataDrinkingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDrinkingViewModel.swift; sourceTree = "<group>"; };
 		2C725EB12C1A3875005359CB /* DataDrinkingOfTheDayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDrinkingOfTheDayViewModel.swift; sourceTree = "<group>"; };
 		2C725EB32C1A3880005359CB /* RemindersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersViewModel.swift; sourceTree = "<group>"; };
+		2C812D3A2C4D8BFC00CB8111 /* MediumWidgetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediumWidgetView.swift; sourceTree = "<group>"; };
+		2C9B91812C4E6A0F00947007 /* WidgetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetManager.swift; sourceTree = "<group>"; };
+		2C9B91B02C4FA20E00947007 /* PhoneSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneSessionManager.swift; sourceTree = "<group>"; };
 		2CA3CC282C44396A003BC364 /* Sound-3.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-3.aiff"; sourceTree = "<group>"; };
 		2CA3CC292C44396A003BC364 /* Sound-4.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-4.aiff"; sourceTree = "<group>"; };
 		2CA3CC2A2C44396A003BC364 /* Sound-2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-2.aiff"; sourceTree = "<group>"; };
 		2CA3CC2B2C44396A003BC364 /* Sound-5.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-5.aiff"; sourceTree = "<group>"; };
 		2CA3CC2C2C44396A003BC364 /* Sound-6.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-6.aiff"; sourceTree = "<group>"; };
 		2CA3CC2D2C44396A003BC364 /* Sound-1.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = "Sound-1.aiff"; sourceTree = "<group>"; };
-		2CA3CC342C445104003BC364 /* StoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreManager.swift; sourceTree = "<group>"; };
+		2CA3CC342C445104003BC364 /* PurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseManager.swift; sourceTree = "<group>"; };
+		2CA3CC362C4464E3003BC364 /* MainConfiguration.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = MainConfiguration.storekit; sourceTree = "<group>"; };
 		2CBB29B32C0CA4F800C8C2FA /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2CBB29B52C0CAF3E00C8C2FA /* WeightModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeightModalView.swift; sourceTree = "<group>"; };
 		2CBB29B72C0CAF5600C8C2FA /* NormModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormModalView.swift; sourceTree = "<group>"; };
@@ -103,24 +259,144 @@
 		2CBB29BF2C0F420A00C8C2FA /* SoundModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundModalView.swift; sourceTree = "<group>"; };
 		2CBB29C12C0F441200C8C2FA /* IntervalModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntervalModalView.swift; sourceTree = "<group>"; };
 		2CBB29C32C0F4A0300C8C2FA /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
+		2CFC0D2C2C7C910200DBAF62 /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
+		2CFCE4C42C6E8F5500EA5393 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		2CFCE4C62C70A6C900EA5393 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		2CFCE4CB2C70B80300EA5393 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		2C5EFC592C07D6B4004B1AE0 /* Frameworks */ = {
+		2C0099BB2C56D8530077E477 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C0099C02C56D8530077E477 /* SwiftUI.framework in Frameworks */,
+				2C0099BF2C56D8530077E477 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2C02FFE62C4D0C8F00F8BD73 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C02FFEE2C4D0C8F00F8BD73 /* SwiftUI.framework in Frameworks */,
+				2C02FFEC2C4D0C8F00F8BD73 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2C08690F2C5008A400FFC519 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2C5EFC592C07D6B4004B1AE0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C1ADC9D2C724BF7004D9203 /* AppMetricaCrashes in Frameworks */,
+				2C0200032C4D716A00F8BD73 /* StoreKit.framework in Frameworks */,
+				2C1ADC9B2C724BF7004D9203 /* AppMetricaCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2C0099C12C56D8530077E477 /* DrinkWaterWatch Complications */ = {
+			isa = PBXGroup;
+			children = (
+				2C0099C22C56D8530077E477 /* DrinkWaterComplications.swift */,
+				2C0099D82C5832CB0077E477 /* DrinkWaterComplicationsView.swift */,
+				2C3AB4082C5978B4002A7DDD /* ComplicationsEntry.swift */,
+				2C3AB4052C5975E4002A7DDD /* ComplicationsProvider.swift */,
+				2C0099D02C56DF5D0077E477 /* CornerComplication.swift */,
+				2C0099D22C56E2640077E477 /* CircularComplication.swift */,
+				2C0099D42C56E35C0077E477 /* InlineComplication.swift */,
+				2C0099D62C56E5CB0077E477 /* RectangularComplication.swift */,
+				2C0099C42C56D8530077E477 /* AppIntent.swift */,
+				2C0099C62C56D8550077E477 /* Assets.xcassets */,
+				2C0099C82C56D8550077E477 /* Info.plist */,
+			);
+			path = "DrinkWaterWatch Complications";
+			sourceTree = "<group>";
+		};
+		2C02FFE02C47DCF600F8BD73 /* ReminderSounds */ = {
+			isa = PBXGroup;
+			children = (
+				2CA3CC2D2C44396A003BC364 /* Sound-1.aiff */,
+				2CA3CC2A2C44396A003BC364 /* Sound-2.aiff */,
+				2CA3CC282C44396A003BC364 /* Sound-3.aiff */,
+				2CA3CC292C44396A003BC364 /* Sound-4.aiff */,
+				2CA3CC2B2C44396A003BC364 /* Sound-5.aiff */,
+				2CA3CC2C2C44396A003BC364 /* Sound-6.aiff */,
+			);
+			path = ReminderSounds;
+			sourceTree = "<group>";
+		};
+		2C02FFEA2C4D0C8F00F8BD73 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2C0200022C4D716A00F8BD73 /* StoreKit.framework */,
+				2C02FFEB2C4D0C8F00F8BD73 /* WidgetKit.framework */,
+				2C02FFED2C4D0C8F00F8BD73 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2C02FFEF2C4D0C8F00F8BD73 /* DrinkWaterWidget Extension */ = {
+			isa = PBXGroup;
+			children = (
+				2C02FFF02C4D0C8F00F8BD73 /* DrinkWaterWidgetBundle.swift */,
+				2C02FFF22C4D0C8F00F8BD73 /* DrinkWaterWidgetLiveActivity.swift */,
+				2C0200072C4D843C00F8BD73 /* WidgetEntry.swift */,
+				2C02FFF62C4D0C8F00F8BD73 /* AppIntent.swift */,
+				2C02FFF42C4D0C8F00F8BD73 /* DrinkWaterWidget.swift */,
+				2C0869352C5590A500FFC519 /* DrinkWaterProvider.swift */,
+				2C0200052C4D828600F8BD73 /* SmallWidgetView.swift */,
+				2C812D3A2C4D8BFC00CB8111 /* MediumWidgetView.swift */,
+				2C02FFF82C4D0C9100F8BD73 /* Assets.xcassets */,
+				2C02FFFA2C4D0C9100F8BD73 /* Info.plist */,
+				2CFCE4C62C70A6C900EA5393 /* Localizable.xcstrings */,
+			);
+			path = "DrinkWaterWidget Extension";
+			sourceTree = "<group>";
+		};
+		2C0869132C5008A400FFC519 /* DrinkWaterWatch Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				2C0869342C55629D00FFC519 /* DrinkWaterWatch-Watch-App-Info.plist */,
+				2C08692D2C5008F900FFC519 /* DrinkWaterWatch Watch App.entitlements */,
+				2C0869142C5008A400FFC519 /* DrinkWaterWatchApp.swift */,
+				2C0869162C5008A400FFC519 /* ContentView.swift */,
+				2C0869232C5008E600FFC519 /* WatchSessionManager.swift */,
+				2C0869252C5008E600FFC519 /* MainWatchView.swift */,
+				2C0869262C5008E600FFC519 /* SelectDrinkView.swift */,
+				2C0869242C5008E600FFC519 /* SelectAmountView.swift */,
+				2C0869272C5008E600FFC519 /* SheetNavigator.swift */,
+				2C0869182C5008A500FFC519 /* Assets.xcassets */,
+				2C08691A2C5008A500FFC519 /* Preview Content */,
+				2CFCE4CB2C70B80300EA5393 /* Localizable.xcstrings */,
+			);
+			path = "DrinkWaterWatch Watch App";
+			sourceTree = "<group>";
+		};
+		2C08691A2C5008A500FFC519 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				2C08691B2C5008A500FFC519 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		2C0E97622C373B1B0034B237 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
 				2C47C33F2C373EA100692E1D /* DrinkWater.entitlements */,
 				2C0E975E2C35F3CE0034B237 /* Info.plist */,
+				2CA3CC362C4464E3003BC364 /* MainConfiguration.storekit */,
+				2CFCE4C42C6E8F5500EA5393 /* Localizable.xcstrings */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -128,7 +404,13 @@
 		2C5EFC532C07D6B4004B1AE0 = {
 			isa = PBXGroup;
 			children = (
+				2C3AB4072C5976BF002A7DDD /* DrinkWaterWatch ComplicationsExtension.entitlements */,
+				2C0200042C4D718A00F8BD73 /* DrinkWaterWidgetExtension.entitlements */,
 				2C5EFC5E2C07D6B4004B1AE0 /* DrinkWater */,
+				2C02FFEF2C4D0C8F00F8BD73 /* DrinkWaterWidget Extension */,
+				2C0869132C5008A400FFC519 /* DrinkWaterWatch Watch App */,
+				2C0099C12C56D8530077E477 /* DrinkWaterWatch Complications */,
+				2C02FFEA2C4D0C8F00F8BD73 /* Frameworks */,
 				2C5EFC5D2C07D6B4004B1AE0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -137,6 +419,9 @@
 			isa = PBXGroup;
 			children = (
 				2C5EFC5C2C07D6B4004B1AE0 /* DrinkWater.app */,
+				2C02FFE92C4D0C8F00F8BD73 /* DrinkWaterWidgetExtension.appex */,
+				2C0869122C5008A400FFC519 /* DrinkWaterWatch Watch App.app */,
+				2C0099BE2C56D8530077E477 /* DrinkWaterWatch ComplicationsExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -145,6 +430,7 @@
 			isa = PBXGroup;
 			children = (
 				2C5EFC7D2C09BA28004B1AE0 /* Constants.swift */,
+				2C5EFC5F2C07D6B4004B1AE0 /* DrinkWaterApp.swift */,
 				2C5EFC612C07D6B4004B1AE0 /* ContentView.swift */,
 				2C6CB4652C31C848004E4FA6 /* Helpers */,
 				2C725E9B2C1A1785005359CB /* Persistence */,
@@ -174,7 +460,10 @@
 				2C6CB4662C31C867004E4FA6 /* UserDefaultsManager.swift */,
 				2C6CB4682C349D47004E4FA6 /* MailComposeViewController.swift */,
 				2C47C3442C395A5B00692E1D /* CloudKitManager.swift */,
-				2CA3CC342C445104003BC364 /* StoreManager.swift */,
+				2CA3CC342C445104003BC364 /* PurchaseManager.swift */,
+				2C02FFE12C4A56E200F8BD73 /* MeasurementManager.swift */,
+				2C9B91812C4E6A0F00947007 /* WidgetManager.swift */,
+				2C9B91B02C4FA20E00947007 /* PhoneSessionManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -185,6 +474,7 @@
 				2C725EA72C1A2A5D005359CB /* Calender+Dates.swift */,
 				2C725EA52C1A292D005359CB /* Date+toString.swift */,
 				2C725EA92C1A2AC9005359CB /* DateForDrinkWater.swift */,
+				2C02FFE32C4A5A3B00F8BD73 /* Double+Measurement.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -204,6 +494,7 @@
 				2C725E9F2C1A2665005359CB /* DataDrinking.swift */,
 				2C725EA12C1A273D005359CB /* DataDrinkingOfTheDay.swift */,
 				2C725EA32C1A285B005359CB /* Reminder.swift */,
+				2C3E58592C66542E00A92A5C /* PreviewContainer.swift */,
 			);
 			path = SwiftDataModel;
 			sourceTree = "<group>";
@@ -222,18 +513,18 @@
 		2C725EAC2C1A382B005359CB /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2CFC0D2C2C7C910200DBAF62 /* LaunchScreenView.swift */,
 				2C5EFC712C07D732004B1AE0 /* SelectGenderView.swift */,
 				2C5EFC702C07D732004B1AE0 /* AdditionalInfoView.swift */,
 				2C5EFC742C07D732004B1AE0 /* MainView.swift */,
 				2C5EFC6F2C07D732004B1AE0 /* SelectDrinkView.swift */,
 				2C5EFC732C07D732004B1AE0 /* CustomAmountView.swift */,
-				2C5EFC722C07D732004B1AE0 /* StatisticsDrinkView.swift */,
+				2C5EFC722C07D732004B1AE0 /* StatisticsView.swift */,
 				2C5EFC7B2C086C4B004B1AE0 /* HistoryItemView.swift */,
 				2CBB29B32C0CA4F800C8C2FA /* SettingsView.swift */,
 				2CBB29BB2C0CC9A600C8C2FA /* RemindersView.swift */,
 				2CBB29B92C0CC96D00C8C2FA /* HydrationView.swift */,
 				2CBB29BD2C0CCFDD00C8C2FA /* HydrationItemView.swift */,
-				2C5EFC5F2C07D6B4004B1AE0 /* DrinkWaterApp.swift */,
 				2CBB29B52C0CAF3E00C8C2FA /* WeightModalView.swift */,
 				2CBB29B72C0CAF5600C8C2FA /* NormModalView.swift */,
 				2CBB29BF2C0F420A00C8C2FA /* SoundModalView.swift */,
@@ -248,12 +539,7 @@
 		2CA3CC272C443947003BC364 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2CA3CC2D2C44396A003BC364 /* Sound-1.aiff */,
-				2CA3CC2A2C44396A003BC364 /* Sound-2.aiff */,
-				2CA3CC282C44396A003BC364 /* Sound-3.aiff */,
-				2CA3CC292C44396A003BC364 /* Sound-4.aiff */,
-				2CA3CC2B2C44396A003BC364 /* Sound-5.aiff */,
-				2CA3CC2C2C44396A003BC364 /* Sound-6.aiff */,
+				2C02FFE02C47DCF600F8BD73 /* ReminderSounds */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -261,6 +547,59 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		2C0099BD2C56D8530077E477 /* DrinkWaterWatch ComplicationsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2C0099CC2C56D8550077E477 /* Build configuration list for PBXNativeTarget "DrinkWaterWatch ComplicationsExtension" */;
+			buildPhases = (
+				2C0099BA2C56D8530077E477 /* Sources */,
+				2C0099BB2C56D8530077E477 /* Frameworks */,
+				2C0099BC2C56D8530077E477 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "DrinkWaterWatch ComplicationsExtension";
+			productName = "DrinkWaterWatch ComplicationsExtension";
+			productReference = 2C0099BE2C56D8530077E477 /* DrinkWaterWatch ComplicationsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		2C02FFE82C4D0C8F00F8BD73 /* DrinkWaterWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2C02FFFE2C4D0C9100F8BD73 /* Build configuration list for PBXNativeTarget "DrinkWaterWidgetExtension" */;
+			buildPhases = (
+				2C02FFE52C4D0C8F00F8BD73 /* Sources */,
+				2C02FFE62C4D0C8F00F8BD73 /* Frameworks */,
+				2C02FFE72C4D0C8F00F8BD73 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DrinkWaterWidgetExtension;
+			productName = DrinkWaterWidgetExtension;
+			productReference = 2C02FFE92C4D0C8F00F8BD73 /* DrinkWaterWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		2C0869112C5008A400FFC519 /* DrinkWaterWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2C0869202C5008A500FFC519 /* Build configuration list for PBXNativeTarget "DrinkWaterWatch Watch App" */;
+			buildPhases = (
+				2C08690E2C5008A400FFC519 /* Sources */,
+				2C08690F2C5008A400FFC519 /* Frameworks */,
+				2C0869102C5008A400FFC519 /* Resources */,
+				2C0099CF2C56D8550077E477 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2C0099CA2C56D8550077E477 /* PBXTargetDependency */,
+			);
+			name = "DrinkWaterWatch Watch App";
+			productName = "DrinkWaterWatch Watch App";
+			productReference = 2C0869122C5008A400FFC519 /* DrinkWaterWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
 		2C5EFC5B2C07D6B4004B1AE0 /* DrinkWater */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2C5EFC6C2C07D6B6004B1AE0 /* Build configuration list for PBXNativeTarget "DrinkWater" */;
@@ -268,12 +607,20 @@
 				2C5EFC582C07D6B4004B1AE0 /* Sources */,
 				2C5EFC592C07D6B4004B1AE0 /* Frameworks */,
 				2C5EFC5A2C07D6B4004B1AE0 /* Resources */,
+				2C0200012C4D0C9100F8BD73 /* Embed Foundation Extensions */,
+				2C0869062C50077800FFC519 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2C02FFFC2C4D0C9100F8BD73 /* PBXTargetDependency */,
+				2C08691E2C5008A500FFC519 /* PBXTargetDependency */,
 			);
 			name = DrinkWater;
+			packageProductDependencies = (
+				2C1ADC9A2C724BF7004D9203 /* AppMetricaCore */,
+				2C1ADC9C2C724BF7004D9203 /* AppMetricaCrashes */,
+			);
 			productName = DrinkWater;
 			productReference = 2C5EFC5C2C07D6B4004B1AE0 /* DrinkWater.app */;
 			productType = "com.apple.product-type.application";
@@ -288,6 +635,15 @@
 				LastSwiftUpdateCheck = 1540;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
+					2C0099BD2C56D8530077E477 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					2C02FFE82C4D0C8F00F8BD73 = {
+						CreatedOnToolsVersion = 15.4;
+					};
+					2C0869112C5008A400FFC519 = {
+						CreatedOnToolsVersion = 15.4;
+					};
 					2C5EFC5B2C07D6B4004B1AE0 = {
 						CreatedOnToolsVersion = 15.4;
 					};
@@ -299,20 +655,55 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				ru,
+				it,
+				es,
+				"en-GB",
 			);
 			mainGroup = 2C5EFC532C07D6B4004B1AE0;
+			packageReferences = (
+				2C1ADC992C724BF7004D9203 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */,
+			);
 			productRefGroup = 2C5EFC5D2C07D6B4004B1AE0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				2C5EFC5B2C07D6B4004B1AE0 /* DrinkWater */,
+				2C02FFE82C4D0C8F00F8BD73 /* DrinkWaterWidgetExtension */,
+				2C0869112C5008A400FFC519 /* DrinkWaterWatch Watch App */,
+				2C0099BD2C56D8530077E477 /* DrinkWaterWatch ComplicationsExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		2C0099BC2C56D8530077E477 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C0099C72C56D8550077E477 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2C02FFE72C4D0C8F00F8BD73 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2CFCE4C82C70A6DD00EA5393 /* Localizable.xcstrings in Resources */,
+				2C02FFF92C4D0C9100F8BD73 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2C0869102C5008A400FFC519 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C08691C2C5008A500FFC519 /* Preview Assets.xcassets in Resources */,
+				2C0869192C5008A500FFC519 /* Assets.xcassets in Resources */,
+				2CFCE4CC2C70B80300EA5393 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2C5EFC5A2C07D6B4004B1AE0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -325,19 +716,69 @@
 				2CA3CC2F2C44396A003BC364 /* Sound-4.aiff in Resources */,
 				2C5EFC662C07D6B6004B1AE0 /* Assets.xcassets in Resources */,
 				2CA3CC332C44396A003BC364 /* Sound-1.aiff in Resources */,
+				2CFCE4C52C6E8F5500EA5393 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2C0099BA2C56D8530077E477 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C3AB4092C5978B4002A7DDD /* ComplicationsEntry.swift in Sources */,
+				2C0099D52C56E35C0077E477 /* InlineComplication.swift in Sources */,
+				2C0099C32C56D8530077E477 /* DrinkWaterComplications.swift in Sources */,
+				2C0099D12C56DF5D0077E477 /* CornerComplication.swift in Sources */,
+				2C0099D72C56E5CB0077E477 /* RectangularComplication.swift in Sources */,
+				2C0099D92C5832CB0077E477 /* DrinkWaterComplicationsView.swift in Sources */,
+				2C0099C52C56D8530077E477 /* AppIntent.swift in Sources */,
+				2C3AB4062C5975E4002A7DDD /* ComplicationsProvider.swift in Sources */,
+				2C0099D32C56E2640077E477 /* CircularComplication.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2C02FFE52C4D0C8F00F8BD73 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C02FFF12C4D0C8F00F8BD73 /* DrinkWaterWidgetBundle.swift in Sources */,
+				2C02FFF72C4D0C8F00F8BD73 /* AppIntent.swift in Sources */,
+				2C0869372C5590AE00FFC519 /* DrinkWaterProvider.swift in Sources */,
+				2C812D3C2C4D8C0300CB8111 /* MediumWidgetView.swift in Sources */,
+				2C0200092C4D857E00F8BD73 /* WidgetEntry.swift in Sources */,
+				2C0869392C5595DC00FFC519 /* UserDefaultsManager.swift in Sources */,
+				2C02FFF32C4D0C8F00F8BD73 /* DrinkWaterWidgetLiveActivity.swift in Sources */,
+				2C02000A2C4D858300F8BD73 /* SmallWidgetView.swift in Sources */,
+				2C02FFF52C4D0C8F00F8BD73 /* DrinkWaterWidget.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2C08690E2C5008A400FFC519 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2C0869292C5008E600FFC519 /* SelectAmountView.swift in Sources */,
+				2C08692B2C5008E600FFC519 /* SelectDrinkView.swift in Sources */,
+				2C0869282C5008E600FFC519 /* WatchSessionManager.swift in Sources */,
+				2C08692A2C5008E600FFC519 /* MainWatchView.swift in Sources */,
+				2C0869172C5008A400FFC519 /* ContentView.swift in Sources */,
+				2C08692C2C5008E600FFC519 /* SheetNavigator.swift in Sources */,
+				2C0869152C5008A400FFC519 /* DrinkWaterWatchApp.swift in Sources */,
+				2CFCE4CD2C70D79300EA5393 /* Double+Measurement.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2C5EFC582C07D6B4004B1AE0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				2C725EA02C1A2665005359CB /* DataDrinking.swift in Sources */,
+				2C3E585A2C66542E00A92A5C /* PreviewContainer.swift in Sources */,
 				2C725EA22C1A273D005359CB /* DataDrinkingOfTheDay.swift in Sources */,
 				2C725EAE2C1A3855005359CB /* ProfileViewModel.swift in Sources */,
+				2C9B91B12C4FA20E00947007 /* PhoneSessionManager.swift in Sources */,
 				2C725EAA2C1A2AC9005359CB /* DateForDrinkWater.swift in Sources */,
 				2C725E9A2C178539005359CB /* PurchaseView.swift in Sources */,
 				2CBB29C02C0F420A00C8C2FA /* SoundModalView.swift in Sources */,
@@ -345,20 +786,24 @@
 				2C725E932C10F92D005359CB /* AchievementsModalView.swift in Sources */,
 				2C5EFC762C07D732004B1AE0 /* AdditionalInfoView.swift in Sources */,
 				2C5EFC7C2C086C4B004B1AE0 /* HistoryItemView.swift in Sources */,
+				2C9B91822C4E6A0F00947007 /* WidgetManager.swift in Sources */,
+				2C9B91842C4E800200947007 /* AppIntent.swift in Sources */,
 				2C5EFC7A2C07D732004B1AE0 /* MainView.swift in Sources */,
-				2CA3CC352C445104003BC364 /* StoreManager.swift in Sources */,
+				2CA3CC352C445104003BC364 /* PurchaseManager.swift in Sources */,
 				2C725EA82C1A2A5D005359CB /* Calender+Dates.swift in Sources */,
 				2CBB29B82C0CAF5600C8C2FA /* NormModalView.swift in Sources */,
 				2C725EB02C1A3869005359CB /* DataDrinkingViewModel.swift in Sources */,
+				2CFC0D2D2C7C910200DBAF62 /* LaunchScreenView.swift in Sources */,
 				2CBB29C22C0F441200C8C2FA /* IntervalModalView.swift in Sources */,
 				2C5EFC622C07D6B4004B1AE0 /* ContentView.swift in Sources */,
+				2C02FFE42C4A5A3B00F8BD73 /* Double+Measurement.swift in Sources */,
 				2C5EFC792C07D732004B1AE0 /* CustomAmountView.swift in Sources */,
 				2C5EFC7E2C09BA28004B1AE0 /* Constants.swift in Sources */,
 				2C5EFC602C07D6B4004B1AE0 /* DrinkWaterApp.swift in Sources */,
 				2C6CB46D2C349F3C004E4FA6 /* HealthKitManager.swift in Sources */,
 				2C47C3452C395A5B00692E1D /* CloudKitManager.swift in Sources */,
 				2C725EA42C1A285B005359CB /* Reminder.swift in Sources */,
-				2C5EFC782C07D732004B1AE0 /* StatisticsDrinkView.swift in Sources */,
+				2C5EFC782C07D732004B1AE0 /* StatisticsView.swift in Sources */,
 				2CBB29BA2C0CC96D00C8C2FA /* HydrationView.swift in Sources */,
 				2CBB29B62C0CAF3E00C8C2FA /* WeightModalView.swift in Sources */,
 				2CBB29BC2C0CC9A600C8C2FA /* RemindersView.swift in Sources */,
@@ -371,13 +816,226 @@
 				2C725EB22C1A3875005359CB /* DataDrinkingOfTheDayViewModel.swift in Sources */,
 				2C725EB42C1A3880005359CB /* RemindersViewModel.swift in Sources */,
 				2CBB29BE2C0CCFDD00C8C2FA /* HydrationItemView.swift in Sources */,
+				2C02FFE22C4A56E200F8BD73 /* MeasurementManager.swift in Sources */,
 				2CBB29B42C0CA4F800C8C2FA /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		2C0099CA2C56D8550077E477 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2C0099BD2C56D8530077E477 /* DrinkWaterWatch ComplicationsExtension */;
+			targetProxy = 2C0099C92C56D8550077E477 /* PBXContainerItemProxy */;
+		};
+		2C02FFFC2C4D0C9100F8BD73 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2C02FFE82C4D0C8F00F8BD73 /* DrinkWaterWidgetExtension */;
+			targetProxy = 2C02FFFB2C4D0C9100F8BD73 /* PBXContainerItemProxy */;
+		};
+		2C08691E2C5008A500FFC519 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2C0869112C5008A400FFC519 /* DrinkWaterWatch Watch App */;
+			targetProxy = 2C08691D2C5008A500FFC519 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		2C0099CD2C56D8550077E477 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch ComplicationsExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = U3ZYMWGFAG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DrinkWaterWatch Complications/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "DrinkWaterWatch Complications";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+			};
+			name = Debug;
+		};
+		2C0099CE2C56D8550077E477 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch ComplicationsExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = U3ZYMWGFAG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DrinkWaterWatch Complications/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "DrinkWaterWatch Complications";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.5;
+			};
+			name = Release;
+		};
+		2C0200002C4D0C9100F8BD73 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DrinkWaterWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = U3ZYMWGFAG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DrinkWaterWidget Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = DrinkWaterWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.DrinkWaterWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		2C02FFFF2C4D0C9100F8BD73 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = DrinkWaterWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = U3ZYMWGFAG;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DrinkWaterWidget Extension/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = DrinkWaterWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.DrinkWaterWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		2C0869212C5008A500FFC519 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch Watch App/DrinkWaterWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_ASSET_PATHS = "\"DrinkWaterWatch Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = U3ZYMWGFAG;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DrinkWaterWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Drink Water";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.alexander.l.DrinkWater;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		2C0869222C5008A500FFC519 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch Watch App/DrinkWaterWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_ASSET_PATHS = "\"DrinkWaterWatch Watch App/Preview Content\"";
+				DEVELOPMENT_TEAM = U3ZYMWGFAG;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DrinkWaterWatch-Watch-App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Drink Water";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.alexander.l.DrinkWater;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 3.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 		2C5EFC6A2C07D6B6004B1AE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -438,6 +1096,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Debug;
 		};
@@ -494,24 +1153,26 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
 			};
 			name = Release;
 		};
 		2C5EFC6D2C07D6B6004B1AE0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWater/Supporting Files/DrinkWater.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWater/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWater/Supporting Files/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Попей Водички";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				INFOPLIST_KEY_CFBundleDisplayName = "Drink Water";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We will use your health information to better calculate your daily goal";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We will enter information about the amount of drink consumed so that all information is stored in Apple Health";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -523,8 +1184,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater2;
+				MARKETING_VERSION = 3.0;
+				OTHER_SWIFT_FLAGS = "-DTARGET_IS_MAIN_APP";
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -539,18 +1201,19 @@
 		2C5EFC6E2C07D6B6004B1AE0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWater/Supporting Files/DrinkWater.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWater/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWater/Supporting Files/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Попей Водички";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.food-and-drink";
+				INFOPLIST_KEY_CFBundleDisplayName = "Drink Water";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "We will use your health information to better calculate your daily goal";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "We will enter information about the amount of drink consumed so that all information is stored in Apple Health";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -562,8 +1225,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater2;
+				MARKETING_VERSION = 3.0;
+				OTHER_SWIFT_FLAGS = "-DTARGET_IS_MAIN_APP";
+				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -578,6 +1242,33 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2C0099CC2C56D8550077E477 /* Build configuration list for PBXNativeTarget "DrinkWaterWatch ComplicationsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C0099CD2C56D8550077E477 /* Debug */,
+				2C0099CE2C56D8550077E477 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2C02FFFE2C4D0C9100F8BD73 /* Build configuration list for PBXNativeTarget "DrinkWaterWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C02FFFF2C4D0C9100F8BD73 /* Debug */,
+				2C0200002C4D0C9100F8BD73 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2C0869202C5008A500FFC519 /* Build configuration list for PBXNativeTarget "DrinkWaterWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2C0869212C5008A500FFC519 /* Debug */,
+				2C0869222C5008A500FFC519 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		2C5EFC572C07D6B4004B1AE0 /* Build configuration list for PBXProject "DrinkWater" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -597,6 +1288,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2C1ADC992C724BF7004D9203 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/appmetrica/appmetrica-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2C1ADC9A2C724BF7004D9203 /* AppMetricaCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C1ADC992C724BF7004D9203 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCore;
+		};
+		2C1ADC9C2C724BF7004D9203 /* AppMetricaCrashes */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2C1ADC992C724BF7004D9203 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			productName = AppMetricaCrashes;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2C5EFC542C07D6B4004B1AE0 /* Project object */;
 }

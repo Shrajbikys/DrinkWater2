@@ -9,14 +9,16 @@
 import SwiftUI
 import SwiftData
 import Charts
+import AppMetricaCore
 
-struct StatisticsDrinkView: View {
+struct StatisticsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
     
     @Query var profile: [Profile]
-    @Query(sort: \DataDrinking.dateDrink, order: .forward) var dataDrinking: [DataDrinking]
-    @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
+    @Query(sort: \DataDrinking.dateDrink, order: .forward) private var dataDrinking: [DataDrinking]
+    @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) private var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
     
     @StateObject private var healthKitManager = HealthKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
@@ -27,10 +29,18 @@ struct StatisticsDrinkView: View {
     @State private var selectedSegment: Int = 0
     @State private var selectedIndex: Int? = nil
     @State private var isEmpty: Bool = true
+    @State private var lastNameDrink: String = "Water"
+    @State private var unit: Int = 0
     
-    let hydration: [String: Double] = ["Water": 1.0, "Coffee": 0.8, "Tea": 0.9, "Milk": 0.9, "Juice": 0.8, "Soda": 0.9, "Cocoa": 0.7, "Smoothie": 0.3, "Yogurt": 0.5, "Beer": -0.6, "NonalcoholicBeer": 0.6, "Wine": -1.6]
+    private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
+    private let backgroundChartColor: Color = Color(#colorLiteral(red: 0.2157807946, green: 0.4114688337, blue: 0.6079391837, alpha: 1))
+    private let backgroundExternalCircleColor: Color = Color(#colorLiteral(red: 0.3114904165, green: 0.5568692684, blue: 0.7960240245, alpha: 1))
+    private let backgroundInternalCircleColor: Color = Color(#colorLiteral(red: 0.933318913, green: 0.9332848787, blue: 0.9375355244, alpha: 1))
     
-    let segments: Array<String> = ["Неделя", "Месяц"]
+    @State private var normDrink: Double = 2000
+    let hydration: [String: Double] = Constants.Back.Drink.hydration
+    
+    let segments: Array<LocalizedStringKey> = ["Неделя", "Месяц"]
     
     struct ToyShape: Identifiable {
         var type: String
@@ -46,7 +56,7 @@ struct StatisticsDrinkView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
+                backgroundViewColor
                     .ignoresSafeArea()
                 VStack {
                     Picker("Days", selection: $selectedSegment) {
@@ -56,35 +66,66 @@ struct StatisticsDrinkView: View {
                     }
                     .pickerStyle(.segmented)
                     .padding(.horizontal, 20)
-                    HStack(alignment: .center) {
-                        Button(action: {
-                            if selectedSegment == 0 {
-                                selectedWeek = selectedWeek.first!.lastWeek
-                            } else {
-                                selectedMonth = getAllDatesInCurrentMonth(date: selectedMonth.first!.lastMonthStart)
-                            }
-                        }, label: {
-                            Image(systemName: "chevron.left.circle")
-                                .font(.title2)
+                    HStack {
+                        if selectedSegment == 0 {
+                            Text("\(selectedWeek.first!.dayShort) \(selectedWeek.first!.abbreviatedMonth) - \(selectedWeek.last!.dayShort) \(selectedWeek.last!.abbreviatedMonth)")
+                                .font(Constants.Design.Fonts.BodySmallFont)
+                                .underline()
                                 .foregroundStyle(.white)
-                        })
-                        Text(selectedSegment == 0 ? "\(selectedWeek.first!.formatForPeriodDates) - \(selectedWeek.last!.formatForPeriodDates)" : "\(selectedMonth.first!.formatForPeriodDates) - \(selectedMonth.last!.formatForPeriodDates)")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                        } else {
+                            Text("\(selectedMonth[0].fullMonth.capitalized) " + "\(selectedMonth[0].year)")
+                                .font(Constants.Design.Fonts.BodyMediumFont)
+                                .underline()
+                                .foregroundStyle(.white)
+                        }
+                        Spacer()
+                        HStack(spacing: 0) {
+                            Button(action: {
+                                if selectedSegment == 0 {
+                                    selectedWeek = selectedWeek.first!.lastWeek
+                                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "LastMonth"])
+                                } else {
+                                    selectedMonth = getAllDatesInCurrentMonth(date: selectedMonth.first!.lastMonthStart)
+                                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "LasttMonth"])
+                                }
+                            }, label: {
+                                Image(systemName: "arrow.left.circle")
+                                    .foregroundStyle(.white)
+                            })
+                            .buttonBorderShape(.circle)
+                            .buttonStyle(.bordered)
+                            .foregroundStyle(.black)
+                            
+                            Button("Сегодня") {
+                                if selectedSegment == 0 {
+                                    selectedWeek = Date().thisWeek
+                                } else {
+                                    selectedMonth = getAllDatesInCurrentMonth(date: [Date().thisMonthStart, Date().thisMonthEnd].first!)
+                                }
+                                AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "Today"])
+                            }
+                            .frame(width: 95)
+                            .buttonBorderShape(.capsule)
+                            .buttonStyle(.bordered)
                             .foregroundStyle(.white)
-                            .padding(.horizontal)
-                        Button(action: {
-                            if selectedSegment == 0 {
-                                selectedWeek = selectedWeek.first!.nextWeek
-                            } else {
-                                selectedMonth = getAllDatesInCurrentMonth(date: selectedMonth.first!.nextMonthStart)
-                            }
-                        }, label: {
-                            Image(systemName: "chevron.right.circle")
-                                .font(.title2)
-                                .foregroundStyle(.white)
-                        })
+                            Button(action: {
+                                if selectedSegment == 0 {
+                                    selectedWeek = selectedWeek.first!.nextWeek
+                                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "NextWeek"])
+                                } else {
+                                    selectedMonth = getAllDatesInCurrentMonth(date: selectedMonth.first!.nextMonthStart)
+                                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "NextMonth"])
+                                }
+                            }, label: {
+                                Image(systemName: "arrow.right.circle")
+                                    .foregroundStyle(.white)
+                            })
+                            .buttonBorderShape(.circle)
+                            .buttonStyle(.bordered)
+                            .foregroundStyle(.black)
+                        }
                     }
-                    .padding(.vertical)
+                    .padding(.horizontal, 20)
                     if selectedSegment == 0 {
                         Chart {
                             ForEach(selectedWeek, id: \.self) { itemDate in
@@ -108,11 +149,11 @@ struct StatisticsDrinkView: View {
                                 }
                             }
                         }
-                        .chartYScale(domain: 0...4000)
+                        .chartYScale(domain: profile[0].unit == 0 ? 0...4000 : 0...150)
                         .chartYAxis(content: {
                             AxisMarks(position: .leading)
                         })
-                        .foregroundStyle(Color(#colorLiteral(red: 0.2157807946, green: 0.4114688337, blue: 0.6079391837, alpha: 1)))
+                        .foregroundStyle(backgroundChartColor)
                         .frame(height: 200)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
@@ -135,17 +176,17 @@ struct StatisticsDrinkView: View {
                             }
                         }
                         .chartScrollableAxes(.horizontal)
-                        .chartYScale(domain: 0...4000)
+                        .chartYScale(domain: profile[0].unit == 0 ? 0...4000 : 0...150)
                         .chartYAxis(content: {
                             AxisMarks(position: .leading)
                         })
-                        .foregroundStyle(Color(#colorLiteral(red: 0.2157807946, green: 0.4114688337, blue: 0.6079391837, alpha: 1)))
+                        .foregroundStyle(backgroundChartColor)
                         .frame(height: 200)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
                     }
                     Text("Статистика за день")
-                        .font(Constants.Design.AppFont.BodyLargeFont)
+                        .font(Constants.Design.Fonts.BodyLargeFont)
                         .foregroundStyle(.white)
                     ScrollViewReader { proxy in
                         ScrollView(.horizontal, showsIndicators: false) {
@@ -154,10 +195,11 @@ struct StatisticsDrinkView: View {
                                     Button(action: {
                                         selectedIndex = index
                                         selectedDate = dataDrinkingOfTheDay[index].dateDrinkOfTheDay
+                                        AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "SelectedDate"])
                                     }, label: {
                                         ZStack {
                                             Circle()
-                                                .fill(selectedIndex == index ? Color(#colorLiteral(red: 0.3114904165, green: 0.5568692684, blue: 0.7960240245, alpha: 1)) : .clear)
+                                                .fill(selectedIndex == index ? backgroundExternalCircleColor : .clear)
                                             VStack {
                                                 Text(dataDrinkingOfTheDay[index].dateDrinkOfTheDay.dayShort)
                                                 Text(dataDrinkingOfTheDay[index].dateDrinkOfTheDay.abbreviatedMonth)
@@ -178,11 +220,11 @@ struct StatisticsDrinkView: View {
                                         ZStack {
                                             Circle()
                                                 .trim(from: 0.0, to: 1.0)
-                                                .stroke(Color(#colorLiteral(red: 0.3114904165, green: 0.5568692684, blue: 0.7960240245, alpha: 1)), lineWidth: 4)
+                                                .stroke(backgroundExternalCircleColor, lineWidth: 4)
                                                 .rotationEffect(.degrees(270))
                                             Circle()
                                                 .trim(from: 0.0, to: (dataDrinkingOfTheDay.first(where: { $0.dayID == dataDrinkingOfTheDay[index].dateDrinkOfTheDay.yearMonthDay } )?.percentDrinking ?? 0) / 100)
-                                                .stroke(Color(#colorLiteral(red: 0.933318913, green: 0.9332848787, blue: 0.9375355244, alpha: 1)), lineWidth: 4)
+                                                .stroke(backgroundInternalCircleColor, lineWidth: 4)
                                                 .rotationEffect(.degrees(270))
                                                 .animation(.easeInOut(duration: 1.0), value: (dataDrinkingOfTheDay.first(where: { $0.dayID == dataDrinkingOfTheDay[index].dateDrinkOfTheDay.yearMonthDay } )?.percentDrinking ?? 0) / 100)
                                         }
@@ -199,25 +241,15 @@ struct StatisticsDrinkView: View {
                         List {
                             ForEach(dataDrinking) { itemDataDrinking in
                                 if itemDataDrinking.dateDrink.yearMonthDay == selectedDate.yearMonthDay {
-                                    HistoryItemView(dataDrinking: itemDataDrinking, hydration: hydration[itemDataDrinking.nameDrink] ?? 1.0)
-                                        .swipeActions(edge: .trailing) {
-                                            Button("", systemImage: "trash") {
-                                                withAnimation(.linear(duration: 0.4)) {
-                                                    dataDrinkingOfTheDayViewModel.cancelDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: itemDataDrinking.amountDrink, percentDrinking: (Double(profile[0].lastAmountDrink) * (hydration[profile[0].lastNameDrink] ?? 1.0)) / profile[0].autoNormMl * 100)
-                                                    dataDrinkingViewModel.deleteItemDataDrinking(modelContext: modelContext, itemDataDrinking: itemDataDrinking)
-                                                    
-                                                    if userDefaultsManager.isAuthorizationHealthKit {
-                                                        healthKitManager.deleteWaterIntake(date: itemDataDrinking.dateDrink)
-                                                    }
-                                                }
-                                            }
-                                            .tint(.red)
-                                        }
+                                    HistoryItemView(dataDrinking: itemDataDrinking, hydration: hydration[itemDataDrinking.nameDrink] ?? 1.0, unit: profile[0].unit)
                                 }
                             }
+                            .onDelete(perform: { indexSet in
+                                delete(at: indexSet)
+                            })
                             .listRowSeparator(.hidden)
                             .listRowInsets(EdgeInsets(top: 5, leading: 0, bottom: 3, trailing: 0))
-                            .listRowBackground(Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1)))
+                            .listRowBackground(backgroundViewColor)
                         }
                         .listStyle(.plain)
                     }
@@ -225,8 +257,18 @@ struct StatisticsDrinkView: View {
             }
         }
         .onAppear {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["StatisticsView": ""])
+            
             selectedWeek = Date().thisWeek
             selectedMonth = getAllDatesInCurrentMonth(date: Date())
+            
+            lastNameDrink = profile[0].lastNameDrink
+            unit = profile[0].unit
+            if unit == 0 {
+                normDrink = profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl
+            } else {
+                normDrink = profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz
+            }
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -267,7 +309,54 @@ struct StatisticsDrinkView: View {
         
         return dates
     }
-}
-    #Preview {
-        StatisticsDrinkView()
+    
+    private func sendDataToWidgetAndWatch() {
+        let amountDrinkingOfTheDay: Int = dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.amountDrinkOfTheDay ?? 0
+        let percentDrink: Double = dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0
+        let isPremium = purchaseManager.hasPremium
+        WidgetManager.sendDataToWidget(normDrink, amountDrinkingOfTheDay, percentDrink, lastNameDrink, unit, isPremium)
+        
+        let dateLastDrink = Date().dateFormatForWidgetAndWatch
+        let amountUnit = unit == 0 ? "250" : "8"
+        let iPhoneAppContext = ["normDrink": String(Int(normDrink)),
+                                "amountDrink": String(amountDrinkingOfTheDay),
+                                "percentDrink": String(Int(percentDrink)),
+                                "amountUnit": amountUnit,
+                                "unit": unit,
+                                "dateLastDrink": dateLastDrink,
+                                "isPremium": isPremium] as [String: Any]
+        PhoneSessionManager.shared.sendAppContextToWatch(iPhoneAppContext)
+        PhoneSessionManager.shared.transferCurrentComplicationUserInfo(iPhoneAppContext)
     }
+    
+    private func delete(at offsets: IndexSet) {
+        for offset in offsets {
+            withAnimation(.linear(duration: 0.4)) {
+                DispatchQueue.main.async {
+                    let dataDrinkingItem = dataDrinking[offset]
+                    let dataDrinkingOfTheDayItem = dataDrinkingOfTheDay.first(where: { $0.dayID == dataDrinkingItem.dateDrink.yearMonthDay } )
+                    let amountDrinkOfTheDay = Int(Double(dataDrinkingItem.amountDrink) * (hydration[dataDrinkingItem.nameDrink] ?? 1.0))
+                    let percentDrinking = (Double(dataDrinkingItem.amountDrink) * (hydration[dataDrinkingItem.nameDrink] ?? 1.0)) / normDrink * 100
+                    dataDrinkingOfTheDayItem?.amountDrinkOfTheDay -= amountDrinkOfTheDay
+                    dataDrinkingOfTheDayItem?.percentDrinking -= percentDrinking
+                    
+                    dataDrinkingViewModel.deleteItemDataDrinking(modelContext: modelContext, itemDataDrinking: dataDrinkingItem)
+                    
+                    sendDataToWidgetAndWatch()
+                    
+                    if userDefaultsManager.isAuthorizationHealthKit {
+                        healthKitManager.deleteWaterIntake(date: dataDrinkingItem.dateDrink)
+                    }
+                    
+                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "Delete"])
+                }
+            }
+        }
+    }
+}
+
+#Preview {
+    StatisticsView()
+        .modelContainer(PreviewContainer.previewContainer)
+        .environment(PurchaseManager())
+}

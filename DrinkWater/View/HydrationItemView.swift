@@ -14,10 +14,13 @@ struct HydrationItemView: View {
     @State var imageDrink: String
     @State var hydration: Double
     
+    private let backgroundItemColor: Color = Color(#colorLiteral(red: 0.8374214172, green: 0.8374213576, blue: 0.8374213576, alpha: 0.2))
+    private let backgroundImageColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 8)
-                .foregroundStyle(colorScheme == .dark ? Color(white: 1, opacity: 0.1) : Color(#colorLiteral(red: 0.8374214172, green: 0.8374213576, blue: 0.8374213576, alpha: 0.2)))
+                .foregroundStyle(colorScheme == .dark ? Color(white: 1, opacity: 0.1) : backgroundItemColor)
                 .frame(width: UIScreen.main.bounds.width - 30, height: UIScreen.main.bounds.width * 0.13)
             HStack(alignment: .center, spacing: 10) {
                 ZStack {
@@ -25,16 +28,16 @@ struct HydrationItemView: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(height: 40)
-                        .colorMultiply(colorScheme == .dark ? .white : Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1)))
+                        .colorMultiply(colorScheme == .dark ? .white : backgroundImageColor)
                 }
                 .padding(.leading, 5)
                 Text(nameDrink)
                     .lineLimit(1)
-                    .font(Constants.Design.AppFont.BodyMediumFont)
+                    .font(Constants.Design.Fonts.BodyMediumFont)
                     .foregroundStyle(colorScheme == .dark ? .white : .black)
                 Spacer()
                 Text("\(String(format: "%.1f", hydration))")
-                    .font(Constants.Design.AppFont.BodyMediumFont)
+                    .font(Constants.Design.Fonts.BodyMediumFont)
                     .foregroundStyle(colorScheme == .dark ? .white : .black)
                     .padding(.trailing, 5)
             }

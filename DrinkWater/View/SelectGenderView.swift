@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import AppMetricaCore
 
 struct SelectGenderView: View {
     var body: some View {
@@ -19,6 +20,7 @@ struct SelectGenderView: View {
                 VStack(spacing: 55) {
                     Text("Выберите ваш пол:")
                         .font(.title)
+                        .foregroundStyle(.white)
                         .bold()
                     HStack(spacing: 25) {
                         VStack(spacing: 13) {
@@ -31,6 +33,8 @@ struct SelectGenderView: View {
                                     .frame(width: 120)
                             }
                             Text("Женский")
+                                .font(Constants.Design.Fonts.BodyMediumFont)
+                                .foregroundStyle(.white)
                         }
                         
                         VStack(spacing: 13) {
@@ -43,10 +47,13 @@ struct SelectGenderView: View {
                                     .frame(width: 120)
                             }
                             Text("Мужской")
+                                .font(Constants.Design.Fonts.BodyMediumFont)
+                                .foregroundStyle(.white)
                         }
                     }
                 }
             }
+            .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["SelectGenderView": ""]) }
         }
     }
 }

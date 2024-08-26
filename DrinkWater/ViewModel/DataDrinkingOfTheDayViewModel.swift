@@ -28,7 +28,7 @@ class DataDrinkingOfTheDayViewModel {
         }
     }
     
-    func cancelDataDrinkingOfTheDay(modelContext: ModelContext, dataDrinkingOfTheDay: [DataDrinkingOfTheDay], amountDrinkOfTheDay: Int, percentDrinking: Double) {
+    func cancelDataDrinkingOfTheDay(dataDrinkingOfTheDay: [DataDrinkingOfTheDay], amountDrinkOfTheDay: Int, percentDrinking: Double) {
         dataDrinkingOfTheDay.last?.amountDrinkOfTheDay -= amountDrinkOfTheDay
         dataDrinkingOfTheDay.last?.percentDrinking -= percentDrinking
     }
@@ -50,7 +50,7 @@ class DataDrinkingOfTheDayViewModel {
         return dataDrinkingOfTheDay.last
     }
 
-    /// Функция получения последней записи за текущий день
+    /// Функция проверки наличия записей за текущий день
     func isAvailiableRecordOfTheCurrentDay(dataDrinkingOfTheDay: [DataDrinkingOfTheDay]) -> Bool {
         guard !dataDrinkingOfTheDay.isEmpty && dataDrinkingOfTheDay.last?.dateDrinkOfTheDay.yearMonthDay == Date().yearMonthDay else {
             return false
@@ -58,5 +58,4 @@ class DataDrinkingOfTheDayViewModel {
         
         return true
     }
-
 }

@@ -6,36 +6,57 @@
 //
 
 import SwiftUI
+import AVFoundation
 
 struct SoundModalView: View {
     @State var reminder: [Reminder]
     @Binding var isSoundShowingModal: Bool
     @Binding var selectedSound: String
-    private let nameSound = ["Без звука", "По умолчанию", "Звук 1", "Звук 2", "Звук 3", "Звук 4", "Звук 5", "Звук 6"]
-    private let soundNameArray = ["Без звука": "Sound off", "По умолчанию": "Default", "Звук 1": "Sound-1.aiff", "Звук 2": "Sound-2.aiff", "Звук 3": "Sound-3.aiff", "Звук 4": "Sound-4.aiff", "Звук 5": "Sound-5.aiff", "Звук 6": "Sound-6.aiff"]
+    var player: AVAudioPlayer?
+    private let nameSound = Constants.Back.Reminder.nameSound
+    private let soundPlayArray = Constants.Back.Reminder.soundPlayArray
+    private let soundNameArray = Constants.Back.Reminder.soundNameArray
+    private let localizedNameSound = Constants.Back.Reminder.localizedNameSound
     
     @State private var remindersViewModel = RemindersViewModel()
     
     var body: some View {
         VStack {
             Text("Выберите звук уведомления:")
-                .font(.headline)
+                .font(Constants.Design.Fonts.BodyMainFont)
                 .padding(.top, 30)
             Picker("Выберите вашу норму:", selection: $selectedSound) {
                 ForEach(nameSound, id: \.self) { name in
-                    Text(name)
+                    Text(localizedNameSound[name]!)
                 }
             }
             .pickerStyle(.wheel)
+            .onChange(of: selectedSound) { _, newValue in
+                playSound(soundName: soundPlayArray[newValue] ?? "Default")
+            }
             Button("Готово") {
                 remindersViewModel.updateReminders(reminder: reminder, soundReminder: soundNameArray[selectedSound] ?? "Default")
                 isSoundShowingModal = false
             }
+            .font(Constants.Design.Fonts.BodyMainFont)
             .bold()
+        }
+    }
+    
+    private func playSound(soundName: String) {
+        if soundName != "Default" {
+            guard let url = Bundle.main.url(forResource: soundName, withExtension: "aiff") else { return }
+
+            var soundID: SystemSoundID = 0
+            AudioServicesCreateSystemSoundID(url as CFURL, &soundID)
+            AudioServicesPlaySystemSound(soundID)
+        } else {
+            AudioServicesPlaySystemSound(1012)
         }
     }
 }
 
-//#Preview {
-//    SoundModalView()
-//}
+#Preview {
+    let reminder = [Reminder(remindersEnabled: true, startTimeReminder: Date(), finishTimeReminder: Date(), nextTimeReminder: Date(), intervalReminder: 1800, soundReminder: "Default")]
+    return SoundModalView(reminder: reminder, isSoundShowingModal: .constant(false), selectedSound: .constant("Default"))
+}

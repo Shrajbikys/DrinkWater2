@@ -28,4 +28,12 @@ class DataDrinkingViewModel {
             fatalError(error.localizedDescription)
         }
     }
+    
+    /// Функция проверки наличия записей за текущий день
+    func isAvailiableRecordOfTheCurrentDay(dataDrinking: [DataDrinking]) -> Bool {
+        guard !dataDrinking.isEmpty && dataDrinking.last?.dateDrink.yearMonthDay == Date().yearMonthDay else {
+            return false
+        }
+        return true
+    }
 }

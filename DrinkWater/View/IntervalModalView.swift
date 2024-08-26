@@ -14,49 +14,32 @@ struct IntervalModalView: View {
     
     @State private var remindersViewModel = RemindersViewModel()
     
-    private let nameInterval = ["30 минут", "1 час", "1 час 30 минут", "2 часа", "2 часа 30 минут", "3 часа"]
+    private let nameInterval: [String] = Constants.Back.Reminder.nameInterval
+    private let nameToTimeInterval: [String: TimeInterval] = Constants.Back.Reminder.nameToTimeInterval
+    private let localizedNameInterval: [String: LocalizedStringKey] = Constants.Back.Reminder.localizedNameInterval
     
     var body: some View {
         VStack {
             Text("Выберите интервал:")
-                .font(.headline)
+                .font(Constants.Design.Fonts.BodyMainFont)
                 .padding(.top, 30)
             Picker("Выберите интервал:", selection: $selectedInterval) {
                 ForEach(nameInterval, id: \.self) { name in
-                    Text(name)
+                    Text(localizedNameInterval[name]!)
                 }
             }
             .pickerStyle(.wheel)
             Button("Готово") {
-                remindersViewModel.updateReminders(reminder: reminder, intervalReminder: calcStringToTimeInterval(value: selectedInterval))
+                remindersViewModel.updateReminders(reminder: reminder, intervalReminder: nameToTimeInterval[selectedInterval]!)
                 isIntervalShowingModal = false
             }
+            .font(Constants.Design.Fonts.BodyMainFont)
             .bold()
-        }
-    }
-    
-    private func calcStringToTimeInterval(value: String) -> TimeInterval {
-        let intervalArray: [TimeInterval] = [1800, 3600, 5400, 7200, 9000, 10800]
-        
-        switch value {
-        case "30 минут":
-            return intervalArray[0]
-        case "1 час":
-            return intervalArray[1]
-        case "1 час 30 минут":
-            return intervalArray[2]
-        case "2 часа":
-            return intervalArray[3]
-        case "2 часа 30 минут":
-            return intervalArray[4]
-        case "3 часа":
-            return intervalArray[5]
-        default:
-            return intervalArray[0]
         }
     }
 }
 
-//#Preview {
-//    IntervalModalView()
-//}
+#Preview {
+    let reminder = [Reminder(remindersEnabled: true, startTimeReminder: Date(), finishTimeReminder: Date(), nextTimeReminder: Date(), intervalReminder: 1800, soundReminder: "Default")]
+    return IntervalModalView(reminder: reminder, isIntervalShowingModal: .constant(false), selectedInterval: .constant("1 час 30 минут"))
+}

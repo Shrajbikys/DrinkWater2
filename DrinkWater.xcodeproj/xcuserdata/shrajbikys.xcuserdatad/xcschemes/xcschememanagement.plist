@@ -9,10 +9,40 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>DrinkWaterWatch ComplicationsExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+		<key>DrinkWaterWatch Watch App.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>DrinkWaterWidgetExtension.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>2C02FFE82C4D0C8F00F8BD73</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>2C5EFC5B2C07D6B4004B1AE0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2C9B91882C4EFDD500947007</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2C9B91972C4EFDD900947007</key>
 		<dict>
 			<key>primary</key>
 			<true/>

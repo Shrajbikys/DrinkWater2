@@ -18,6 +18,8 @@ class CloudKitManager: ObservableObject {
     
     private let userDefaultsManager = UserDefaultsManager.shared
     
+    let zone = CKRecordZone(zoneName: "UserZone")
+    
     init() {
         self.container = CKContainer.default()
         self.privateCloudDatabase = container.privateCloudDatabase
@@ -26,7 +28,7 @@ class CloudKitManager: ObservableObject {
     func fetchAllRecords(recordType: String, completion: @escaping ([CKRecord]?, Error?) -> Void) {
         let query = CKQuery(recordType: recordType, predicate: NSPredicate(value: true))
         
-        privateCloudDatabase.fetch(withQuery: query) { result in
+        privateCloudDatabase.fetch(withQuery: query, inZoneWith: zone.zoneID) { result in
             switch result {
             case .success((let matchResults, _)):
                 var fetchedRecords: [CKRecord] = []
@@ -93,7 +95,9 @@ class CloudKitManager: ObservableObject {
         let total = dataDrinking.count
         var saved = 0
         for item in dataDrinking {
-            let record = CKRecord(recordType: "DrinkData")
+            let recordId = CKRecord.ID(zoneID: zone.zoneID)
+            let record = CKRecord(recordType: "DrinkData", recordID: recordId)
+            
             record.setValue(item.nameDrink, forKey: "nameDrink")
             record.setValue(item.amountDrink, forKey: "amountDrink")
             record.setValue(item.dateDrink, forKey: "dateDrink")
@@ -115,7 +119,8 @@ class CloudKitManager: ObservableObject {
         let total = dataDrinkingOfTheDay.count
         var saved = 0
         for item in dataDrinkingOfTheDay {
-            let record = CKRecord(recordType: "DrinkDataOfDay")
+            let recordId = CKRecord.ID(zoneID: zone.zoneID)
+            let record = CKRecord(recordType: "DrinkDataOfDay", recordID: recordId)
             let userDefaultsManager = UserDefaultsManager.shared
             let numberOfTheNorm = userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0
             record.setValue(item.dayID, forKey: "dayID")
@@ -167,8 +172,9 @@ extension CloudKitManager {
         let query = CKQuery(recordType: "DrinkData", predicate: predicate)
         
         let queryOperation = CKQueryOperation(query: query)
+        queryOperation.zoneID = zone.zoneID
         var fetchedRecords: [CKRecord] = []
-        
+
         queryOperation.recordMatchedBlock = { (recordID, recordResult) in
             switch recordResult {
             case .success(let record):
@@ -187,7 +193,6 @@ extension CloudKitManager {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    print(fetchedRecords.count)
                     completion(true, nil)
                 case .failure(let error):
                     completion(false, error)
@@ -202,6 +207,7 @@ extension CloudKitManager {
         let query = CKQuery(recordType: "DrinkDataOfDay", predicate: predicate)
         
         let queryOperation = CKQueryOperation(query: query)
+        queryOperation.zoneID = zone.zoneID
         var fetchedRecords: [CKRecord] = []
         
         queryOperation.recordMatchedBlock = { (recordID, recordResult) in
@@ -224,7 +230,6 @@ extension CloudKitManager {
             DispatchQueue.main.async {
                 switch result {
                 case .success:
-                    print(fetchedRecords.count)
                     completion(true, nil)
                 case .failure(let error):
                     completion(false, error)

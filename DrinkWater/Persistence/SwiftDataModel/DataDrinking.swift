@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 final class DataDrinking: Identifiable {
-    var id: String = "F092DD2A-6CD3-4CD4-901F-5FED9CBA6895"    
+    var id: String = UUID().uuidString
     var nameDrink: String = "Water"
     var amountDrink: Int = 100
     var dateDrink: Date = Date()

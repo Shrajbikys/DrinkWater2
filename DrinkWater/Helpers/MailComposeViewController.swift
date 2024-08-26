@@ -7,6 +7,7 @@
 
 import Foundation
 import MessageUI
+import SwiftUI
 
 class MailComposeViewController: UIViewController, MFMailComposeViewControllerDelegate {
     
@@ -25,9 +26,9 @@ class MailComposeViewController: UIViewController, MFMailComposeViewControllerDe
 
 
                     -------------------------------------------
-                    Модель: \(modelName)
-                    Версия ОС: \(systemVersion)
-                    Версия приложения: \(appVersion)
+                    Device model: \(modelName)
+                    System version: iOS \(systemVersion)
+                    App version: \(appVersion)
                     -------------------------------------------
                     """
         

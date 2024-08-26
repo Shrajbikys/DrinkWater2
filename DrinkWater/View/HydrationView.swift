@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+import AppMetricaCore
 
 struct HydrationView: View {
-    let hydration: [String: Double] = ["Water": 1.0, "Coffee": 0.8, "Tea": 0.9, "Milk": 0.9, "Juice": 0.8, "Soda": 0.9, "Cocoa": 0.7, "Smoothie": 0.3, "Yogurt": 0.5, "Beer": -0.6, "NonalcoholicBeer": 0.6, "Wine": -1.6]
+    let hydration: [String: Double] = Constants.Back.Drink.hydration
     
     var body: some View {
         NavigationStack {
@@ -17,6 +18,7 @@ struct HydrationView: View {
                     HydrationItemView(nameDrink: key, imageDrink: "\(key)CA" , hydration: value)
                 }
             }
+            .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["HydrationView": ""]) }
         }
         .navigationTitle("Коэффициенты гидратации")
         .navigationBarTitleDisplayMode(.inline)

@@ -8,9 +8,11 @@
 import SwiftUI
 import SwiftData
 import UserNotifications
+import AppMetricaCore
 
 struct RemindersView: View {
     @Environment(\.modelContext) private var modelContext
+    @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
     
     @Query var reminder: [Reminder]
     
@@ -28,7 +30,12 @@ struct RemindersView: View {
     @State private var selectedFinishTime = Date()
     @State private var selectedNextTime = Date()
     @State private var selectedInterval: String = "2 часа"
+    @State private var localizedNameInterval: [String: LocalizedStringKey] = Constants.Back.Reminder.localizedNameInterval
     @State private var selectedSound: String = "Звук 2"
+    @State private var soundName: String = "Default"
+    @State private var localizedNameSound = Constants.Back.Reminder.localizedNameSound
+    
+    @State private var isPurchaseViewModal = false
     
     var body: some View {
         NavigationStack {
@@ -37,7 +44,7 @@ struct RemindersView: View {
                     HStack {
                         Toggle(isOn: $isAuthorizationSystemNotifications) {
                             Text("Уведомления")
-                                .font(Constants.Design.AppFont.BodyMediumFont)
+                                .font(Constants.Design.Fonts.BodyMediumFont)
                         }
                         .onChange(of: isAuthorizationSystemNotifications) { _, newValue in
                             userDefaultsManager.isAuthorizationSystemNotifications = newValue
@@ -45,6 +52,7 @@ struct RemindersView: View {
                             if isAuthorizationSystemNotifications {
                                 getPermissionSystemNotifications()
                             }
+                            AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "ActivateSystemNotifications"])
                         }
                     }
                 } header: {
@@ -52,20 +60,25 @@ struct RemindersView: View {
                         .textCase(.uppercase)
                 } footer: {
                     Text("Разрешите уведомления в настройках, чтобы мы могли отправлять вам напоминания")
-                        .font(Constants.Design.AppFont.BodyMiniFont)
+                        .font(Constants.Design.Fonts.BodyMiniFont)
                         .foregroundStyle(.secondary)
                 }
                 Section {
                     HStack {
                         Toggle(isOn: $isRemindersEnabled) {
                             Text("Включить напоминания")
-                                .font(Constants.Design.AppFont.BodyMediumFont)
+                                .font(Constants.Design.Fonts.BodyMediumFont)
                         }
                         .onChange(of: isRemindersEnabled) { _, newValue in
                             DispatchQueue.main.async {
+                                if newValue {
+                                    self.removeAndAddNotification()
+                                } else {
+                                    self.removeOldNotifications()
+                                }
                                 self.remindersViewModel.updateReminders(reminder: reminder, remindersEnabled: isRemindersEnabled)
-                                self.removeAndAddNotification()
                             }
+                            AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "RemindersEnabled"])
                         }
                     }
                 } header: {
@@ -75,37 +88,34 @@ struct RemindersView: View {
                 Section {
                     HStack{
                         Text("Начинаем")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                         Spacer()
                         DatePicker("", selection: $selectedStartTime, displayedComponents: .hourAndMinute)
-                            .onChange(of: selectedStartTime) { _, newValue in
-                                DispatchQueue.main.async {
-                                    self.remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: selectedStartTime)
-                                    self.removeAndAddNotification()
-                                }
+                            .onChange(of: selectedStartTime) { _, newDate in
+                                updateStartTimeDate(newDate)
+                                AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "UpdateStartTimeDate"])
                             }
                     }
                     HStack{
                         Text("Заканчиваем")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                         Spacer()
                         DatePicker("", selection: $selectedFinishTime, displayedComponents: .hourAndMinute)
-                            .onChange(of: selectedFinishTime) { _, newValue in
-                                DispatchQueue.main.async {
-                                    self.remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: selectedFinishTime)
-                                    self.removeAndAddNotification()
-                                }
+                            .onChange(of: selectedFinishTime) { _, newDate in
+                                updateFinishTimeDate(newDate)
+                                AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "UpdateFinishTimeDate"])
                             }
                     }
                     HStack{
                         Text("Интервал")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                         Spacer()
                         Button(action: {
                             isIntervalShowingModal = true
+                            AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "SelectedInterval"])
                         }) {
-                            Text("\(selectedInterval)")
-                                .font(Constants.Design.AppFont.BodyMediumFont)
+                            Text(localizedNameInterval[selectedInterval]!)
+                                .font(Constants.Design.Fonts.BodyMediumFont)
                                 .bold()
                                 .foregroundStyle(.link)
                         }
@@ -124,13 +134,19 @@ struct RemindersView: View {
                 Section {
                     HStack {
                         Text("Звук уведомления")
-                            .font(Constants.Design.AppFont.BodyMediumFont)
+                            .font(Constants.Design.Fonts.BodyMediumFont)
                         Spacer()
                         Button(action: {
-                            isSoundShowingModal = true
+                            if purchaseManager.hasPremium {
+                                isSoundShowingModal = true
+                                AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "SelectedSound"])
+                            } else {
+                                isPurchaseViewModal = true
+                                AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "SelectedSoundPurchase"])
+                            }
                         }) {
-                            Text("\(selectedSound)")
-                                .font(Constants.Design.AppFont.BodyMediumFont)
+                            Text(localizedNameSound[selectedSound]!)
+                                .font(Constants.Design.Fonts.BodyMediumFont)
                                 .bold()
                                 .foregroundStyle(.link)
                         }
@@ -146,11 +162,15 @@ struct RemindersView: View {
                     Text("Оповещение")
                         .textCase(.uppercase)
                 }
-
             }
             .listStyle(.plain)
             .onAppear {
+                AppMetrica.reportEvent(name: "OpenView", parameters: ["RemindersView": ""])
+                
                 getDataFromReminder()
+            }
+            .sheet(isPresented: $isPurchaseViewModal) {
+                PurchaseView(isPurchaseViewModal: $isPurchaseViewModal)
             }
         }
     }
@@ -179,30 +199,67 @@ struct RemindersView: View {
     }
     
     private func goToSettings(){
-            DispatchQueue.main.async {
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:],
-                completionHandler: nil)
-            }
+        DispatchQueue.main.async {
+            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:],
+                                      completionHandler: nil)
         }
+    }
     
     private func getDataFromReminder() {
         isAuthorizationSystemNotifications = userDefaultsManager.isAuthorizationSystemNotifications
         isRemindersEnabled = reminder[0].reminderEnabled
         selectedStartTime = reminder[0].startTimeReminder
         selectedFinishTime = reminder[0].finishTimeReminder
-        selectedSound = reminder[0].soundReminder
+        soundName = reminder[0].soundReminder
         
         let intervalReminder = reminder[0].intervalReminder
         selectedInterval = calcTimeIntervalToString(value: intervalReminder)
-
-        let soundTextArray = ["Sound off": "Без звука", "Default": "По умолчанию", "Sound-1.aiff": "Звук 1", "Sound-2.aiff": "Звук 2", "Sound-3.aiff": "Звук 3", "Sound-4.aiff": "Звук 4", "Sound-5.aiff": "Звук 5", "Sound-6.aiff": "Звук 6"]
-        let soundName = reminder[0].soundReminder
+        
+        let soundTextArray: [String: String] = ["Sound off": "Без звука", "Default": "По умолчанию", "Sound-1.aiff": "Звук 1", "Sound-2.aiff": "Звук 2", "Sound-3.aiff": "Звук 3", "Sound-4.aiff": "Звук 4", "Sound-5.aiff": "Звук 5", "Sound-6.aiff": "Звук 6"]
         selectedSound = soundTextArray[soundName] ?? "По умолчанию"
     }
-
+    
+    private func updateStartTimeDate(_ date: Date) {
+        let finishTime = selectedFinishTime
+        if date > finishTime {
+            selectedStartTime = date
+            selectedFinishTime = date
+            
+            DispatchQueue.main.async {
+                self.remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: selectedStartTime)
+                self.remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: selectedFinishTime)
+                self.removeAndAddNotification()
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: selectedStartTime)
+                self.removeAndAddNotification()
+            }
+        }
+    }
+    
+    private func updateFinishTimeDate(_ date: Date) {
+        let startTime = selectedStartTime
+        if date < startTime {
+            selectedStartTime = date
+            selectedFinishTime = date
+            
+            DispatchQueue.main.async {
+                self.remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: selectedStartTime)
+                self.remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: selectedFinishTime)
+                self.removeAndAddNotification()
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: selectedFinishTime)
+                self.removeAndAddNotification()
+            }
+        }
+    }
+    
     private func calcTimeIntervalToString(value: TimeInterval) -> String {
         let intervalArray = ["30 минут", "1 час", "1 час 30 минут", "2 часа", "2 часа 30 минут", "3 часа"]
-
+        
         switch value {
         case 1800:
             return intervalArray[0]
@@ -223,7 +280,7 @@ struct RemindersView: View {
     
     private func calcStringToTimeInterval(value: String) -> TimeInterval {
         let intervalArray: [TimeInterval] = [1800, 3600, 5400, 7200, 9000, 10800]
-
+        
         switch value {
         case "30 минут":
             return intervalArray[0]
@@ -250,30 +307,32 @@ struct RemindersView: View {
     }
     
     private func addNotification() {
-        let soundName = selectedSound
         var soundNotifications: UNNotificationSound? = .default
         if soundName == "Sound off" {
             soundNotifications = .none
         } else {
             soundNotifications = soundName == "Default" ? .default : UNNotificationSound(named: UNNotificationSoundName(rawValue: soundName))
         }
-
+        
         var interval = 0
         var startDate = selectedStartTime
         let amountInterval = getAmountInterval()
         let timeInterval = calcStringToTimeInterval(value: selectedInterval)
         let content = UNMutableNotificationContent()
+        let title = String(localized: Constants.Back.Reminder.titleNotificationText)
+        let body = String(localized: Constants.Back.Reminder.bodyNotificationText.randomElement()!)
+        
         while interval != amountInterval {
-            content.title = "Пора выпить воды"
-            content.body = "Не забывайте - вода улучшает пищеварение"
+            content.title = title
+            content.body = body
             content.sound = soundNotifications
-
+            
             let triggerDaily = Calendar.current.dateComponents([. hour, .minute, .second ], from: startDate)
             let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDaily, repeats: true)
-
+            
             let uuidString = UUID().uuidString
             let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
-
+            
             UNUserNotificationCenter.current().add(request) { (_) in
                 // check the error parameter and check errors
             }
@@ -285,10 +344,10 @@ struct RemindersView: View {
     private func getAmountInterval() -> Int {
         let startDate = selectedStartTime
         let finishDate = selectedFinishTime
-
+        
         let timeInterval = calcStringToTimeInterval(value: selectedInterval)
         let amountInterval = Int(((finishDate.timeIntervalSinceNow - startDate.timeIntervalSinceNow) / timeInterval)) + 1
-
+        
         return amountInterval
     }
     
@@ -298,14 +357,14 @@ struct RemindersView: View {
             self.refreshNotifications()
         }
     }
-
+    
     private func removeDeliveredNotifications(identifiers: [String]) {
         DispatchQueue.main.async {
             UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: identifiers)
             self.refreshNotifications()
         }
     }
-
+    
     private func refreshNotifications() {
         UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
             DispatchQueue.main.async {
@@ -318,7 +377,7 @@ struct RemindersView: View {
             }
         }
     }
-
+    
     private func removeOldNotifications() {
         refreshNotifications()
         removePendingNotifications(identifiers: pending)
@@ -327,5 +386,7 @@ struct RemindersView: View {
 }
 
 #Preview {
-    RemindersView(isRemindersEnabled: .constant(false))
+    RemindersView(isRemindersEnabled: .constant(true))
+        .modelContainer(PreviewContainer.previewContainer)
+        .environment(PurchaseManager())
 }

@@ -18,14 +18,14 @@ struct NormModalView: View {
     
     var body: some View {
         VStack {
-            Text("Выберите ваш вес:")
-                .font(.headline)
+            Text("Выберите вашу норму:")
+                .font(Constants.Design.Fonts.BodyMainFont)
                 .padding(.top, 30)
             Picker("Выберите вашу норму:", selection: $selectedNorm) {
                 ForEach(Array(stride(
-                    from: profile[0].unit == 0 ? 100 : 0,
+                    from: profile[0].unit == 0 ? 100 : 2,
                     to: profile[0].unit == 0 ? 4100 : 142,
-                    by: profile[0].unit == 0 ? 100 : 2
+                    by: profile[0].unit == 0 ? 100 : 1
                 )), id: \.self) { number in
                     Text("\(number)")
                         .tag(number)
@@ -37,11 +37,13 @@ struct NormModalView: View {
                 sliderValue = Double(selectedNorm)
                 isNormShowingModal = false
             }
+            .font(Constants.Design.Fonts.BodyMainFont)
             .bold()
         }
     }
 }
 
-//#Preview {
-//    NormModalView()
-//}
+#Preview {
+    NormModalView(profile: [Profile(gender: .man, weightKg: 55, unit: 0, autoNormMl: 1900, customNormMl: 1900, weightPounds: 121, autoNormOz: 67, customNormOz: 67, autoCalc: true, lastAmountDrink: 250, lastNameDrink: "Water")], isNormShowingModal: .constant(false), selectedNorm: .constant(2100), sliderValue: .constant(2100))
+        .modelContainer(PreviewContainer.previewContainer)
+}
