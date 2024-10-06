@@ -12,7 +12,6 @@ struct AchievementsView: View {
     @Binding var isAchievementShowingModal: Bool
     private let chooseIndexImageArray = [1, 7, 14, 30, 60, 90, 180, 270, 365]
     private let imagesAchievement = Constants.Back.Achievement.imagesAchievement
-    private let imagesAchievementOff = Constants.Back.Achievement.imagesAchievementOff
     private let namesAchievementFirst = Constants.Back.Achievement.namesAchievementFirst
     private let namesAchievementSecond = Constants.Back.Achievement.namesAchievementSecond
     
@@ -46,10 +45,10 @@ struct AchievementsView: View {
                     .padding(.top)
                 HStack {
                     VStack {
-                        Image(userDefaultsManager.getBoolValueForUserDefaults("normDone") ?? false ? "Winning" : "WinningOff")
+                        Image(userDefaultsManager.getBoolValueForUserDefaults("normDone") ?? false ? "Winning" : "DayAchievOff")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 100)
+                            .frame(width: 120, height: 100)
                         Text("Цель достигнута!")
                             .font(Constants.Design.Fonts.BodySmallFont)
                             .foregroundStyle(.white)
@@ -71,12 +70,13 @@ struct AchievementsView: View {
                     ForEach(0..<imagesAchievement.count, id: \.self) { index in
                         if index % 3 == 0 {
                             HStack(alignment: .bottom) {
-                                ForEach(index..<min(index + 3, imagesAchievementOff.count), id: \.self) { innerIndex in
+                                ForEach(index..<min(index + 3, imagesAchievement.count), id: \.self) { innerIndex in
                                     VStack {
                                         ZStack {
-                                            Image(userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0 >= chooseIndexImageArray[innerIndex] ? imagesAchievement[innerIndex] : imagesAchievementOff[innerIndex])
+                                            Image(userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0 >= chooseIndexImageArray[innerIndex] ? imagesAchievement[innerIndex] : "DayAchievOff")
                                                 .resizable()
                                                 .scaledToFit()
+                                                .frame(width: 120, height: 100)
                                                 .onTapGesture {
                                                     withAnimation {
                                                         imageAchievement = imagesAchievement[innerIndex]

@@ -40,6 +40,7 @@ struct MainView: View {
     @State private var isPressedImpact = false
     @State private var isNormExceeding = false
     @State private var isNormExceedingModal = false
+    @State private var isAnimationAchievement = false
     
     private let backgroundExternalCircleColor: Color = Color(#colorLiteral(red: 0.631372549, green: 0.7921568627, blue: 0.9725490196, alpha: 1))
     private let backgroundInternalCircleColor: Color = Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 1))
@@ -143,10 +144,15 @@ struct MainView: View {
                             isPurchaseViewModal = true
                         }
                     }) {
-                        Image("1DayAchiev")
+                        Image("Winning")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 45, height: 45)
+                            .frame(width: 55, height: 55)
+                            .rotationEffect(.degrees(isAnimationAchievement ? 0 : 5))
+                            .animation(.easeInOut(duration: 0.2).repeatCount(15, autoreverses: true), value: isAnimationAchievement)
+                            .onAppear {
+                                isAnimationAchievement = true
+                            }
                     }
                     .sheet(isPresented: $isAchievementShowingModal) {
                         AchievementsView(isAchievementShowingModal: $isAchievementShowingModal)
@@ -174,7 +180,7 @@ struct MainView: View {
                                 isShowingModal = true
                                 AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "SelectDrinkView"])
                             }) {
-                                Image("WaterMain")
+                                Image("\(profile[0].lastNameDrink)Main")
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 60, height: 60)

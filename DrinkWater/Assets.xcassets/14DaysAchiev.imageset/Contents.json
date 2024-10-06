@@ -1,16 +1,17 @@
 {
   "images" : [
     {
+      "filename" : "WaterDrop3.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "14DaysAchiev@2x.png",
+      "filename" : "WaterDrop3@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "14DaysAchiev@3x.png",
+      "filename" : "WaterDrop3@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

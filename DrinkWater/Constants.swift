@@ -57,7 +57,6 @@ struct Constants {
         
         struct Achievement {
             static let imagesAchievement = ["1DayAchiev", "7DaysAchiev", "14DaysAchiev", "30DaysAchiev", "60DaysAchiev", "90DaysAchiev", "180DaysAchiev", "270DaysAchiev", "365DaysAchiev"]
-            static let imagesAchievementOff = ["1DayAchievOff", "7DaysAchievOff", "14DaysAchievOff", "30DaysAchievOff", "60DaysAchievOff", "90DaysAchievOff", "180DaysAchievOff", "270DaysAchievOff", "365DaysAchievOff"]
             static let namesAchievementFirst: [LocalizedStringKey] = ["Первый день", "7 дней", "14 дней", "30 дней", "60 дней", "90 дней", "180 дней", "270 дней", "365 дней"]
             static let namesAchievementSecond: [LocalizedStringKey] = ["Начало положено!", "Смотри как легко!", "Только вперёд!", "Не останавливайся!", "Всегда стремись выше!", "Мотивация на уровне!", "Ты можешь больше!", "Всё возможно!", "Ты на вершине!"]
         }

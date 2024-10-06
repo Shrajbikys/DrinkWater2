@@ -17,7 +17,7 @@ struct ContentView: View {
             if showLaunchScreen {
                 LaunchScreenView()
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.5) {
                             showLaunchScreen = false
                         }
                     }
