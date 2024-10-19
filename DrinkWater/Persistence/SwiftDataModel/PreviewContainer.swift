@@ -12,7 +12,7 @@ import SwiftData
 class PreviewContainer {
     static let previewContainer: ModelContainer = {
         do {
-            let schema = Schema([Profile.self, DataDrinking.self, DataDrinkingOfTheDay.self, Reminder.self])
+            let schema = Schema([Profile.self, DataDrinking.self, DataDrinkingOfTheDay.self, Reminder.self, DataWeight.self])
             let container = try ModelContainer(
                 for: schema,
                 configurations: ModelConfiguration(isStoredInMemoryOnly: true)
@@ -30,6 +30,9 @@ class PreviewContainer {
             SampleData.reminder.enumerated().forEach { _, reminderItem in
                 container.mainContext.insert(reminderItem)
             }
+            SampleData.dataWeight.enumerated().forEach { _, dataWeightItem in
+                container.mainContext.insert(dataWeightItem)
+            }
             
             return container
             
@@ -41,7 +44,7 @@ class PreviewContainer {
 
 struct SampleData {
     static let profile: [Profile] = {
-        return [Profile(gender: .man, weightKg: 55, unit: 0, autoNormMl: 1900, customNormMl: 1900, weightPounds: 121, autoNormOz: 67, customNormOz: 67, autoCalc: true, lastAmountDrink: 250, lastNameDrink: "Water")]
+        return [Profile(gender: .man, weightKg: 55.4, unit: 0, autoNormMl: 1900, customNormMl: 1900, weightPounds: 121.8, autoNormOz: 67, customNormOz: 67, autoCalc: true, lastAmountDrink: 250, lastNameDrink: "Water")]
     }()
     
     static let dataDrinking: [DataDrinking] = {
@@ -54,5 +57,10 @@ struct SampleData {
     
     static let reminder: [Reminder] = {
         return [Reminder(remindersEnabled: true, startTimeReminder: Date(), finishTimeReminder: Date(), nextTimeReminder: Date(), intervalReminder: 1800, soundReminder: "Default")]
+    }()
+    
+    static let dataWeight: [DataWeight] = {
+        return [DataWeight(date: Date(), goal: 78.1, weight: 84.1, difference: 12.2), DataWeight(date: Date() - 100000, goal: 78.1, weight: 86.3, difference: 4.2),
+                DataWeight(date: Date() - 200000, goal: 78.1, weight: 89.8, difference: 4.2), DataWeight(date: Date() - 300000, goal: 78.1, weight: 94.5, difference: 4.2)]
     }()
 }

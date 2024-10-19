@@ -15,7 +15,7 @@ struct HydrationView: View {
         NavigationStack {
             ScrollView {
                 ForEach(hydration.sorted(by: <), id: \.key) { key, value in
-                    HydrationItemView(nameDrink: key, imageDrink: "\(key)CA" , hydration: value)
+                    HydrationItemView(nameDrink: key, imageDrink: "\(key)SD" , hydration: value)
                 }
             }
             .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["HydrationView": ""]) }

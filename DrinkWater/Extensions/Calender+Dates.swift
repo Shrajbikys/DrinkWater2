@@ -105,6 +105,18 @@ extension Date {
         return false
     }
     
+    func last14DaysDates() -> [Date] {
+        let calendar = Calendar.current
+        var dates: [Date] = []
+
+        for dayOffset in 0..<14 {
+            if let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) {
+                dates.append(date)
+            }
+        }
+        return dates.reversed()
+    }
+    
     static func compareDatesWithoutTime(date1: Date, date2: Date) -> ComparisonResult {
         // Создаем календарь
         let calendar = Calendar.current

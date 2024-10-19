@@ -23,14 +23,15 @@ struct StatisticsView: View {
     @StateObject private var healthKitManager = HealthKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
     
-    var dataDrinkingViewModel = DataDrinkingViewModel()
-    var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
+    @State private var dataDrinkingViewModel = DataDrinkingViewModel()
+    @State private var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
     @State private var selectedSegment: Int = 0
     @State private var selectedIndex: Int? = nil
     @State private var isEmpty: Bool = true
     @State private var lastNameDrink: String = "Water"
     @State private var unit: Int = 0
+    @State private var statisticDate: Date = Date()
     
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     private let backgroundChartColor: Color = Color(#colorLiteral(red: 0.2157807946, green: 0.4114688337, blue: 0.6079391837, alpha: 1))
@@ -51,7 +52,7 @@ struct StatisticsView: View {
     @State var selectedWeek: [Date] = Date().thisWeek
     @State var selectedMonth: [Date] = [Date().thisMonthStart, Date().thisMonthEnd]
     
-    @State var selectedDate: Date = Date()
+    @State private var selectedDate: Date = Date()
     
     var body: some View {
         NavigationStack {
@@ -147,13 +148,25 @@ struct StatisticsView: View {
                                         )
                                     }
                                 }
+                                RuleMark(y: .value("Drunk", normDrink))
+                                    .lineStyle(.init(lineWidth: 0.3, dash: [5]))
+                                    .foregroundStyle(.orange)
                             }
                         }
                         .chartYScale(domain: profile[0].unit == 0 ? 0...4000 : 0...150)
                         .chartYAxis(content: {
                             AxisMarks(position: .leading)
                         })
-                        .foregroundStyle(backgroundChartColor)
+                        .foregroundStyle(
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    backgroundChartColor.opacity(0.8),
+                                    backgroundChartColor.opacity(0.1)
+                                ]),
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
                         .frame(height: 200)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
@@ -173,6 +186,9 @@ struct StatisticsView: View {
                                         )
                                     }
                                 }
+                                RuleMark(y: .value("Drunk", normDrink))
+                                    .lineStyle(.init(lineWidth: 0.3, dash: [5]))
+                                    .foregroundStyle(.orange)
                             }
                         }
                         .chartScrollableAxes(.horizontal)
@@ -180,61 +196,31 @@ struct StatisticsView: View {
                         .chartYAxis(content: {
                             AxisMarks(position: .leading)
                         })
-                        .foregroundStyle(backgroundChartColor)
+                        .foregroundStyle(
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    backgroundChartColor.opacity(0.8),
+                                    backgroundChartColor.opacity(0.1)
+                                ]),
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
                         .frame(height: 200)
                         .padding(.horizontal, 20)
                         .padding(.bottom, 10)
                     }
-                    Text("Статистика за день")
-                        .font(Constants.Design.Fonts.BodyLargeFont)
-                        .foregroundStyle(.white)
-                    ScrollViewReader { proxy in
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 15) {
-                                ForEach(0..<dataDrinkingOfTheDay.count, id: \.self) { index in
-                                    Button(action: {
-                                        selectedIndex = index
-                                        selectedDate = dataDrinkingOfTheDay[index].dateDrinkOfTheDay
-                                        AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "SelectedDate"])
-                                    }, label: {
-                                        ZStack {
-                                            Circle()
-                                                .fill(selectedIndex == index ? backgroundExternalCircleColor : .clear)
-                                            VStack {
-                                                Text(dataDrinkingOfTheDay[index].dateDrinkOfTheDay.dayShort)
-                                                Text(dataDrinkingOfTheDay[index].dateDrinkOfTheDay.abbreviatedMonth)
-                                            }
-                                            .foregroundStyle(.white)
-                                            .font(.caption)
-                                        }
-                                    })
-                                    .id(index)
-                                    .frame(width: 57, height: 57)
-                                    .onAppear {
-                                        if  dataDrinkingOfTheDay.count > 0 {
-                                            proxy.scrollTo(dataDrinkingOfTheDay.count - 1, anchor: .bottom)
-                                            selectedIndex = dataDrinkingOfTheDay.count - 1
-                                        }
-                                    }
-                                    .overlay {
-                                        ZStack {
-                                            Circle()
-                                                .trim(from: 0.0, to: 1.0)
-                                                .stroke(backgroundExternalCircleColor, lineWidth: 4)
-                                                .rotationEffect(.degrees(270))
-                                            Circle()
-                                                .trim(from: 0.0, to: (dataDrinkingOfTheDay.first(where: { $0.dayID == dataDrinkingOfTheDay[index].dateDrinkOfTheDay.yearMonthDay } )?.percentDrinking ?? 0) / 100)
-                                                .stroke(backgroundInternalCircleColor, lineWidth: 4)
-                                                .rotationEffect(.degrees(270))
-                                                .animation(.easeInOut(duration: 1.0), value: (dataDrinkingOfTheDay.first(where: { $0.dayID == dataDrinkingOfTheDay[index].dateDrinkOfTheDay.yearMonthDay } )?.percentDrinking ?? 0) / 100)
-                                        }
-                                    }
-                                }
-                            }
-                            .padding(.vertical, 5)
-                            .padding(.horizontal, 10)
-                        }
+                    HStack(spacing: 15) {
+                        Text("Статистика за")
+                            .font(Constants.Design.Fonts.BodyLargeFont)
+                            .foregroundStyle(.white)
+                        DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                            .colorScheme(.dark)
+                            .frame(width: 120)
+                            .labelsHidden()
+                            .transformEffect(.init(scaleX: 1.1, y: 1.1))
                     }
+                    .padding(.horizontal)
                     if isEmptyRecordsToday() {
                         ContentUnavailableView("Упс! Пока здесь ничего нет...", systemImage: "waterbottle")
                     } else {

@@ -27,6 +27,7 @@ struct AdditionalInfoView: View {
     
     @State private var isWeightShowingModal = false
     @State private var selectedWeight: Double = 50
+    @State private var selectedWeightFractional: Double = 0
     @State private var selectedUnitSegment: Int = 0
     @State private var isAppleHealthAuthorized = false
     @State private var isActivateSystemNotifications = false
@@ -85,7 +86,12 @@ struct AdditionalInfoView: View {
                             }
                         }
                         .sheet(isPresented: $isWeightShowingModal) {
-                            WeightModalView(profile: profile, isWeightShowingModal: $isWeightShowingModal, selectedWeight: $selectedWeight, unitValue: selectedUnitSegment)
+                            let weight = profile[0].unit == 0 ? profile[0].weightKg : profile[0].weightPounds
+                            let numberString = String(weight)
+                            let parts = numberString.split(separator: ".")
+                            let wholePart = Int(String(parts[0]))!
+                            let fractionalPart = Int(String(parts[1]))!
+                            WeightModalView(profile: profile, isWeightShowingModal: $isWeightShowingModal, selectedWeight: wholePart, selectedWeightFractional: fractionalPart, unitValue: selectedUnitSegment)
                                 .presentationDetents([.height(250)])
                         }
                     }
@@ -127,7 +133,7 @@ struct AdditionalInfoView: View {
                         .pickerStyle(.segmented)
                         .onChange(of: selectedUnitSegment) { _, index in
                             profileViewModel.updateProfileUnitData(profile: profile, unit: index)
-                            selectedWeight = index == 0 ? profile[0].weightKg : profile[0].weightPounds.rounded(.toNearestOrAwayFromZero)
+                            selectedWeight = index == 0 ? profile[0].weightKg : profile[0].weightPounds
                             
                             AppMetrica.reportEvent(name: "AdditionalInfoView", parameters: ["Press button": "SelectedUnit"])
                         }

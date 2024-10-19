@@ -27,7 +27,16 @@ class UserDefaultsManager {
             setValueForKey(newValue, forKey: Keys.isFirstSign)
         }
     }
-    
+
+    var isFirstSignWidth: Bool {
+        get {
+            return getBoolForKey(Keys.isFirstSignWidth, defaultValue: false)
+        }
+        set {
+            setValueForKey(newValue, forKey: Keys.isFirstSignWidth)
+        }
+    }
+
     var isMigration: Bool {
         get {
             return getBoolForKey(Keys.isMigration, defaultValue: false)
@@ -104,6 +113,7 @@ private extension UserDefaultsManager {
     struct Keys {
         static let isMigration = "isMigration"
         static let isFirstSign = "isFirstSign"
+        static let isFirstSignWidth = "isFirstSignWidth"
         static let isAuthorizationHealthKit = "authorizationHealthKit"
         static let isAuthorizationICloud = "isAuthorizationICloud"
         static let isAuthorizationSystemNotifications = "isAuthorizationSystemNotifications"

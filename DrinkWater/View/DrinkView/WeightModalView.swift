@@ -15,7 +15,8 @@ struct WeightModalView: View {
     var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
     @Binding var isWeightShowingModal: Bool
-    @Binding var selectedWeight: Double
+    @State var selectedWeight: Int
+    @State var selectedWeightFractional: Int
     
     @State var unitValue: Int
     
@@ -24,15 +25,35 @@ struct WeightModalView: View {
             Text("Выберите ваш вес:")
                 .font(Constants.Design.Fonts.BodyMainFont)
                 .padding(.top, 30)
-            Picker("Выберите ваш вес:", selection: $selectedWeight) {
-                ForEach(unitValue == 0 ? (20...200).map { Double($0) } : (44...400).map { Double($0) }, id: \.self) { number in
-                    Text("\(Int(number))").tag(number)
+            HStack {
+                Picker("", selection: $selectedWeight) {
+                    ForEach(unitValue == 0 ? (20...200).map { $0 } : (44...400).map { $0 }, id: \.self) { number in
+                        Text("\(number)").tag(number)
+                            .font(Constants.Design.Fonts.BodyMainFont)
+                    }
                 }
-            }.pickerStyle(.wheel)
+                .pickerStyle(.wheel)
+                .frame(width: 80)
+                .padding(.trailing, -15)
+                VStack {
+                    Text(unitValue == 0 ? "," : ".")
+                        .padding(.top, 10)
+                }
+                Picker("", selection: $selectedWeightFractional) {
+                    ForEach((0...9).map { $0 }, id: \.self) { number in
+                        Text("\(number)").tag(number)
+                            .font(Constants.Design.Fonts.BodyMainFont)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(width: 80)
+                .padding(.leading, -15)
+            }
             Button("Сохранить") {
                 if let profile = profile {
                     if !profile.isEmpty {
-                        profileViewModel.updateProfileWeightData(profile: profile, weight: selectedWeight)
+                        let weight = Double(selectedWeight) + Double(selectedWeightFractional) / 10
+                        profileViewModel.updateProfileWeightData(profile: profile, weight: weight)
                         if let dataDrinkingOfTheDay = dataDrinkingOfTheDay {
                             if !dataDrinkingOfTheDay.isEmpty {
                                 let autoNorm = unitValue == 0 ? profile[0].autoNormMl : profile[0].autoNormOz
@@ -51,6 +72,6 @@ struct WeightModalView: View {
 }
 
 #Preview {
-    WeightModalView(isWeightShowingModal: .constant(false), selectedWeight: .constant(50), unitValue: 0)
+    WeightModalView(isWeightShowingModal: .constant(false), selectedWeight: 50, selectedWeightFractional: 3, unitValue: 0)
         .modelContainer(PreviewContainer.previewContainer)
 }

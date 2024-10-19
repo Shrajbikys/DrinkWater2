@@ -37,11 +37,11 @@ extension Double {
     }
     
     var toStringKg: String {
-        let value = Measurement(value: self.rounded(.toNearestOrAwayFromZero), unit: UnitMass.kilograms).value.formatted(.number)
-        let unit = Measurement(value: self.rounded(.toNearestOrAwayFromZero), unit: UnitMass.kilograms).unit.symbol
+        let value = Measurement(value: self, unit: UnitMass.kilograms).value.formatted(.number)
+        let unit = Measurement(value: self, unit: UnitMass.kilograms).unit.symbol
         
         if Locale.current.identifier.localizedStandardContains("ru") {
-            return Measurement(value: self.rounded(.toNearestOrAwayFromZero), unit: UnitMass.kilograms).formatted(.measurement(width: .abbreviated, usage: .asProvided))
+            return Measurement(value: self, unit: UnitMass.kilograms).formatted(.measurement(width: .abbreviated, usage: .asProvided))
         } else {
             return "\(value) \(unit)"
         }
@@ -49,14 +49,14 @@ extension Double {
     }
     
     var toStringPounds: String {
-        let value = Measurement(value: self.rounded(.toNearestOrAwayFromZero), unit: UnitMass.pounds).value.formatted(.number)
-        let unit = Measurement(value: self.rounded(.toNearestOrAwayFromZero), unit: UnitMass.pounds).unit.symbol
+        let value = Measurement(value: self, unit: UnitMass.pounds).value.formatted(.number)
+        let unit = Measurement(value: self, unit: UnitMass.pounds).unit.symbol
         
         if Locale.current.identifier.localizedStandardContains("ru") {
             if Locale.preferredLanguages.first == "ru-RU" {
-                return ("\(Measurement(value: self.rounded(.toNearestOrAwayFromZero), unit: UnitMass.pounds).value.formatted(.number)) фн")
+                return ("\(Measurement(value: self, unit: UnitMass.pounds).value.formatted(.number)) фн")
             } else {
-                return ("\(Measurement(value: self.rounded(.toNearestOrAwayFromZero), unit: UnitMass.pounds).value.formatted(.number)) lb")
+                return ("\(Measurement(value: self, unit: UnitMass.pounds).value.formatted(.number)) lb")
             }
         } else {
             return "\(value) \(unit)"

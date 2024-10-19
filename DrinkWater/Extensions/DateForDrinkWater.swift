@@ -141,6 +141,13 @@ extension Date {
         dateFormatter.dateFormat = "MMM"
         return dateFormatter.string(from: self)
     }
+    
+    /// Получаем название месяца в коротком формате (Имен. падеж)
+    var monthShortStandalone: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "LLL"
+        return dateFormatter.string(from: self)
+    }
 
     /// Получаем номер дня недели текущего дня
     var dayOfWeek: Int {
@@ -160,6 +167,13 @@ extension Date {
     var dateFormatForWidgetAndWatch: String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyyMMdd"
+        return dateFormatter.string(from: self)
+    }
+    
+    /// Получаем форматированную дату в формате 10.10.2024
+    var formatDayMonthYear: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
         return dateFormatter.string(from: self)
     }
 

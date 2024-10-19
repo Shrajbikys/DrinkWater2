@@ -68,8 +68,8 @@ class ProfileViewModel {
         autoNormMl = 100*round(weightKg*indexWeight/100)
         autoNormOz = Measurement(value: autoNormMl, unit: UnitVolume.milliliters).converted(to: .imperialFluidOunces).value
         
-        profile[0].weightKg = weightKg
-        profile[0].weightPounds = weightPounds
+        profile[0].weightKg = (weightKg * 10).rounded() / 10
+        profile[0].weightPounds = (weightPounds * 10).rounded() / 10
         profile[0].autoNormMl = autoNormMl
         profile[0].customNormMl = autoNormMl
         profile[0].autoNormOz = autoNormOz

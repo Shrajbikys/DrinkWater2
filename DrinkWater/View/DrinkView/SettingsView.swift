@@ -37,6 +37,7 @@ struct SettingsView: View {
     @State private var isWeightShowingModal = false
     @State private var isNormShowingModal = false
     @State private var selectedWeight: Double = 50
+    @State private var selectedWeightFractional: Double = 0
     @State private var selectedNorm: Int = 2200
     @State private var selectedGenderSegment: Int = 0
     @State private var selectedUnitSegment: Int = 0
@@ -86,7 +87,13 @@ struct SettingsView: View {
                                 .foregroundStyle(.link)
                         }
                         .sheet(isPresented: $isWeightShowingModal) {
-                            WeightModalView(profile: profile, dataDrinkingOfTheDay: dataDrinkingOfTheDay, isWeightShowingModal: $isWeightShowingModal, selectedWeight: $selectedWeight, unitValue: selectedUnitSegment)
+                            let weight = profile[0].unit == 0 ? profile[0].weightKg : profile[0].weightPounds
+                            let numberString = String(weight)
+                            let parts = numberString.split(separator: ".")
+                            let wholePart = Int(String(parts[0]))!
+                            let fractionalPart = Int(String(parts[1]))!
+
+                            WeightModalView(profile: profile, dataDrinkingOfTheDay: dataDrinkingOfTheDay, isWeightShowingModal: $isWeightShowingModal, selectedWeight: wholePart, selectedWeightFractional: fractionalPart, unitValue: selectedUnitSegment)
                                 .presentationDetents([.height(250)])
                         }
                     }
@@ -384,11 +391,11 @@ struct SettingsView: View {
             if profile[0].unit == 0 {
                 selectedNorm = profile[0].autoCalc ? Int(profile[0].autoNormMl) : Int(profile[0].customNormMl)
                 sliderValue = profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl
-                selectedWeight = profile[0].weightKg.rounded(.toNearestOrAwayFromZero)
+                selectedWeight = profile[0].weightKg
             } else {
                 selectedNorm = profile[0].autoCalc ? Int(profile[0].autoNormOz) : Int(profile[0].customNormOz)
                 sliderValue = profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz
-                selectedWeight = profile[0].weightPounds.rounded(.toNearestOrAwayFromZero)
+                selectedWeight = profile[0].weightPounds
             }
         }
         .sheet(isPresented: $isPurchaseViewModal) {

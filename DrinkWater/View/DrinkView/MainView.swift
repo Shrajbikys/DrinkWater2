@@ -41,6 +41,8 @@ struct MainView: View {
     @State private var isNormExceeding = false
     @State private var isNormExceedingModal = false
     @State private var isAnimationAchievement = false
+    @State private var isShowMainWidthView = false
+    @State private var path = NavigationPath()
     
     private let backgroundExternalCircleColor: Color = Color(#colorLiteral(red: 0.631372549, green: 0.7921568627, blue: 0.9725490196, alpha: 1))
     private let backgroundInternalCircleColor: Color = Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 1))
@@ -57,7 +59,7 @@ struct MainView: View {
     }
     
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             ZStack {
                 Image("BackgroundNew")
                     .resizable()
@@ -158,6 +160,49 @@ struct MainView: View {
                         AchievementsView(isAchievementShowingModal: $isAchievementShowingModal)
                     }
                     .position(x: geometry.size.width / 10, y: geometry.size.height / 2)
+                }
+                GeometryReader { geometry in
+                    Button {
+                        if !userDefaultsManager.isFirstSignWidth {
+                            let dataWeight = DataWeight()
+                            let weight = profile[0].weightKg
+                            dataWeight.weight = weight
+                            dataWeight.goal = weight
+                            modelContext.insert(dataWeight)
+                        }
+                        if purchaseManager.hasPremium {
+                            AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "MainWeightView"])
+                            isAchievementShowingModal = true
+                        } else {
+                            AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "MainWeightPurchaseView"])
+                            isPurchaseViewModal = true
+                        }
+                        isShowMainWidthView = true
+                    } label: {
+                        Image("WeightScale")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 50, height: 50)
+                            .scaleEffect(isAnimationAchievement ? 1 : 0.9)
+                            .animation(.easeInOut(duration: 0.2).repeatCount(15, autoreverses: true), value: isAnimationAchievement)
+                            .onAppear {
+                                isAnimationAchievement = true
+                            }
+                    }
+                    
+                    .sheet(isPresented: $isShowMainWidthView, onDismiss: {
+                        unit = profile[0].unit
+                        if unit == 0 {
+                            normDrink = profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl
+                        } else {
+                            normDrink = profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz
+                        }
+                        normDrinkLabel = unit == 0 ? normDrink.toStringMilli : normDrink.toStringOunces
+                        
+                    }, content: {
+                        MainWeightView(unit: unit)
+                    })
+                    .position(x: geometry.size.width / 10, y: geometry.size.height / 1.75)
                 }
                 GeometryReader { geometry in
                     VStack(spacing: 7) {
