@@ -11,7 +11,8 @@ import SwiftData
 struct ReadingsWeightView: View {
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     @State private var value: String = ""
-    @State var selectedButton: String
+    @State var pressedButton: String
+    @Binding var isShowKeyboardView: Bool
     
     var body: some View {
         ZStack {
@@ -44,7 +45,7 @@ struct ReadingsWeightView: View {
                     }
                     .padding(.trailing, 20)
                 }
-                CustomKeyboard(input: $value, pressedButton: selectedButton)
+                CustomKeyboard(input: $value, isShowKeyboardView: $isShowKeyboardView, pressedButton: pressedButton)
                 Spacer()
             }
             .padding(.top, 40)
@@ -53,5 +54,5 @@ struct ReadingsWeightView: View {
 }
 
 #Preview {
-    ReadingsWeightView(selectedButton: "Weight")
+    ReadingsWeightView(pressedButton: "Weight", isShowKeyboardView: .constant(false))
 }

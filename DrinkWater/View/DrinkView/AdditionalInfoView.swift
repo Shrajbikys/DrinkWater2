@@ -43,7 +43,7 @@ struct AdditionalInfoView: View {
             Image("BackgroundLS")
                 .resizable()
                 .scaledToFill()
-                .ignoresSafeArea(.all)
+                .ignoresSafeArea()
             VStack {
                 Text("Укажите информацию для расчёта суточной нормы употребления воды:")
                     .font(Constants.Design.Fonts.BodyMainFont)

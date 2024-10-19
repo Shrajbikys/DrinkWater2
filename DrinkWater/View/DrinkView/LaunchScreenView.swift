@@ -17,6 +17,9 @@ struct LaunchScreenView: View {
     var body: some View {
         ZStack {
             Image("BackgroundLS")
+                .resizable()
+                .scaledToFill()
+                .ignoresSafeArea()
             VStack {
                 GeometryReader { geometry in
                     Image("WaterDrop")

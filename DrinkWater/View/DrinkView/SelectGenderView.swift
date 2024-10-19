@@ -16,7 +16,7 @@ struct SelectGenderView: View {
                 Image("BackgroundLS")
                     .resizable()
                     .scaledToFill()
-                    .ignoresSafeArea(.all)
+                    .ignoresSafeArea()
                 VStack(spacing: 55) {
                     Text("Выберите ваш пол:")
                         .font(.title)

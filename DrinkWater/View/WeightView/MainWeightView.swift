@@ -17,9 +17,9 @@ struct MainWeightView: View {
     private let userDefaultsManager = UserDefaultsManager.shared
     @State var unit: Int
     
-    @State private var showWeightSheet = false
-    @State private var showGoalSheet = false
-    @State private var showDataWeightSheet = false
+    @State private var isShowWeightSheet = false
+    @State private var isShowGoalSheet = false
+    @State private var isShowDataWeightSheet = false
     
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     private var backgroundBarMarkColor: LinearGradient {
@@ -61,14 +61,14 @@ struct MainWeightView: View {
                 }
                 Button("Последняя запись \((dataWeight.last?.date ?? Date()).formatted(.dateTime))") {
                     AppMetrica.reportEvent(name: "MainWeightView", parameters: ["Press button": "HistoryWeightView"])
-                    showDataWeightSheet = true
+                    isShowDataWeightSheet = true
                 }
                 .font(.system(.caption))
                 .buttonStyle(.bordered)
                 .padding(.top, -20)
                 .shadow(radius: 5)
                 .foregroundStyle(.white).opacity(0.6)
-                .sheet(isPresented: $showDataWeightSheet) {
+                .sheet(isPresented: $isShowDataWeightSheet) {
                     HistoryWeightView(unit: unit)
                         .presentationDetents([.large])
                 }
@@ -101,7 +101,7 @@ struct MainWeightView: View {
                 Spacer()
                 Button {
                     AppMetrica.reportEvent(name: "MainWeightView", parameters: ["Press button": "ReadingsGoalView"])
-                    showGoalSheet = true
+                    isShowGoalSheet = true
                 } label: {
                     Text("Цель: \(unit == 0 ? (dataWeight.last?.goal ?? 0).toStringKg : (dataWeight.last?.goal ?? 0).toStringPounds)")
                 }
@@ -112,14 +112,14 @@ struct MainWeightView: View {
                         .stroke(.white.opacity(0.4), style: StrokeStyle(lineWidth: 1.0))
                         .frame(width: 120, height: 30)
                 }
-                .sheet(isPresented: $showGoalSheet) {
-                    ReadingsGoalView(selectedButton: "Goal")
+                .sheet(isPresented: $isShowGoalSheet) {
+                    ReadingsGoalView(pressedButton: "Goal", isShowKeyboardView: $isShowGoalSheet)
                         .presentationDetents([.fraction(0.85)])
                 }
                 .padding(.vertical)
                 Button {
                     AppMetrica.reportEvent(name: "MainWeightView", parameters: ["Press button": "ReadingsWeightView"])
-                    showWeightSheet = true
+                    isShowWeightSheet = true
                 } label: {
                     Image(systemName: "plus")
                         .font(.system(size: 25, weight: .bold))
@@ -130,8 +130,8 @@ struct MainWeightView: View {
                         .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
                 }
                 .padding(.bottom, 20)
-                .sheet(isPresented: $showWeightSheet) {
-                    ReadingsWeightView(selectedButton: "Weight")
+                .sheet(isPresented: $isShowWeightSheet) {
+                    ReadingsWeightView(pressedButton: "Weight", isShowKeyboardView: $isShowWeightSheet)
                         .presentationDetents([.fraction(0.85)])
                 }
             }

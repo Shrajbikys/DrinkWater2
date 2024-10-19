@@ -42,6 +42,7 @@ struct MainView: View {
     @State private var isNormExceedingModal = false
     @State private var isAnimationAchievement = false
     @State private var isShowMainWidthView = false
+    @State private var isAnimationMainWidth = false
     @State private var path = NavigationPath()
     
     private let backgroundExternalCircleColor: Color = Color(#colorLiteral(red: 0.631372549, green: 0.7921568627, blue: 0.9725490196, alpha: 1))
@@ -64,7 +65,7 @@ struct MainView: View {
                 Image("BackgroundNew")
                     .resizable()
                     .scaledToFill()
-                    .ignoresSafeArea(.all)
+                    .ignoresSafeArea()
                 VStack {
                     GeometryReader { geometry in
                         ZStack {
@@ -172,21 +173,20 @@ struct MainView: View {
                         }
                         if purchaseManager.hasPremium {
                             AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "MainWeightView"])
-                            isAchievementShowingModal = true
+                            isShowMainWidthView = true
                         } else {
                             AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "MainWeightPurchaseView"])
                             isPurchaseViewModal = true
                         }
-                        isShowMainWidthView = true
                     } label: {
                         Image("WeightScale")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 50, height: 50)
-                            .scaleEffect(isAnimationAchievement ? 1 : 0.9)
-                            .animation(.easeInOut(duration: 0.2).repeatCount(15, autoreverses: true), value: isAnimationAchievement)
+                            .scaleEffect(isAnimationMainWidth ? 1 : 0.9)
+                            .animation(.easeInOut(duration: 0.2).repeatCount(15, autoreverses: true), value: isAnimationMainWidth)
                             .onAppear {
-                                isAnimationAchievement = true
+                                isAnimationMainWidth = true
                             }
                     }
                     

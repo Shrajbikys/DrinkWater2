@@ -9,13 +9,13 @@ import SwiftUI
 import SwiftData
 
 struct CustomKeyboard: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query var profile: [Profile]
     @Query(sort: \DataWeight.date, order: .forward) var dataWeight: [DataWeight]
     
     var profileViewModel = ProfileViewModel()
     @Binding var input: String
+    @Binding var isShowKeyboardView: Bool
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     @State var pressedButton: String
@@ -61,39 +61,41 @@ struct CustomKeyboard: View {
                 }
                 Button(action: {
                     handleOK()
-                    if dataWeight.last!.date.yearMonthDay == Date().yearMonthDay {
-                        if pressedButton == "Weight" {
-                            let newWeight = input.isEmpty ? 0 : Double(input)!
-                            dataWeight.last!.weight = newWeight
-                            DispatchQueue.main.async {
-                                profileViewModel.updateProfileWeightData(profile: profile, weight: newWeight)
+                    if Double(input) ?? 0 > 0 {
+                        if dataWeight.last!.date.yearMonthDay == Date().yearMonthDay {
+                            if pressedButton == "Weight" {
+                                let newWeight = input.isEmpty ? 0 : Double(input)!
+                                dataWeight.last!.weight = newWeight
+                                DispatchQueue.main.async {
+                                    profileViewModel.updateProfileWeightData(profile: profile, weight: newWeight)
+                                }
+                                if dataWeight.count > 1 {
+                                    dataWeight.last!.difference = dataWeight.last!.weight - dataWeight[dataWeight.count - 2].weight
+                                }
+                            } else if pressedButton == "Goal" {
+                                dataWeight.last!.goal = input.isEmpty ? 0 : Double(input)!
                             }
-                            if dataWeight.count > 1 {
-                                dataWeight.last!.difference = dataWeight.last!.weight - dataWeight[dataWeight.count - 2].weight
+                        } else {
+                            let dataWeightItem = DataWeight()
+                            dataWeightItem.date = Date()
+                            if pressedButton == "Weight" {
+                                let lastGoal = dataWeight.last!.goal
+                                let lastWeight = dataWeight.last!.weight
+                                let newWeight = input.isEmpty ? 0 : Double(input)!
+                                dataWeightItem.weight = newWeight
+                                dataWeightItem.goal = lastGoal
+                                dataWeightItem.difference = newWeight - lastWeight
+                                DispatchQueue.main.async {
+                                    profileViewModel.updateProfileWeightData(profile: profile, weight: newWeight)
+                                }
+                            } else if pressedButton == "Goal" {
+                                dataWeightItem.weight = dataWeight.last!.weight
+                                dataWeightItem.goal = input.isEmpty ? 0 : Double(input)!
                             }
-                        } else if pressedButton == "Goal" {
-                            dataWeight.last!.goal = input.isEmpty ? 0 : Double(input)!
+                            modelContext.insert(dataWeightItem)
                         }
-                    } else {
-                        let dataWeightItem = DataWeight()
-                        dataWeightItem.date = Date()
-                        if pressedButton == "Weight" {
-                            let lastGoal = dataWeight.last!.goal
-                            let lastWeight = dataWeight.last!.weight
-                            let newWeight = input.isEmpty ? 0 : Double(input)!
-                            dataWeightItem.weight = newWeight
-                            dataWeightItem.goal = lastGoal
-                            dataWeightItem.difference = newWeight - lastWeight
-                            DispatchQueue.main.async {
-                                profileViewModel.updateProfileWeightData(profile: profile, weight: newWeight)
-                            }
-                        } else if pressedButton == "Goal" {
-                            dataWeightItem.weight = dataWeight.last!.weight
-                            dataWeightItem.goal = input.isEmpty ? 0 : Double(input)!
-                        }
-                        modelContext.insert(dataWeightItem)
                     }
-                    dismiss()
+                    isShowKeyboardView = false
                 }) {
                     Text("OK")
                         .font(.title)
