@@ -25,6 +25,9 @@ struct CustomAmountView: View {
     @State var dataDrinkingViewModel = DataDrinkingViewModel()
     @State var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     @Binding var isShowingModal: Bool
     @State private var selectedNumber: Int = 250
     @State private var selectedDrink: String = ""
@@ -62,7 +65,6 @@ struct CustomAmountView: View {
                                     selectedImages[index] = "\(nameDrink[index])SD" == "\(nameDrink[index])SD" ? "\(nameDrink[index])HighlightedSD" : "\(nameDrink[index])SD"
                                     selectedDrink = nameDrink[index]
                                     isImageDisabled = false
-                                    AppMetrica.reportEvent(name: "CustomAmountView", parameters: ["Press button": "SelectedDrink"])
                                 }) {
                                     VStack(spacing: 10) {
                                         Image(selectedImages[index])
@@ -103,7 +105,6 @@ struct CustomAmountView: View {
                         Button("Добавить напиток") {
                             isPressedImpact.toggle()
                             drinkWater(amountDrink: selectedNumber)
-                            AppMetrica.reportEvent(name: "CustomAmountView", parameters: ["Press button": "DrinkWater"])
                             isShowingModal = false
                         }
                         .sensoryFeedback(.impact, trigger: isPressedImpact)
@@ -121,7 +122,7 @@ struct CustomAmountView: View {
                 }
             }
             .onAppear {
-                AppMetrica.reportEvent(name: "OpenView", parameters: ["CustomAmountView": ""])
+                startNetworkMonitoring()
                 
                 unit = profile[0].unit
                 
@@ -194,6 +195,25 @@ struct CustomAmountView: View {
                     if success {print(successMessage) } else { print(errorMessage) }
                 }
             }
+        }
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["CustomAmountView": ""])
+        } else {
+            print("No network connection available. Cannot send event.")
         }
     }
 }

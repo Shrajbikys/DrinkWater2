@@ -17,6 +17,9 @@ struct MainWeightView: View {
     private let userDefaultsManager = UserDefaultsManager.shared
     @State var unit: Int
     
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     @State private var isShowWeightSheet = false
     @State private var isShowGoalSheet = false
     @State private var isShowDataWeightSheet = false
@@ -60,7 +63,6 @@ struct MainWeightView: View {
                         .foregroundStyle(.yellow)
                 }
                 Button("Последняя запись \((dataWeight.last?.date ?? Date()).formatted(.dateTime))") {
-                    AppMetrica.reportEvent(name: "MainWeightView", parameters: ["Press button": "HistoryWeightView"])
                     isShowDataWeightSheet = true
                 }
                 .font(.system(.caption))
@@ -100,7 +102,6 @@ struct MainWeightView: View {
                 }
                 Spacer()
                 Button {
-                    AppMetrica.reportEvent(name: "MainWeightView", parameters: ["Press button": "ReadingsGoalView"])
                     isShowGoalSheet = true
                 } label: {
                     Text("Цель: \(unit == 0 ? (dataWeight.last?.goal ?? 0).toStringKg : (dataWeight.last?.goal ?? 0).toStringPounds)")
@@ -118,7 +119,6 @@ struct MainWeightView: View {
                 }
                 .padding(.vertical)
                 Button {
-                    AppMetrica.reportEvent(name: "MainWeightView", parameters: ["Press button": "ReadingsWeightView"])
                     isShowWeightSheet = true
                 } label: {
                     Image(systemName: "plus")
@@ -138,10 +138,31 @@ struct MainWeightView: View {
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
+            startNetworkMonitoring()
+            
             let isFirstSignWidth = userDefaultsManager.isFirstSignWidth
             if !isFirstSignWidth {
                 userDefaultsManager.isFirstSignWidth = true
             }
+        }
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["MainWeightView": ""])
+        } else {
+            print("No network connection available. Cannot send event.")
         }
     }
 }

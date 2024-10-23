@@ -24,6 +24,9 @@ struct SelectDrinkView: View {
     @StateObject private var healthKitManager = HealthKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
     
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     @State var profileViewModel = ProfileViewModel()
     @State var dataDrinkingViewModel = DataDrinkingViewModel()
     @State var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
@@ -68,7 +71,6 @@ struct SelectDrinkView: View {
                                     Button(action: {
                                         drinkWater(index: index)
                                         isPressedImpact.toggle()
-                                        AppMetrica.reportEvent(name: "SelectDrinkView", parameters: ["Press button": "DrinkWater"])
                                         dismiss()
                                     }, label: {
                                         ZStack(alignment: .center) {
@@ -115,7 +117,6 @@ struct SelectDrinkView: View {
                                                     }
                                                     buttonStates[innerIndex].toggle()
                                                     lastSelectedIndex = innerIndex
-                                                    AppMetrica.reportEvent(name: "SelectDrinkView", parameters: ["Press button": "SelectDrink"])
                                                 }) {
                                                     VStack(spacing: 10) {
                                                         if selectedDrinkFirst && selectedDrink == nameDrink[innerIndex] {
@@ -141,7 +142,7 @@ struct SelectDrinkView: View {
                         }
                     }
                     .onAppear {
-                        AppMetrica.reportEvent(name: "OpenView", parameters: ["SelectDrinkView": ""])
+                        startNetworkMonitoring()
                         
                         unit = profile[0].unit
                         selectedDrink = profile[0].lastNameDrink
@@ -216,6 +217,25 @@ struct SelectDrinkView: View {
                     if success {print(successMessage) } else { print(errorMessage) }
                 }
             }
+        }
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["SelectDrinkView": ""])
+        } else {
+            print("No network connection available. Cannot send event.")
         }
     }
 }

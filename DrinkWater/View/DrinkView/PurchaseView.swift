@@ -15,6 +15,9 @@ struct PurchaseView: View {
     @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
     @Binding var isPurchaseViewModal: Bool
     
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     
     var body: some View {
@@ -71,7 +74,7 @@ struct PurchaseView: View {
                             .foregroundStyle(.white)
                         Button(action: {
                             joinPremium()
-                            AppMetrica.reportEvent(name: "PurchaseView", parameters: ["Press button": "JoinPremium"])
+                            startNetworkMonitoring()
                         }, label: {
                             ZStack {
                                 Image("PurchaseButton")
@@ -89,7 +92,6 @@ struct PurchaseView: View {
                         .foregroundStyle(.link)
                         .onTapGesture {
                             restore()
-                            AppMetrica.reportEvent(name: "PurchaseView", parameters: ["Press button": "Restore"])
                         }
                     Link("Условия использования", destination: URL(string: "https://telegra.ph/Terms--Conditions-02-17")!)
                         .font(Constants.Design.Fonts.BodyMediumFont)
@@ -98,7 +100,6 @@ struct PurchaseView: View {
                 }
             }
         }
-        .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["PurchaseView": ""]) }
     }
     
     private func joinPremium() {
@@ -107,7 +108,6 @@ struct PurchaseView: View {
                 if try await purchaseManager.purchasePremium() {
                     withAnimation {
                         isPurchaseViewModal = false
-//                        showWelcome.toggle()
                     }
                 }
             } catch {
@@ -120,15 +120,28 @@ struct PurchaseView: View {
         Task {
             do {
                 try await purchaseManager.restorePurchases()
-                
-                if purchaseManager.hasPremium {
-                    withAnimation {
-//                        showWelcome.toggle()
-                    }
-                }
             } catch {
                 print(error)
             }
+        }
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "PurchaseView", parameters: ["Press button": "JoinPremium"])
+        } else {
+            print("No network connection available. Cannot send event.")
         }
     }
 }

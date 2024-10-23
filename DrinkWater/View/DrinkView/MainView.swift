@@ -25,6 +25,9 @@ struct MainView: View {
     var dataDrinkingViewModel = DataDrinkingViewModel()
     var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     @State private var lastAmountDrink: Int = 250
     @State private var lastNameDrink: String = "Water"
     @State private var normDrink: Double = 2000
@@ -140,10 +143,8 @@ struct MainView: View {
                 GeometryReader { geometry in
                     Button(action: {
                         if purchaseManager.hasPremium {
-                            AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "AchievementsView"])
                             isAchievementShowingModal = true
                         } else {
-                            AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "AchievementsPurchaseView"])
                             isPurchaseViewModal = true
                         }
                     }) {
@@ -172,10 +173,8 @@ struct MainView: View {
                             modelContext.insert(dataWeight)
                         }
                         if purchaseManager.hasPremium {
-                            AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "MainWeightView"])
                             isShowMainWidthView = true
                         } else {
-                            AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "MainWeightPurchaseView"])
                             isPurchaseViewModal = true
                         }
                     } label: {
@@ -223,7 +222,6 @@ struct MainView: View {
                         HStack(alignment: .center) {
                             Button(action: {
                                 isShowingModal = true
-                                AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "SelectDrinkView"])
                             }) {
                                 Image("\(profile[0].lastNameDrink)Main")
                                     .resizable()
@@ -283,11 +281,10 @@ struct MainView: View {
             .onChange(of: PhoneSessionManager.shared.idOperation, {
                 let drinkName = PhoneSessionManager.shared.nameDrink
                 let amountDrink = PhoneSessionManager.shared.amountDrink
-                AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "DrinkWaterFromWatch"])
                 drinkWaterAction(action: .drink, nameDrink: drinkName, amountDrink: Int(amountDrink))
             })
             .onAppear {
-                AppMetrica.reportEvent(name: "OpenView", parameters: ["MainView": ""])
+                startNetworkMonitoring()
                 
                 if !dataDrinkingOfTheDay.contains(where: { $0.dateDrinkOfTheDay.yearMonthDay == Date().yearMonthDay } ) {
                     userDefaultsManager.setValueForUserDefaults(false, "normDone")
@@ -314,7 +311,6 @@ struct MainView: View {
             }
             .onOpenURL { url in
                 if url.scheme == "drinkwaterapp" {
-                    AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "DrinkWaterFromWidget"])
                     drinkWaterAction(action: .drink, nameDrink: nil, amountDrink: Int(url.host!))
                 }
             }
@@ -361,7 +357,6 @@ struct MainView: View {
         dataDrinkingViewModel.updateDataDrinking(modelContext: modelContext, nameDrink: lastNameDrink, amountDrink: lastAmountDrink, dateDrink: now)
         dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: amountDrinkOfTheDay, dateDrinkOfTheDay: now, percentDrinking: percentDrinking)
         
-        AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "DrinkWater"])
         DispatchQueue.main.async {
             isDrinkedPressed = false
             
@@ -409,7 +404,6 @@ struct MainView: View {
         profileViewModel.updateProfileDrinkData(profile: profile, lastNameDrink: lastNameDrinkProfile, lastAmountDrink: lastAmountDrinkProfile)
         dataDrinkingViewModel.deleteItemDataDrinking(modelContext: modelContext, itemDataDrinking: dataDrinking.last!)
         
-        AppMetrica.reportEvent(name: "MainView", parameters: ["Press button": "CancelDrinkWater"])
         DispatchQueue.main.async {
             // Сохраняем данные в HealthKit, если разрешение получено
             if userDefaultsManager.isAuthorizationHealthKit {
@@ -452,6 +446,25 @@ struct MainView: View {
             }
         case .cancel:
             cancelDrinkWater(amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking, lastNameDrinkProfile: lastNameDrinkProfile, lastAmountDrinkProfile: lastAmountDrinkProfile)
+        }
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["MainView": ""])
+        } else {
+            print("No network connection available. Cannot send event.")
         }
     }
 }

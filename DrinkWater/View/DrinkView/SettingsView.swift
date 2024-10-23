@@ -33,6 +33,9 @@ struct SettingsView: View {
     @StateObject private var cloudKitManager = CloudKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
     
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     private let settingsListRowBackground = Constants.Design.Colors.settingsListRowBackground
     @State private var isWeightShowingModal = false
     @State private var isNormShowingModal = false
@@ -80,7 +83,6 @@ struct SettingsView: View {
                         Spacer()
                         Button(action: {
                             isWeightShowingModal = true
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SelectedWeight"])
                         }) {
                             Text(profile[0].unit == 0 ? profile[0].weightKg.toStringKg : profile[0].weightPounds.toStringPounds)
                                 .bold()
@@ -120,7 +122,6 @@ struct SettingsView: View {
                             } else {
                                 sliderValue = profile[0].unit == 0 ? profile[0].customNormMl : profile[0].customNormOz
                             }
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SelectedGender"])
                         }
                     }
                     HStack {
@@ -145,7 +146,6 @@ struct SettingsView: View {
                                 selectedNorm = index == 0 ? Int(profile[0].customNormMl) : Int(profile[0].customNormOz)
                                 sliderValue = index == 0 ? profile[0].customNormMl : profile[0].customNormOz
                             }
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SelectedUnit"])
                         }
                     }
                 } header: {
@@ -185,7 +185,6 @@ struct SettingsView: View {
                             } else {
                                 sliderValue = profile[0].unit == 0 ? profile[0].customNormMl : profile[0].customNormOz
                             }
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "AutoCalcSwitch"])
                         }
                     }
                     HStack {
@@ -195,7 +194,6 @@ struct SettingsView: View {
                         Button(action: {
                             if !isActivateAutoCalcSwitch {
                                 isNormShowingModal = true
-                                AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SelectedNorm"])
                             }
                         }) {
                             if profile[0].unit == 0 {
@@ -262,11 +260,9 @@ struct SettingsView: View {
                         if isAuthorizationHealthKit {
                             requestHealthKitAuthorization()
                         }
-                        AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "ActivateAppleHealth"])
                     } else {
                         isPurchaseViewModal = true
                         isAuthorizationHealthKit = false
-                        AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "ActivateAppleHealthPurchase"])
                     }
                 }
                 .alert("Apple Health", isPresented: $isAppleHealthPermissionAlert) {
@@ -280,10 +276,8 @@ struct SettingsView: View {
                     Button("Экспорт в iCloud") {
                         if purchaseManager.hasPremium {
                             isCloudExportAlert = true
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "isCloudExport"])
                         } else {
                             isPurchaseViewModal = true
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "isCloudExportPurchase"])
                         }
                     }
                     .font(Constants.Design.Fonts.BodyMediumFont)
@@ -309,10 +303,8 @@ struct SettingsView: View {
                     Button("Импорт из iCloud") {
                         if purchaseManager.hasPremium {
                             isCloudImportAlert = true
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "isCloudImport"])
                         } else {
                             isPurchaseViewModal = true
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "isCloudImportPurchase"])
                         }
                     }
                     .font(Constants.Design.Fonts.BodyMediumFont)
@@ -347,13 +339,11 @@ struct SettingsView: View {
                         .font(Constants.Design.Fonts.BodyMediumFont)
                         .onTapGesture {
                             restore()
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "Restore"])
                         }
                     Text("Оценить приложение")
                         .font(Constants.Design.Fonts.BodyMediumFont)
                         .onTapGesture {
                             openAppStore()
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "Rate"])
                         }
                     ShareLink(item: "https://apple.co/3tB5ofx", message: Text("Приложение Drink Water помогает мне поддерживать необходимый уровень воды в организме. Рекомендую!")) {
                         Text("Поделиться")
@@ -363,7 +353,6 @@ struct SettingsView: View {
                         .font(Constants.Design.Fonts.BodyMediumFont)
                         .onTapGesture {
                             MailComposeViewController.shared.sendEmail()
-                            AppMetrica.reportEvent(name: "SettingsView", parameters: ["Press button": "SendEmail"])
                         }
                     Link("Политика конфиденциальности", destination: URL(string: "https://telegra.ph/Privacy-Policy-02-17-9")!)
                         .font(Constants.Design.Fonts.BodyMediumFont)
@@ -380,7 +369,7 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["SettingsView": ""])
+            startNetworkMonitoring()
             
             selectedUnitSegment = profile[0].unit
             isActivateAutoCalcSwitch = profile[0].autoCalc
@@ -538,6 +527,25 @@ struct SettingsView: View {
             } catch {
                 print(error)
             }
+        }
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["SettingsView": ""])
+        } else {
+            print("No network connection available. Cannot send event.")
         }
     }
 }

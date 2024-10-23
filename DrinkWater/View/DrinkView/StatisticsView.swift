@@ -26,6 +26,9 @@ struct StatisticsView: View {
     @State private var dataDrinkingViewModel = DataDrinkingViewModel()
     @State private var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     @State private var selectedSegment: Int = 0
     @State private var selectedIndex: Int? = nil
     @State private var isEmpty: Bool = true
@@ -84,10 +87,8 @@ struct StatisticsView: View {
                             Button(action: {
                                 if selectedSegment == 0 {
                                     selectedWeek = selectedWeek.first!.lastWeek
-                                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "LastMonth"])
                                 } else {
                                     selectedMonth = getAllDatesInCurrentMonth(date: selectedMonth.first!.lastMonthStart)
-                                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "LasttMonth"])
                                 }
                             }, label: {
                                 Image(systemName: "arrow.left.circle")
@@ -103,7 +104,6 @@ struct StatisticsView: View {
                                 } else {
                                     selectedMonth = getAllDatesInCurrentMonth(date: [Date().thisMonthStart, Date().thisMonthEnd].first!)
                                 }
-                                AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "Today"])
                             }
                             .frame(width: 95)
                             .buttonBorderShape(.capsule)
@@ -112,10 +112,8 @@ struct StatisticsView: View {
                             Button(action: {
                                 if selectedSegment == 0 {
                                     selectedWeek = selectedWeek.first!.nextWeek
-                                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "NextWeek"])
                                 } else {
                                     selectedMonth = getAllDatesInCurrentMonth(date: selectedMonth.first!.nextMonthStart)
-                                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "NextMonth"])
                                 }
                             }, label: {
                                 Image(systemName: "arrow.right.circle")
@@ -243,7 +241,7 @@ struct StatisticsView: View {
             }
         }
         .onAppear {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["StatisticsView": ""])
+            startNetworkMonitoring()
             
             selectedWeek = Date().thisWeek
             selectedMonth = getAllDatesInCurrentMonth(date: Date())
@@ -333,10 +331,27 @@ struct StatisticsView: View {
                     if userDefaultsManager.isAuthorizationHealthKit {
                         healthKitManager.deleteWaterIntake(date: dataDrinkingItem.dateDrink)
                     }
-                    
-                    AppMetrica.reportEvent(name: "StatisticsView", parameters: ["Press button": "Delete"])
                 }
             }
+        }
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["StatisticsView": ""])
+        } else {
+            print("No network connection available. Cannot send event.")
         }
     }
 }

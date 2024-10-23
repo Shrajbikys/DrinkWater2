@@ -152,25 +152,25 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ to the target"
+            "value" : "%@ to target"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ to the target"
+            "value" : "%@ to target"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ para alcanzar la meta"
+            "value" : "%@ hasta la meta"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ al bersaglio"
+            "value" : "%@ fino all'obiettivo"
           }
         }
       }
@@ -4975,6 +4975,34 @@
         }
       }
     },
+    "Следи за своим прогрессом и достигай идеального веса шаг за шагом" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track your progress and reach your ideal weight step by step"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track your progress and reach your ideal weight step by step"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Sigue tu progreso y alcanza tu peso ideal paso a paso"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monitora i tuoi progressi e raggiungi il peso ideale passo dopo passo"
+          }
+        }
+      }
+    },
     "Смотри как легко!" : {
       "localizations" : {
         "en" : {
@@ -5202,6 +5230,34 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Solo avanti!"
+          }
+        }
+      }
+    },
+    "Трекер веса" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weight tracker"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weight tracker"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rastreador de peso"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tracker del peso"
           }
         }
       }
@@ -5453,7 +5509,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scopo"
+            "value" : "Obiettivo"
           }
         }
       }

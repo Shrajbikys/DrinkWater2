@@ -74,7 +74,6 @@ struct AchievementsModalView: View {
         .background(Gradient(colors: [Color(#colorLiteral(red: 0.2219799757, green: 0.7046170831, blue: 0.9977453351, alpha: 1)), Color(#colorLiteral(red: 0.3222017288, green: 0.522277236, blue: 0.7342401743, alpha: 1))]))
         .cornerRadius(20)
         .shadow(radius: 20)
-        .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["AchievementsModalView": ""]) }
     }
 }
 

@@ -484,7 +484,7 @@
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scopo: %lld %@"
+            "value" : "Obiettivo: %lld %@"
           }
         },
         "ru" : {

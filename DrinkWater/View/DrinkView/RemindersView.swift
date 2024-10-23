@@ -19,6 +19,9 @@ struct RemindersView: View {
     private let userDefaultsManager = UserDefaultsManager.shared
     @State private var remindersViewModel = RemindersViewModel()
     
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     @State private var isAuthorizationSystemNotifications = false
     @Binding var isRemindersEnabled: Bool
     @State private var isIntervalShowingModal = false
@@ -52,7 +55,6 @@ struct RemindersView: View {
                             if isAuthorizationSystemNotifications {
                                 getPermissionSystemNotifications()
                             }
-                            AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "ActivateSystemNotifications"])
                         }
                     }
                 } header: {
@@ -78,7 +80,6 @@ struct RemindersView: View {
                                 }
                                 self.remindersViewModel.updateReminders(reminder: reminder, remindersEnabled: isRemindersEnabled)
                             }
-                            AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "RemindersEnabled"])
                         }
                     }
                 } header: {
@@ -93,7 +94,6 @@ struct RemindersView: View {
                         DatePicker("", selection: $selectedStartTime, displayedComponents: .hourAndMinute)
                             .onChange(of: selectedStartTime) { _, newDate in
                                 updateStartTimeDate(newDate)
-                                AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "UpdateStartTimeDate"])
                             }
                     }
                     HStack{
@@ -103,7 +103,6 @@ struct RemindersView: View {
                         DatePicker("", selection: $selectedFinishTime, displayedComponents: .hourAndMinute)
                             .onChange(of: selectedFinishTime) { _, newDate in
                                 updateFinishTimeDate(newDate)
-                                AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "UpdateFinishTimeDate"])
                             }
                     }
                     HStack{
@@ -112,7 +111,6 @@ struct RemindersView: View {
                         Spacer()
                         Button(action: {
                             isIntervalShowingModal = true
-                            AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "SelectedInterval"])
                         }) {
                             Text(localizedNameInterval[selectedInterval]!)
                                 .font(Constants.Design.Fonts.BodyMediumFont)
@@ -139,10 +137,8 @@ struct RemindersView: View {
                         Button(action: {
                             if purchaseManager.hasPremium {
                                 isSoundShowingModal = true
-                                AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "SelectedSound"])
                             } else {
                                 isPurchaseViewModal = true
-                                AppMetrica.reportEvent(name: "RemindersView", parameters: ["Press button": "SelectedSoundPurchase"])
                             }
                         }) {
                             Text(localizedNameSound[selectedSound]!)
@@ -165,7 +161,7 @@ struct RemindersView: View {
             }
             .listStyle(.plain)
             .onAppear {
-                AppMetrica.reportEvent(name: "OpenView", parameters: ["RemindersView": ""])
+                startNetworkMonitoring()
                 
                 getDataFromReminder()
             }
@@ -382,6 +378,25 @@ struct RemindersView: View {
         refreshNotifications()
         removePendingNotifications(identifiers: pending)
         removeDeliveredNotifications(identifiers: delivered)
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["RemindersView": ""])
+        } else {
+            print("No network connection available. Cannot send event.")
+        }
     }
 }
 

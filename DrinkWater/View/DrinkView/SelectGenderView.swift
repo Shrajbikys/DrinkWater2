@@ -10,6 +10,9 @@ import SwiftUI
 import AppMetricaCore
 
 struct SelectGenderView: View {
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -53,7 +56,28 @@ struct SelectGenderView: View {
                     }
                 }
             }
-            .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["SelectGenderView": ""]) }
+            .onAppear {
+                startNetworkMonitoring()
+            }
+        }
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["SelectGenderView": ""])
+        } else {
+            print("No network connection available. Cannot send event.")
         }
     }
 }

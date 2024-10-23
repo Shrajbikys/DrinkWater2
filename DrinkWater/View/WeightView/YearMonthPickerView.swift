@@ -89,7 +89,6 @@ struct YearMonthPickerView: View {
                             dateComponent.month =  months.firstIndex(of: item)! + 1
                             dateComponent.year = Int(selectedDate.year)
                             selectedDate = Calendar.current.date(from: dateComponent)!
-                            AppMetrica.reportEvent(name: "MainWeightView", parameters: ["Press button": "SelectMonth"])
                         }
                 }
             }

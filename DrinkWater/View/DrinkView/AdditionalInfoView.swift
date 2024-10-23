@@ -16,6 +16,9 @@ struct AdditionalInfoView: View {
     
     @Query var profile: [Profile]
     
+    @State private var isNetworkAvailable = false
+    let monitor = NWPathMonitor()
+    
     private let userDefaultsManager = UserDefaultsManager.shared
     @State private var isAppleHealthPermissionAlert = false
     @State private var isAuthorizationSystemNotifications = false
@@ -63,7 +66,6 @@ struct AdditionalInfoView: View {
                             if isAuthorizationSystemNotifications {
                                 getPermissionSystemNotifications()
                             }
-                            AppMetrica.reportEvent(name: "AdditionalInfoView", parameters: ["Press button": "ActivateSystemNotifications"])
                         }
                     }
                     HStack{
@@ -73,7 +75,6 @@ struct AdditionalInfoView: View {
                         Spacer()
                         Button(action: {
                             isWeightShowingModal = true
-                            AppMetrica.reportEvent(name: "AdditionalInfoView", parameters: ["Press button": "SelectedWeight"])
                         }) {
                             if profile.isEmpty {
                                 Text(selectedUnitSegment == 0 ? selectedWeight.toStringKg : selectedWeight.toStringPounds)
@@ -109,7 +110,6 @@ struct AdditionalInfoView: View {
                         if isAppleHealthAuthorized {
                             requestHealthKitAuthorization()
                         }
-                        AppMetrica.reportEvent(name: "AdditionalInfoView", parameters: ["Press button": "ActivateAppleHealth"])
                     }
                     .alert("Apple Health", isPresented: $isAppleHealthPermissionAlert) {
                         Button("Готово", role: .cancel) {
@@ -135,16 +135,14 @@ struct AdditionalInfoView: View {
                             profileViewModel.updateProfileUnitData(profile: profile, unit: index)
                             selectedWeight = index == 0 ? profile[0].weightKg : profile[0].weightPounds
                             
-                            AppMetrica.reportEvent(name: "AdditionalInfoView", parameters: ["Press button": "SelectedUnit"])
                         }
                     }
                 }
                 Spacer()
                 VStack {
                     Button(action: {
-                            profileViewModel.updateProfileGenderData(profile: profile, gender: gender)
-                            profileViewModel.updateProfileUnitData(profile: profile, unit: selectedUnitSegment)
-                            AppMetrica.reportEvent(name: "AdditionalInfoView", parameters: ["Press button": "StartApp"])
+                        profileViewModel.updateProfileGenderData(profile: profile, gender: gender)
+                        profileViewModel.updateProfileUnitData(profile: profile, unit: selectedUnitSegment)
                         userDefaultsManager.isFirstSign = true
                         userDefaultsManager.isMigration = true
                         isActive = true
@@ -178,7 +176,7 @@ struct AdditionalInfoView: View {
                 selectedUnitSegment = profile[0].unit
             }
             
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["AdditionalInfoView": ""])
+            startNetworkMonitoring()
         }
     }
     
@@ -200,7 +198,7 @@ struct AdditionalInfoView: View {
             }
         }
     }
-
+    
     private func getPermissionHealthKit() {
         if HKHealthStore().authorizationStatus(for: HKObjectType.quantityType(forIdentifier: .dietaryWater)!) == .sharingAuthorized {
             updateAuthorizationHealthKit(true)
@@ -210,7 +208,7 @@ struct AdditionalInfoView: View {
             print("Permission Denied to Access DietaryWater")
         }
     }
-
+    
     private func updateAuthorizationHealthKit(_ value: Bool) {
         userDefaultsManager.isAuthorizationHealthKit = value
     }
@@ -242,6 +240,25 @@ struct AdditionalInfoView: View {
         DispatchQueue.main.async {
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:],
                                       completionHandler: nil)
+        }
+    }
+    
+    private func startNetworkMonitoring() {
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                isNetworkAvailable = path.status == .satisfied
+                reportEventIfNetworkAvailable()
+            }
+        }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
+    private func reportEventIfNetworkAvailable() {
+        if isNetworkAvailable {
+            AppMetrica.reportEvent(name: "OpenView", parameters: ["AdditionalInfoView": ""])
+        } else {
+            print("No network connection available. Cannot send event.")
         }
     }
 }

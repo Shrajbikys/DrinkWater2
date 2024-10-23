@@ -18,7 +18,6 @@ struct HydrationView: View {
                     HydrationItemView(nameDrink: key, imageDrink: "\(key)SD" , hydration: value)
                 }
             }
-            .onAppear { AppMetrica.reportEvent(name: "OpenView", parameters: ["HydrationView": ""]) }
         }
         .navigationTitle("Коэффициенты гидратации")
         .navigationBarTitleDisplayMode(.inline)
