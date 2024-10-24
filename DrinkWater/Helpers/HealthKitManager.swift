@@ -8,10 +8,11 @@
 
 import HealthKit
 
-class HealthKitManager: ObservableObject {
+@Observable
+class HealthKitManager {
     private var healthStore: HKHealthStore?
-    @Published var weight: Double?
-    @Published var biologicalSex: HKBiologicalSex?
+    var weight: Double?
+    var biologicalSex: HKBiologicalSex?
     
     init() {
         if HKHealthStore.isHealthDataAvailable() {

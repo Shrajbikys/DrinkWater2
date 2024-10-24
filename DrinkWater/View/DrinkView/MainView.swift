@@ -18,15 +18,14 @@ struct MainView: View {
     @Query(sort: \DataDrinking.dateDrink, order: .forward) var dataDrinking: [DataDrinking]
     @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
     
-    @StateObject private var healthKitManager = HealthKitManager()
+    @State private var healthKitManager = HealthKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
     
     var profileViewModel = ProfileViewModel()
     var dataDrinkingViewModel = DataDrinkingViewModel()
     var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
-    @State private var isNetworkAvailable = false
-    let monitor = NWPathMonitor()
+    @State private var networkMonitor = NetworkMonitor()
     
     @State private var lastAmountDrink: Int = 250
     @State private var lastNameDrink: String = "Water"
@@ -284,7 +283,9 @@ struct MainView: View {
                 drinkWaterAction(action: .drink, nameDrink: drinkName, amountDrink: Int(amountDrink))
             })
             .onAppear {
-                startNetworkMonitoring()
+                if networkMonitor.isConnected {
+                    AppMetrica.reportEvent(name: "OpenView", parameters: ["MainView": ""])
+                }
                 
                 if !dataDrinkingOfTheDay.contains(where: { $0.dateDrinkOfTheDay.yearMonthDay == Date().yearMonthDay } ) {
                     userDefaultsManager.setValueForUserDefaults(false, "normDone")
@@ -446,25 +447,6 @@ struct MainView: View {
             }
         case .cancel:
             cancelDrinkWater(amountDrinkOfTheDay: amountDrinkOfTheDay, percentDrinking: percentDrinking, lastNameDrinkProfile: lastNameDrinkProfile, lastAmountDrinkProfile: lastAmountDrinkProfile)
-        }
-    }
-    
-    private func startNetworkMonitoring() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                isNetworkAvailable = path.status == .satisfied
-                reportEventIfNetworkAvailable()
-            }
-        }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
-    }
-    
-    private func reportEventIfNetworkAvailable() {
-        if isNetworkAvailable {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["MainView": ""])
-        } else {
-            print("No network connection available. Cannot send event.")
         }
     }
 }

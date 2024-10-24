@@ -15,8 +15,7 @@ struct PurchaseView: View {
     @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
     @Binding var isPurchaseViewModal: Bool
     
-    @State private var isNetworkAvailable = false
-    let monitor = NWPathMonitor()
+    @State private var networkMonitor = NetworkMonitor()
     
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     
@@ -74,7 +73,9 @@ struct PurchaseView: View {
                             .foregroundStyle(.white)
                         Button(action: {
                             joinPremium()
-                            startNetworkMonitoring()
+                            if networkMonitor.isConnected {
+                                AppMetrica.reportEvent(name: "PurchaseView", parameters: ["Press button": "JoinPremium"])
+                            }
                         }, label: {
                             ZStack {
                                 Image("PurchaseButton")
@@ -123,25 +124,6 @@ struct PurchaseView: View {
             } catch {
                 print(error)
             }
-        }
-    }
-    
-    private func startNetworkMonitoring() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                isNetworkAvailable = path.status == .satisfied
-                reportEventIfNetworkAvailable()
-            }
-        }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
-    }
-    
-    private func reportEventIfNetworkAvailable() {
-        if isNetworkAvailable {
-            AppMetrica.reportEvent(name: "PurchaseView", parameters: ["Press button": "JoinPremium"])
-        } else {
-            print("No network connection available. Cannot send event.")
         }
     }
 }

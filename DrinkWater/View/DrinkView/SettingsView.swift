@@ -29,12 +29,11 @@ struct SettingsView: View {
     @State private var dataDrinkingViewModel = DataDrinkingViewModel()
     @State private var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
-    @StateObject private var healthKitManager = HealthKitManager()
-    @StateObject private var cloudKitManager = CloudKitManager()
+    @State private var healthKitManager = HealthKitManager()
+    @State private var cloudKitManager = CloudKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
     
-    @State private var isNetworkAvailable = false
-    let monitor = NWPathMonitor()
+    @State private var networkMonitor = NetworkMonitor()
     
     private let settingsListRowBackground = Constants.Design.Colors.settingsListRowBackground
     @State private var isWeightShowingModal = false
@@ -369,7 +368,9 @@ struct SettingsView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear {
-            startNetworkMonitoring()
+            if networkMonitor.isConnected {
+                AppMetrica.reportEvent(name: "OpenView", parameters: ["SettingsView": ""])
+            }
             
             selectedUnitSegment = profile[0].unit
             isActivateAutoCalcSwitch = profile[0].autoCalc
@@ -527,25 +528,6 @@ struct SettingsView: View {
             } catch {
                 print(error)
             }
-        }
-    }
-    
-    private func startNetworkMonitoring() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                isNetworkAvailable = path.status == .satisfied
-                reportEventIfNetworkAvailable()
-            }
-        }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
-    }
-    
-    private func reportEventIfNetworkAvailable() {
-        if isNetworkAvailable {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["SettingsView": ""])
-        } else {
-            print("No network connection available. Cannot send event.")
         }
     }
 }

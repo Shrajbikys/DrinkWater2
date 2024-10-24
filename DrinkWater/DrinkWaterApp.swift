@@ -11,6 +11,7 @@ import AppMetricaCore
 
 @main
 struct DrinkWaterApp: App {
+    @State private var networkMonitor = NetworkMonitor()
     @State private var purchases: PurchaseManager = .init()
     private let appMetricaConfiguration = AppMetricaConfiguration(apiKey: "57af5786-bb55-453d-b5c3-13b63b49fc6b")
     
@@ -35,10 +36,14 @@ struct DrinkWaterApp: App {
         WindowGroup {
             ContentView()
                 .task {
-                    await fetchProducts()
+                    if networkMonitor.isConnected {
+                        await fetchProducts()
+                    }
                 }
                 .onAppear {
-                    AppMetrica.activate(with: appMetricaConfiguration!)
+                    if networkMonitor.isConnected {
+                        AppMetrica.activate(with: appMetricaConfiguration!)
+                    }
                 }
         }
         .modelContainer(sharedModelContainer)

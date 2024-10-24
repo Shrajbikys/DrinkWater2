@@ -63,6 +63,7 @@
 		2C5EFC7A2C07D732004B1AE0 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC742C07D732004B1AE0 /* MainView.swift */; };
 		2C5EFC7C2C086C4B004B1AE0 /* HistoryItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC7B2C086C4B004B1AE0 /* HistoryItemView.swift */; };
 		2C5EFC7E2C09BA28004B1AE0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5EFC7D2C09BA28004B1AE0 /* Constants.swift */; };
+		2C61477A2CCABC6100FB375E /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6147792CCABC6000FB375E /* NetworkMonitor.swift */; };
 		2C6CB4672C31C867004E4FA6 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CB4662C31C867004E4FA6 /* UserDefaultsManager.swift */; };
 		2C6CB4692C349D47004E4FA6 /* MailComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CB4682C349D47004E4FA6 /* MailComposeViewController.swift */; };
 		2C6CB46D2C349F3C004E4FA6 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CB46C2C349F3C004E4FA6 /* HealthKitManager.swift */; };
@@ -233,6 +234,7 @@
 		2C5EFC742C07D732004B1AE0 /* MainView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		2C5EFC7B2C086C4B004B1AE0 /* HistoryItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryItemView.swift; sourceTree = "<group>"; };
 		2C5EFC7D2C09BA28004B1AE0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		2C6147792CCABC6000FB375E /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
 		2C6CB4662C31C867004E4FA6 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		2C6CB4682C349D47004E4FA6 /* MailComposeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailComposeViewController.swift; sourceTree = "<group>"; };
 		2C6CB46C2C349F3C004E4FA6 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 				2C02FFE12C4A56E200F8BD73 /* MeasurementManager.swift */,
 				2C9B91812C4E6A0F00947007 /* WidgetManager.swift */,
 				2C9B91B02C4FA20E00947007 /* PhoneSessionManager.swift */,
+				2C6147792CCABC6000FB375E /* NetworkMonitor.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -820,6 +823,7 @@
 				2C725EA22C1A273D005359CB /* DataDrinkingOfTheDay.swift in Sources */,
 				2CBDBA7F2CB6E96000A70750 /* ReadingsWeightView.swift in Sources */,
 				2C725EAE2C1A3855005359CB /* ProfileViewModel.swift in Sources */,
+				2C61477A2CCABC6100FB375E /* NetworkMonitor.swift in Sources */,
 				2C9B91B12C4FA20E00947007 /* PhoneSessionManager.swift in Sources */,
 				2C725EAA2C1A2AC9005359CB /* DateForDrinkWater.swift in Sources */,
 				2CC67D962CBBB21700A7FBE4 /* DataWeight.swift in Sources */,
@@ -910,7 +914,7 @@
 					"@executable_path/../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -941,7 +945,7 @@
 					"@executable_path/../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -972,7 +976,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.DrinkWaterWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1005,7 +1009,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.DrinkWaterWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1039,7 +1043,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1071,7 +1075,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1232,7 +1236,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.5;
 				OTHER_SWIFT_FLAGS = "-DTARGET_IS_MAIN_APP";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1272,7 +1276,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.3;
+				MARKETING_VERSION = 3.5;
 				OTHER_SWIFT_FLAGS = "-DTARGET_IS_MAIN_APP";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater;
 				PRODUCT_NAME = "$(TARGET_NAME)";

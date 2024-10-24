@@ -16,8 +16,7 @@ struct AdditionalInfoView: View {
     
     @Query var profile: [Profile]
     
-    @State private var isNetworkAvailable = false
-    let monitor = NWPathMonitor()
+    @State private var networkMonitor = NetworkMonitor()
     
     private let userDefaultsManager = UserDefaultsManager.shared
     @State private var isAppleHealthPermissionAlert = false
@@ -26,7 +25,7 @@ struct AdditionalInfoView: View {
     @State private var profileViewModel = ProfileViewModel()
     @State private var remindersViewModel = RemindersViewModel()
     
-    @StateObject private var healthKitManager = HealthKitManager()
+    @State private var healthKitManager = HealthKitManager()
     
     @State private var isWeightShowingModal = false
     @State private var selectedWeight: Double = 50
@@ -176,7 +175,9 @@ struct AdditionalInfoView: View {
                 selectedUnitSegment = profile[0].unit
             }
             
-            startNetworkMonitoring()
+            if networkMonitor.isConnected {
+                AppMetrica.reportEvent(name: "OpenView", parameters: ["AdditionalInfoView": ""])
+            }
         }
     }
     
@@ -240,25 +241,6 @@ struct AdditionalInfoView: View {
         DispatchQueue.main.async {
             UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:],
                                       completionHandler: nil)
-        }
-    }
-    
-    private func startNetworkMonitoring() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                isNetworkAvailable = path.status == .satisfied
-                reportEventIfNetworkAvailable()
-            }
-        }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
-    }
-    
-    private func reportEventIfNetworkAvailable() {
-        if isNetworkAvailable {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["AdditionalInfoView": ""])
-        } else {
-            print("No network connection available. Cannot send event.")
         }
     }
 }

@@ -17,8 +17,7 @@ struct MainWeightView: View {
     private let userDefaultsManager = UserDefaultsManager.shared
     @State var unit: Int
     
-    @State private var isNetworkAvailable = false
-    let monitor = NWPathMonitor()
+    @State private var networkMonitor = NetworkMonitor()
     
     @State private var isShowWeightSheet = false
     @State private var isShowGoalSheet = false
@@ -138,31 +137,14 @@ struct MainWeightView: View {
         }
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            startNetworkMonitoring()
+            if networkMonitor.isConnected {
+                AppMetrica.reportEvent(name: "OpenView", parameters: ["MainWeightView": ""])
+            }
             
             let isFirstSignWidth = userDefaultsManager.isFirstSignWidth
             if !isFirstSignWidth {
                 userDefaultsManager.isFirstSignWidth = true
             }
-        }
-    }
-    
-    private func startNetworkMonitoring() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                isNetworkAvailable = path.status == .satisfied
-                reportEventIfNetworkAvailable()
-            }
-        }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
-    }
-    
-    private func reportEventIfNetworkAvailable() {
-        if isNetworkAvailable {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["MainWeightView": ""])
-        } else {
-            print("No network connection available. Cannot send event.")
         }
     }
 }

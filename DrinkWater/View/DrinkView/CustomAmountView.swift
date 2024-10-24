@@ -18,15 +18,14 @@ struct CustomAmountView: View {
     @Query var profile: [Profile]
     @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
     
-    @StateObject private var healthKitManager = HealthKitManager()
+    @State private var healthKitManager = HealthKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
     
     @State var profileViewModel = ProfileViewModel()
     @State var dataDrinkingViewModel = DataDrinkingViewModel()
     @State var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
-    @State private var isNetworkAvailable = false
-    let monitor = NWPathMonitor()
+    @State private var networkMonitor = NetworkMonitor()
     
     @Binding var isShowingModal: Bool
     @State private var selectedNumber: Int = 250
@@ -122,7 +121,9 @@ struct CustomAmountView: View {
                 }
             }
             .onAppear {
-                startNetworkMonitoring()
+                if networkMonitor.isConnected {
+                    AppMetrica.reportEvent(name: "OpenView", parameters: ["CustomAmountView": ""])
+                }
                 
                 unit = profile[0].unit
                 
@@ -195,25 +196,6 @@ struct CustomAmountView: View {
                     if success {print(successMessage) } else { print(errorMessage) }
                 }
             }
-        }
-    }
-    
-    private func startNetworkMonitoring() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                isNetworkAvailable = path.status == .satisfied
-                reportEventIfNetworkAvailable()
-            }
-        }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
-    }
-    
-    private func reportEventIfNetworkAvailable() {
-        if isNetworkAvailable {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["CustomAmountView": ""])
-        } else {
-            print("No network connection available. Cannot send event.")
         }
     }
 }

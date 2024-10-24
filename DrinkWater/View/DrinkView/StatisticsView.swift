@@ -20,14 +20,13 @@ struct StatisticsView: View {
     @Query(sort: \DataDrinking.dateDrink, order: .forward) private var dataDrinking: [DataDrinking]
     @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) private var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
     
-    @StateObject private var healthKitManager = HealthKitManager()
+    @State private var healthKitManager = HealthKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
     
     @State private var dataDrinkingViewModel = DataDrinkingViewModel()
     @State private var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     
-    @State private var isNetworkAvailable = false
-    let monitor = NWPathMonitor()
+    @State private var networkMonitor = NetworkMonitor()
     
     @State private var selectedSegment: Int = 0
     @State private var selectedIndex: Int? = nil
@@ -241,7 +240,9 @@ struct StatisticsView: View {
             }
         }
         .onAppear {
-            startNetworkMonitoring()
+            if networkMonitor.isConnected {
+                AppMetrica.reportEvent(name: "OpenView", parameters: ["StatisticsView": ""])
+            }
             
             selectedWeek = Date().thisWeek
             selectedMonth = getAllDatesInCurrentMonth(date: Date())
@@ -333,25 +334,6 @@ struct StatisticsView: View {
                     }
                 }
             }
-        }
-    }
-    
-    private func startNetworkMonitoring() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                isNetworkAvailable = path.status == .satisfied
-                reportEventIfNetworkAvailable()
-            }
-        }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
-    }
-    
-    private func reportEventIfNetworkAvailable() {
-        if isNetworkAvailable {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["StatisticsView": ""])
-        } else {
-            print("No network connection available. Cannot send event.")
         }
     }
 }

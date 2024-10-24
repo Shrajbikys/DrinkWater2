@@ -8,7 +8,8 @@
 import CloudKit
 import SwiftData
 
-class CloudKitManager: ObservableObject {
+@Observable
+class CloudKitManager {
     
     private let container: CKContainer
     private let privateCloudDatabase: CKDatabase

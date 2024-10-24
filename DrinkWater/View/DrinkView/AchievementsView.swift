@@ -15,8 +15,7 @@ struct AchievementsView: View {
     private let namesAchievementFirst = Constants.Back.Achievement.namesAchievementFirst
     private let namesAchievementSecond = Constants.Back.Achievement.namesAchievementSecond
     
-    @State private var isNetworkAvailable = false
-    let monitor = NWPathMonitor()
+    @State private var networkMonitor = NetworkMonitor()
     
     @State private var imageAchievement = ""
     @State private var nameAchievementFirst: LocalizedStringKey = ""
@@ -122,25 +121,10 @@ struct AchievementsView: View {
                 AchievementsModalView(showAchievementsModal: $showAchievementsModal, imageAchievement: imageAchievement, nameAchievementFirst: nameAchievementFirst, nameAchievementSecond: nameAchievementSecond)
             }
         })
-        .onAppear { startNetworkMonitoring() }
-    }
-    
-    private func startNetworkMonitoring() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                isNetworkAvailable = path.status == .satisfied
-                reportEventIfNetworkAvailable()
+        .onAppear {
+            if networkMonitor.isConnected {
+                AppMetrica.reportEvent(name: "OpenView", parameters: ["AchievementsView": ""])
             }
-        }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
-    }
-    
-    private func reportEventIfNetworkAvailable() {
-        if isNetworkAvailable {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["AchievementsView": ""])
-        } else {
-            print("No network connection available. Cannot send event.")
         }
     }
 }

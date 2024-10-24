@@ -19,8 +19,7 @@ struct RemindersView: View {
     private let userDefaultsManager = UserDefaultsManager.shared
     @State private var remindersViewModel = RemindersViewModel()
     
-    @State private var isNetworkAvailable = false
-    let monitor = NWPathMonitor()
+    @State private var networkMonitor = NetworkMonitor()
     
     @State private var isAuthorizationSystemNotifications = false
     @Binding var isRemindersEnabled: Bool
@@ -161,7 +160,9 @@ struct RemindersView: View {
             }
             .listStyle(.plain)
             .onAppear {
-                startNetworkMonitoring()
+                if networkMonitor.isConnected {
+                    AppMetrica.reportEvent(name: "OpenView", parameters: ["RemindersView": ""])
+                }
                 
                 getDataFromReminder()
             }
@@ -378,25 +379,6 @@ struct RemindersView: View {
         refreshNotifications()
         removePendingNotifications(identifiers: pending)
         removeDeliveredNotifications(identifiers: delivered)
-    }
-    
-    private func startNetworkMonitoring() {
-        monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                isNetworkAvailable = path.status == .satisfied
-                reportEventIfNetworkAvailable()
-            }
-        }
-        let queue = DispatchQueue(label: "NetworkMonitor")
-        monitor.start(queue: queue)
-    }
-    
-    private func reportEventIfNetworkAvailable() {
-        if isNetworkAvailable {
-            AppMetrica.reportEvent(name: "OpenView", parameters: ["RemindersView": ""])
-        } else {
-            print("No network connection available. Cannot send event.")
-        }
     }
 }
 
