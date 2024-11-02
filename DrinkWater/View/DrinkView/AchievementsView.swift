@@ -31,81 +31,81 @@ struct AchievementsView: View {
         ZStack {
             backgroundViewColor
                 .ignoresSafeArea()
-            VStack {
-                Text("Достижения")
-                    .font(Constants.Design.Fonts.BodyLargeFont)
-                    .bold()
-                    .foregroundStyle(.white)
-                    .padding(.top)
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundStyle(.white)
-                Text("Ежедневная цель")
-                    .font(Constants.Design.Fonts.BodyMainFont)
-                    .bold()
-                    .foregroundStyle(.white)
-                    .padding(.top)
-                HStack {
+            GeometryReader { geometry in
+                let imageWidth = geometry.size.width * 0.3
+                VStack {
                     VStack {
-                        Image(userDefaultsManager.getBoolValueForUserDefaults("normDone") ?? false ? "Winning" : "DayAchievOff")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 120, height: 100)
-                        Text("Цель достигнута!")
-                            .font(Constants.Design.Fonts.BodySmallFont)
-                            .foregroundStyle(.white)
+                        Text("Достижения")
+                            .font(Constants.Design.Fonts.BodyLargeFont)
                             .bold()
+                            .foregroundStyle(.white)
+                            .padding(.top)
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundStyle(.white)
+                        HStack {
+                            VStack {
+                                Image(userDefaultsManager.getBoolValueForUserDefaults("normDone") ?? false ? "Winning" : "DayAchievOff")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: imageWidth, height: imageWidth * 0.9)
+                                Text("Ежедневная цель")
+                                    .font(Constants.Design.Fonts.BodySmallFont)
+                                    .foregroundStyle(.white)
+                                    .bold()
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        Rectangle()
+                            .frame(height: 0.5)
+                            .foregroundStyle(.white)
+                        Text("Награды")
+                            .font(Constants.Design.Fonts.BodyMainFont)
+                            .bold()
+                            .foregroundStyle(.white)
+                            .padding(.vertical, 10)
                     }
-                    Spacer()
-                }
-                .padding(.horizontal)
-                .padding(.bottom)
-                Rectangle()
-                    .frame(height: 0.5)
-                    .foregroundStyle(.white)
-                Text("Награды")
-                    .font(Constants.Design.Fonts.BodyMainFont)
-                    .bold()
-                    .foregroundStyle(.white)
-                    .padding(.top)
-                LazyVStack {
-                    ForEach(0..<imagesAchievement.count, id: \.self) { index in
-                        if index % 3 == 0 {
-                            HStack(alignment: .bottom) {
-                                ForEach(index..<min(index + 3, imagesAchievement.count), id: \.self) { innerIndex in
-                                    VStack {
-                                        ZStack {
-                                            Image(userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0 >= chooseIndexImageArray[innerIndex] ? imagesAchievement[innerIndex] : "DayAchievOff")
-                                                .resizable()
-                                                .scaledToFit()
-                                                .frame(width: 120, height: 100)
-                                                .onTapGesture {
-                                                    withAnimation {
-                                                        imageAchievement = imagesAchievement[innerIndex]
-                                                        nameAchievementFirst = namesAchievementFirst[innerIndex]
-                                                        nameAchievementSecond = namesAchievementSecond[innerIndex]
-                                                        if userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0 >= chooseIndexImageArray[innerIndex] {
-                                                            showAchievementsModal = true
+                    LazyVStack {
+                        ForEach(0..<imagesAchievement.count, id: \.self) { index in
+                            if index % 3 == 0 {
+                                HStack(alignment: .bottom) {
+                                    ForEach(index..<min(index + 3, imagesAchievement.count), id: \.self) { innerIndex in
+                                        VStack {
+                                            ZStack {
+                                                Image(userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0 >= chooseIndexImageArray[innerIndex] ? imagesAchievement[innerIndex] : "DayAchievOff")
+                                                    .resizable()
+                                                    .scaledToFit()
+                                                    .frame(width: imageWidth, height: imageWidth)
+                                                    .onTapGesture {
+                                                        withAnimation {
+                                                            imageAchievement = imagesAchievement[innerIndex]
+                                                            nameAchievementFirst = namesAchievementFirst[innerIndex]
+                                                            nameAchievementSecond = namesAchievementSecond[innerIndex]
+                                                            if userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0 >= chooseIndexImageArray[innerIndex] {
+                                                                showAchievementsModal = true
+                                                            }
                                                         }
                                                     }
+                                                if userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0 < chooseIndexImageArray[innerIndex] {
+                                                    Text("\(userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0)/\(chooseIndexImageArray[innerIndex])")
+                                                        .font(Constants.Design.Fonts.BodyMiniFont)
+                                                        .foregroundStyle(.white)
                                                 }
-                                            if userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0 < chooseIndexImageArray[innerIndex] {
-                                                Text("\(userDefaultsManager.getValueForUserDefaults("numberNorm") ?? 0)/\(chooseIndexImageArray[innerIndex])")
-                                                    .font(Constants.Design.Fonts.BodyMiniFont)
-                                                    .foregroundStyle(.white)
                                             }
+                                            Text(namesAchievementFirst[innerIndex])
+                                                .font(Constants.Design.Fonts.BodySmallFont)
+                                                .foregroundStyle(.white)
+                                                .bold()
                                         }
-                                        Text(namesAchievementFirst[innerIndex])
-                                            .font(Constants.Design.Fonts.BodySmallFont)
-                                            .foregroundStyle(.white)
-                                            .bold()
                                     }
                                 }
                             }
-                            .padding(.horizontal, 20)
                         }
                     }
+                    Spacer()
                 }
+                .frame(width: geometry.size.width, height: geometry.size.height)
             }
         }
         .blur(radius: showAchievementsModal ? 10 : 0)

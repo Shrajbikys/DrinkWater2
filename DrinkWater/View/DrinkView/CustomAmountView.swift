@@ -56,68 +56,72 @@ struct CustomAmountView: View {
                     Rectangle()
                         .frame(height: 1)
                         .foregroundStyle(.white)
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 15) {
-                            ForEach(nameDrink.indices, id: \.self) { index in
-                                Button(action: {
-                                    selectedImages = isPremium ? imageDrinkPremium : imageDrink
-                                    selectedImages[index] = "\(nameDrink[index])SD" == "\(nameDrink[index])SD" ? "\(nameDrink[index])HighlightedSD" : "\(nameDrink[index])SD"
-                                    selectedDrink = nameDrink[index]
-                                    isImageDisabled = false
-                                }) {
-                                    VStack(spacing: 10) {
-                                        Image(selectedImages[index])
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 70, height: 70)
-                                        Text(localizedNameDrink[index])
-                                            .font(.subheadline)
+                    GeometryReader { geometry in
+                        VStack {
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 15) {
+                                    ForEach(nameDrink.indices, id: \.self) { index in
+                                        Button(action: {
+                                            selectedImages = isPremium ? imageDrinkPremium : imageDrink
+                                            selectedImages[index] = "\(nameDrink[index])SD" == "\(nameDrink[index])SD" ? "\(nameDrink[index])HighlightedSD" : "\(nameDrink[index])SD"
+                                            selectedDrink = nameDrink[index]
+                                            isImageDisabled = false
+                                        }) {
+                                            VStack(spacing: 10) {
+                                                Image(selectedImages[index])
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: sizeButton(for: geometry.size.width), height: sizeButton(for: geometry.size.width))
+                                                Text(localizedNameDrink[index])
+                                                    .font(.subheadline)
+                                                    .foregroundStyle(.white)
+                                            }
+                                        }
+                                    }
+                                }
+                                .padding(.vertical, 5)
+                                .padding(.horizontal, 10)
+                            }
+                            Rectangle()
+                                .frame(height: 1)
+                                .foregroundStyle(.white)
+                            VStack {
+                                Text("Выберите объём:")
+                                    .font(.custom("Palatino", size: 19))
+                                    .foregroundStyle(.white)
+                                    .padding(.top, 30)
+                                Picker("Выберите объём:", selection: $selectedNumber) {
+                                    ForEach(Array(stride(
+                                        from: profile[0].unit == 0 ? 50 : 2,
+                                        to: profile[0].unit == 0 ? 2050 : 70,
+                                        by: profile[0].unit == 0 ? 50 : 2
+                                    )), id: \.self) { number in
+                                        Text("\(number)")
+                                            .tag(number)
                                             .foregroundStyle(.white)
                                     }
                                 }
+                                .pickerStyle(.wheel)
+                                .frame(height: sizePicker(for: geometry.size.width))
+                                Button("Добавить напиток") {
+                                    isPressedImpact.toggle()
+                                    drinkWater(amountDrink: selectedNumber)
+                                    isShowingModal = false
+                                }
+                                .sensoryFeedback(.impact, trigger: isPressedImpact)
+                                .disabled(isImageDisabled)
+                                .font(.custom("Palatino", size: 17))
+                                .padding(.horizontal, 27)
+                                .padding(.vertical, 12)
+                                .foregroundStyle(!isImageDisabled ? .white : Color(white: 1, opacity: 0.5))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 30)
+                                        .stroke(!isImageDisabled ? .white : Color(white: 1, opacity: 0.5), lineWidth: 1)
+                                )
                             }
+                            Spacer()
                         }
-                        .padding(.vertical, 5)
-                        .padding(.horizontal, 10)
                     }
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundStyle(.white)
-                    VStack {
-                        Text("Выберите объём:")
-                            .font(.custom("Palatino", size: 19))
-                            .foregroundStyle(.white)
-                            .padding(.top, 30)
-                        Picker("Выберите объём:", selection: $selectedNumber) {
-                            ForEach(Array(stride(
-                                from: profile[0].unit == 0 ? 50 : 2,
-                                to: profile[0].unit == 0 ? 2050 : 70,
-                                by: profile[0].unit == 0 ? 50 : 2
-                            )), id: \.self) { number in
-                                Text("\(number)")
-                                    .tag(number)
-                                    .foregroundStyle(.white)
-                            }
-                        }
-                        .pickerStyle(.wheel)
-                        .frame(height: 100)
-                        Button("Добавить напиток") {
-                            isPressedImpact.toggle()
-                            drinkWater(amountDrink: selectedNumber)
-                            isShowingModal = false
-                        }
-                        .sensoryFeedback(.impact, trigger: isPressedImpact)
-                        .disabled(isImageDisabled)
-                        .font(.custom("Palatino", size: 17))
-                        .padding(.horizontal, 27)
-                        .padding(.vertical, 12)
-                        .foregroundStyle(!isImageDisabled ? .white : Color(white: 1, opacity: 0.5))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 30)
-                                .stroke(!isImageDisabled ? .white : Color(white: 1, opacity: 0.5), lineWidth: 1)
-                        )
-                    }
-                    Spacer()
                 }
             }
             .onAppear {
@@ -163,6 +167,22 @@ struct CustomAmountView: View {
             }
         }
     }
+}
+
+#Preview {
+    CustomAmountView(isShowingModal: .constant(false))
+        .modelContainer(PreviewContainer.previewContainer)
+        .environment(PurchaseManager())
+}
+
+extension CustomAmountView {
+    private func sizeButton(for width: CGFloat) -> CGFloat {
+        return width > 393 ? 80 : 70
+    }
+    
+    private func sizePicker(for width: CGFloat) -> CGFloat {
+        return width > 393 ? 150 : 100
+    }
     
     private func drinkWater(amountDrink: Int) {
         let now = Date()
@@ -198,10 +218,4 @@ struct CustomAmountView: View {
             }
         }
     }
-}
-
-#Preview {
-    CustomAmountView(isShowingModal: .constant(false))
-        .modelContainer(PreviewContainer.previewContainer)
-        .environment(PurchaseManager())
 }
