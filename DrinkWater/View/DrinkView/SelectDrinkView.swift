@@ -16,7 +16,6 @@ struct SelectDrinkView: View {
     @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
     
     @Binding var isShowingModal: Bool
-    @State private var isImageToggled: Bool = true
     
     @Query var profile: [Profile]
     @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
@@ -60,85 +59,93 @@ struct SelectDrinkView: View {
                     Rectangle()
                         .frame(height: 1)
                         .foregroundStyle(.white)
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 30.0)
-                            .frame(width: 370, height: 75)
-                            .foregroundStyle(backgroundSelectAmountCircleColor)
-                        HStack(spacing: 12) {
-                            ForEach(0...4, id: \.self) { index in
-                                if index < 4 {
-                                    Button(action: {
-                                        drinkWater(index: index)
-                                        isPressedImpact.toggle()
-                                        dismiss()
-                                    }, label: {
-                                        ZStack(alignment: .center) {
-                                            Image("BlankAmount")
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 60, height: 60)
-                                            Text("\(profile[0].unit == 0 ? nameButtonCustomAmountMl[index].toStringMilli : nameButtonCustomAmountOz[index].toStringOunces)")
-                                                .font(.caption)
-                                                .foregroundStyle(.white)
-                                        }
-                                    })
-                                    .sensoryFeedback(.impact, trigger: isPressedImpact)
-                                } else {
-                                    NavigationLink {
-                                        CustomAmountView(isShowingModal: $isShowingModal)
-                                    } label: {
-                                        ZStack(alignment: .center) {
-                                            Image("BlankAmount")
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 60, height: 60)
-                                            Text("+")
-                                                .font(.title)
-                                                .foregroundStyle(.white)
+                    GeometryReader { geometry in
+                        VStack {
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 30.0)
+                                    .foregroundStyle(backgroundSelectAmountCircleColor)
+                                    .frame(height: heightBackgroundButtons(for: geometry.size.width))
+                                    .padding(.horizontal, 10)
+                                HStack(spacing: spacingBetweenButtons(for: geometry.size.width)) {
+                                    ForEach(0...4, id: \.self) { index in
+                                        if index < 4 {
+                                            Button(action: {
+                                                drinkWater(index: index)
+                                                isPressedImpact.toggle()
+                                                dismiss()
+                                            }, label: {
+                                                ZStack(alignment: .center) {
+                                                    Image("BlankAmount")
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .frame(width: sizeButton(for: geometry.size.width), height: sizeButton(for: geometry.size.width))
+                                                    Text("\(profile[0].unit == 0 ? nameButtonCustomAmountMl[index].toStringMilli : nameButtonCustomAmountOz[index].toStringOunces)")
+                                                        .font(.caption)
+                                                        .foregroundStyle(.white)
+                                                }
+                                            })
+                                            .sensoryFeedback(.impact, trigger: isPressedImpact)
+                                        } else {
+                                            NavigationLink {
+                                                CustomAmountView(isShowingModal: $isShowingModal)
+                                            } label: {
+                                                ZStack(alignment: .center) {
+                                                    Image("BlankAmount")
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .frame(width: sizeButton(for: geometry.size.width), height: sizeButton(for: geometry.size.width))
+                                                    Text("+")
+                                                        .font(.title)
+                                                        .foregroundStyle(.white)
+                                                }
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
-                    }
-                    ScrollView {
-                        LazyVStack(spacing: 15) {
-                            ForEach(0..<nameDrink.count, id: \.self) { index in
-                                if index % 3 == 0 {
-                                    HStack(spacing: 25) {
-                                        ForEach(index..<min(index + 3, nameDrink.count), id: \.self) { innerIndex in
-                                            VStack {
-                                                Button(action: {
-                                                    selectedDrinkFirst = false
-                                                    selectedDrink = nameDrink[innerIndex]
-                                                    if let lastIndex = lastSelectedIndex {
-                                                        buttonStates[lastIndex] = false
-                                                    }
-                                                    buttonStates[innerIndex].toggle()
-                                                    lastSelectedIndex = innerIndex
-                                                }) {
-                                                    VStack(spacing: 10) {
-                                                        if selectedDrinkFirst && selectedDrink == nameDrink[innerIndex] {
-                                                            Image("\(selectedDrink)HighlightedSD")
-                                                                .resizable()
-                                                                .scaledToFit()
-                                                        } else {
-                                                            Image(buttonStates[innerIndex] ? "\(nameDrink[innerIndex])HighlightedSD" : "\(nameDrink[innerIndex])SD")
-                                                                .resizable()
-                                                                .scaledToFit()
+                            .frame(width: geometry.size.width, height: 85)
+                            ScrollView {
+                                LazyVStack(spacing: 15) {
+                                    ForEach(0..<nameDrink.count, id: \.self) { index in
+                                        if index % 3 == 0 {
+                                            HStack(spacing: 25) {
+                                                ForEach(index..<min(index + 3, nameDrink.count), id: \.self) { innerIndex in
+                                                    VStack {
+                                                        Button(action: {
+                                                            selectedDrinkFirst = false
+                                                            selectedDrink = nameDrink[innerIndex]
+                                                            if let lastIndex = lastSelectedIndex {
+                                                                buttonStates[lastIndex] = false
+                                                            }
+                                                            buttonStates[innerIndex].toggle()
+                                                            lastSelectedIndex = innerIndex
+                                                        }) {
+                                                            VStack(spacing: 10) {
+                                                                if selectedDrinkFirst && selectedDrink == nameDrink[innerIndex] {
+                                                                    Image("\(selectedDrink)HighlightedSD")
+                                                                        .resizable()
+                                                                        .scaledToFit()
+                                                                } else {
+                                                                    Image(buttonStates[innerIndex] ? "\(nameDrink[innerIndex])HighlightedSD" : "\(nameDrink[innerIndex])SD")
+                                                                        .resizable()
+                                                                        .scaledToFit()
+                                                                }
+                                                                Text(localizedNameDrink[innerIndex])
+                                                                    .font(.subheadline)
+                                                                    .foregroundStyle(.white)
+                                                            }
                                                         }
-                                                        Text(localizedNameDrink[innerIndex])
-                                                            .font(.subheadline)
-                                                            .foregroundStyle(.white)
-                                                    }
+                                                    }.frame(maxWidth: .infinity)
                                                 }
-                                            }
-                                            .frame(maxWidth: .infinity)
+                                            }.padding(.horizontal, 25)
                                         }
-                                    }.padding(.horizontal, 35)
+                                    }
                                 }
                             }
+                            .frame(width: geometry.size.width)
+                            .padding(.top, 5)
                         }
+                        .frame(width: geometry.size.width, height: geometry.size.height)
                     }
                     .onAppear {
                         if networkMonitor.isConnected {
@@ -184,6 +191,26 @@ struct SelectDrinkView: View {
             }
         }
     }
+}
+
+#Preview {
+    SelectDrinkView(isShowingModal: .constant(false))
+        .modelContainer(PreviewContainer.previewContainer)
+        .environment(PurchaseManager())
+}
+
+extension SelectDrinkView {
+    private func spacingBetweenButtons(for width: CGFloat) -> CGFloat {
+        return width > 402 ? 12 : 10
+    }
+    
+    private func sizeButton(for width: CGFloat) -> CGFloat {
+        return width > 402 ? 70 : 60
+    }
+    
+    private func heightBackgroundButtons(for width: CGFloat) -> CGFloat {
+        return width > 402 ? 85 : 75
+    }
     
     private func drinkWater(index: Int) {
         let now = Date()
@@ -220,10 +247,4 @@ struct SelectDrinkView: View {
             }
         }
     }
-}
-
-#Preview {
-    SelectDrinkView(isShowingModal: .constant(false))
-        .modelContainer(PreviewContainer.previewContainer)
-        .environment(PurchaseManager())
 }
