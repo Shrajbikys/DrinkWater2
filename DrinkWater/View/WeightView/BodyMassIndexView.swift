@@ -39,7 +39,7 @@ struct BodyMassIndexView: View {
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     private let colorFontGoal: Color = Color(#colorLiteral(red: 0.9254901961, green: 0.7647058824, blue: 0.3176470588, alpha: 1))
     
-    private let descriptionBMI: [String] = ["Cильный дефицит массы тела", "Дефицит массы тела", "Нормальный вес", "Лишний вес", "Ожирение"]
+    private let descriptionBMI: [LocalizedStringKey] = ["Cильный дефицит массы тела", "Дефицит массы тела", "Нормальный вес", "Лишний вес", "Ожирение"]
     private let valueBMI: [String] = ["< 17.0", "17.0 - 18.4", "18.5 - 24.9", "25.0 - 29.9", "> 29.9"]
     private let colorBMI: [Color] = [.brown, .blue, .green, .yellow, .red]
     
@@ -105,7 +105,7 @@ struct BodyMassIndexView: View {
                                 VStack {
                                     Text("Рост:")
                                         .foregroundStyle(.white)
-                                    Text(formatHeight(forHeightInCm: profile[0].heightCm))
+                                    Text("\(formatHeight(forHeightInCm: profile[0].heightCm)) см")
                                         .foregroundStyle(.white)
                                         .bold()
                                 }
@@ -185,7 +185,7 @@ extension BodyMassIndexView {
     
     private func formatHeight(forHeightInCm heightInCm: Double, locale: Locale = .current) -> String {
         if locale.measurementSystem == .metric {
-            return "\(Int(heightInCm)) см"
+            return "\(Int(heightInCm))"
         } else {
             let heightInInches = heightInCm / 2.54
             let feet = Int(heightInInches / 12)

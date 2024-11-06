@@ -206,8 +206,8 @@ extension MainWeightView {
         return bmi
     }
     
-    private func calculateDifferenseValue() -> String {
-        var result: String = ""
+    private func calculateDifferenseValue() -> LocalizedStringKey {
+        var result: LocalizedStringKey = ""
         if dataWeight.last!.weightGoalType == 0 {
             if !dataWeight.isEmpty && dataWeight.last!.weight <= dataWeight.last!.goal {
                 result = "Цель достигнута!"
