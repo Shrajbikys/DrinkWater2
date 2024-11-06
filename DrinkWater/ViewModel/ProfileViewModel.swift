@@ -13,6 +13,7 @@ import SwiftData
 class ProfileViewModel {
     
     func createProfileForTheFirstLogin(modelContext: ModelContext, gender: Constants.Back.Types.Gender, weight: Double, unit: Int) {
+        let heightCm: Double = 170.0
         var weightKg: Double
         var weightPounds: Double
         var autoNormMl: Double
@@ -36,6 +37,7 @@ class ProfileViewModel {
         profile.unit = unit
         profile.weightKg = weightKg
         profile.weightPounds = weightPounds
+        profile.heightCm = heightCm
         profile.autoNormMl = autoNormMl
         profile.customNormMl = autoNormMl
         profile.autoNormOz = autoNormOz

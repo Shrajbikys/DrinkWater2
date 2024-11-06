@@ -13,6 +13,7 @@ struct ReadingsWeightView: View {
     @State private var value: String = ""
     @State var pressedButton: String
     @Binding var isShowKeyboardView: Bool
+    @State private var isPressedImpact = false
     
     var body: some View {
         ZStack {
@@ -32,6 +33,7 @@ struct ReadingsWeightView: View {
                         )
                         .padding(.leading, 20)
                     Button(action: {
+                        isPressedImpact.toggle()
                         if !value.isEmpty {
                             value.removeLast()
                         }
@@ -44,11 +46,13 @@ struct ReadingsWeightView: View {
                             .cornerRadius(10)
                     }
                     .padding(.trailing, 20)
+                    .sensoryFeedback(.selection, trigger: isPressedImpact)
                 }
                 CustomKeyboard(input: $value, isShowKeyboardView: $isShowKeyboardView, pressedButton: pressedButton)
+                    .padding(.horizontal)
                 Spacer()
             }
-            .padding(.top, 40)
+            .padding(.top, 30)
         }
     }
 }

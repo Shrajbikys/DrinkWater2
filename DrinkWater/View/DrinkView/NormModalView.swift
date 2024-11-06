@@ -44,6 +44,6 @@ struct NormModalView: View {
 }
 
 #Preview {
-    NormModalView(profile: [Profile(gender: .man, weightKg: 55, unit: 0, autoNormMl: 1900, customNormMl: 1900, weightPounds: 121, autoNormOz: 67, customNormOz: 67, autoCalc: true, lastAmountDrink: 250, lastNameDrink: "Water")], isNormShowingModal: .constant(false), selectedNorm: .constant(2100), sliderValue: .constant(2100))
+    NormModalView(profile: [Profile(gender: .man, weightKg: 55, heightCm: 170.0, unit: 0, autoNormMl: 1900, customNormMl: 1900, weightPounds: 121, autoNormOz: 67, customNormOz: 67, autoCalc: true, lastAmountDrink: 250, lastNameDrink: "Water")], isNormShowingModal: .constant(false), selectedNorm: .constant(2100), sliderValue: .constant(2100))
         .modelContainer(PreviewContainer.previewContainer)
 }

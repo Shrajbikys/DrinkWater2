@@ -44,7 +44,7 @@ class PreviewContainer {
 
 struct SampleData {
     static let profile: [Profile] = {
-        return [Profile(gender: .man, weightKg: 55.4, unit: 0, autoNormMl: 1900, customNormMl: 1900, weightPounds: 121.8, autoNormOz: 67, customNormOz: 67, autoCalc: true, lastAmountDrink: 250, lastNameDrink: "Water")]
+        return [Profile(gender: .man, weightKg: 55.4, heightCm: 170, unit: 0, autoNormMl: 1900, customNormMl: 1900, weightPounds: 121.8, autoNormOz: 67, customNormOz: 67, autoCalc: true, lastAmountDrink: 250, lastNameDrink: "Water")]
     }()
     
     static let dataDrinking: [DataDrinking] = {

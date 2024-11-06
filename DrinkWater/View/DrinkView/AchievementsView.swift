@@ -39,7 +39,7 @@ struct AchievementsView: View {
                             .font(Constants.Design.Fonts.BodyLargeFont)
                             .bold()
                             .foregroundStyle(.white)
-                            .padding(.top)
+                            .padding(.top, 20)
                         Rectangle()
                             .frame(height: 1)
                             .foregroundStyle(.white)

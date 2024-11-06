@@ -19,6 +19,7 @@ struct CustomKeyboard: View {
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     @State var pressedButton: String
+    @State private var isPressedImpact = false
     
     var body: some View {
         ZStack {
@@ -27,6 +28,7 @@ struct CustomKeyboard: View {
             LazyVGrid(columns: columns, spacing: 20) {
                 ForEach(1..<10) { number in
                     Button(action: {
+                        isPressedImpact.toggle()
                         addDigit(digit: String(number))
                     }) {
                         Text("\(number)")
@@ -36,8 +38,10 @@ struct CustomKeyboard: View {
                             .background(Color.white.opacity(0.1))
                             .cornerRadius(10)
                     }
+                    .sensoryFeedback(.selection, trigger: isPressedImpact)
                 }
                 Button(action: {
+                    isPressedImpact.toggle()
                     addDot()
                 }) {
                     Text(".")
@@ -47,7 +51,9 @@ struct CustomKeyboard: View {
                         .background(Color.white.opacity(0.1))
                         .cornerRadius(10)
                 }
+                .sensoryFeedback(.selection, trigger: isPressedImpact)
                 Button(action: {
+                    isPressedImpact.toggle()
                     if input.count > 0 {
                         addDigit(digit: "0")
                     }
@@ -59,8 +65,10 @@ struct CustomKeyboard: View {
                         .background(Color.white.opacity(0.1))
                         .cornerRadius(10)
                 }
+                .sensoryFeedback(.selection, trigger: isPressedImpact)
                 Button(action: {
                     handleOK()
+                    isPressedImpact.toggle()
                     if Double(input) ?? 0 > 0 {
                         if dataWeight.last!.date.yearMonthDay == Date().yearMonthDay {
                             if pressedButton == "Weight" {
@@ -104,8 +112,8 @@ struct CustomKeyboard: View {
                         .background(Color.green.opacity(0.3))
                         .cornerRadius(10)
                 }
+                .sensoryFeedback(.impact, trigger: isPressedImpact)
             }
-            .padding()
         }
     }
     

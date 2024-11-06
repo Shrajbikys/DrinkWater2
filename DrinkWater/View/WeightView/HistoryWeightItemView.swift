@@ -50,7 +50,7 @@ struct HistoryWeightItemView: View {
                     HStack(spacing: 0) {
                         Text("\(difference > 0 ? "+" :"")\(unit == 0 ? difference.toStringKg : difference.toStringPounds)")
                             .font(Constants.Design.Fonts.BodyMediumFont)
-                            .foregroundStyle(difference > 0 ? .red : .green)
+                            .foregroundStyle(.white)
                             .padding(2)
                         Image(systemName: difference > 0 ? "arrow.up" : "arrow.down")
                             .foregroundColor(difference > 0 ? .red : .green)

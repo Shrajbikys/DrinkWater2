@@ -12,6 +12,7 @@ import AppMetricaCore
 
 struct MainWeightView: View {
     @Environment(\.dismiss) private var dismiss
+    @Query var profile: [Profile]
     @Query(sort: \DataWeight.date, order: .forward) var dataWeight: [DataWeight]
     
     private let userDefaultsManager = UserDefaultsManager.shared
@@ -21,14 +22,17 @@ struct MainWeightView: View {
     
     @State private var isShowWeightSheet = false
     @State private var isShowGoalSheet = false
+    @State private var isShowBMISheet = false
     @State private var isShowDataWeightSheet = false
+    @State private var isDrinkedPressed = false
+    @State private var isPressedImpact = false
+    @State private var isShadowVisible = false
     
+    private let colorFontGoal: Color = Color(#colorLiteral(red: 0.2157807946, green: 0.4114688337, blue: 0.6079391837, alpha: 1))
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
+    private let backgroundBarMarkColorEmpty: Color = Color(#colorLiteral(red: 0.2157807946, green: 0.4114688337, blue: 0.6079391837, alpha: 1)).opacity(0.1)
     private var backgroundBarMarkColor: LinearGradient {
-        LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.9529411793, green: 0.6862745285, blue: 0.1333333403, alpha: 1)), Color(#colorLiteral(red: 0.9568627477, green: 0.5766853228, blue: 0.4625490829, alpha: 1))]), startPoint: .top, endPoint: .bottom)
-    }
-    private var backgroundBarMarkColorEmpty: LinearGradient {
-        LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)), Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 0.5))]), startPoint: .top, endPoint: .bottom)
+        LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.2157807946, green: 0.4114688337, blue: 0.6079391837, alpha: 1)).opacity(0.8), Color(#colorLiteral(red: 0.2157807946, green: 0.4114688337, blue: 0.6079391837, alpha: 1)).opacity(0.1)]), startPoint: .top, endPoint: .bottom)
     }
     
     var body: some View {
@@ -43,25 +47,18 @@ struct MainWeightView: View {
                         .font(.system(size: 40))
                         .foregroundStyle(.white)
                 }
-                .padding(.top, 10)
+                .padding(.top, 20)
                 .padding(.bottom, 10)
                 Text("\(Date().formatted(.dateTime))")
                     .foregroundStyle(.white).opacity(0.6)
                 Text("\(unit == 0 ? (dataWeight.last?.weight ?? 0).toStringKg : (dataWeight.last?.weight ?? 0).toStringPounds)")
                     .font(.system(size: 100))
                     .foregroundStyle(.white)
-                if !dataWeight.isEmpty && dataWeight.last!.weight <= dataWeight.last!.goal {
-                    Text("Цель достигнута!")
+                Text(calculateDifferenseValue())
                         .font(.system(size: 40).bold())
-                        .foregroundStyle(.yellow)
-                } else {
-                    let weight = unit == 0 ? (dataWeight.last?.weight ?? 0) : (dataWeight.last?.weight ?? 0)
-                    let goal = unit == 0 ? (dataWeight.last?.goal ?? 0) : (dataWeight.last?.goal ?? 0)
-                    Text("\(unit == 0 ? (weight - goal).toStringKg : (weight - goal).toStringPounds) до цели")
-                        .font(.system(size: 40).bold())
-                        .foregroundStyle(.yellow)
-                }
+                        .foregroundStyle(colorFontGoal)
                 Button("Последняя запись \((dataWeight.last?.date ?? Date()).formatted(.dateTime))") {
+                    isPressedImpact.toggle()
                     isShowDataWeightSheet = true
                 }
                 .font(.system(.caption))
@@ -69,6 +66,7 @@ struct MainWeightView: View {
                 .padding(.top, -20)
                 .shadow(radius: 5)
                 .foregroundStyle(.white).opacity(0.6)
+                .sensoryFeedback(.impact, trigger: isPressedImpact)
                 .sheet(isPresented: $isShowDataWeightSheet) {
                     HistoryWeightView(unit: unit)
                         .presentationDetents([.large])
@@ -83,56 +81,103 @@ struct MainWeightView: View {
                             BarMark(x: .value("MonthDay", day),
                                     y: .value("WeightValue", data.weight)
                             )
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
                             .foregroundStyle(backgroundBarMarkColor)
                         } else {
                             BarMark(x: .value("MonthDay", day),
-                                    y: .value("WeightValue", dataWeight.first?.weight ?? 0)
-                            ).foregroundStyle(backgroundBarMarkColorEmpty)
+                                    y: .value("WeightValue", dataWeight.last?.goal ?? 0)
+                            )
+                            .clipShape(RoundedRectangle(cornerRadius: 5))
+                            .foregroundStyle(backgroundBarMarkColorEmpty)
                         }
                     }
                     RuleMark(y: .value("Goal", dataWeight.last?.goal ?? 0))
                         .lineStyle(.init(lineWidth: 1.0, dash: [5]))
-                        .foregroundStyle(.white)
+                        .foregroundStyle(colorFontGoal)
+                        .annotation(alignment: .leading) {
+                            Text("\(unit == 0 ? (dataWeight.last?.goal ?? 0).toStringKg : (dataWeight.last?.goal ?? 0).toStringPounds)")
+                                .foregroundStyle(colorFontGoal)
+                                .font(.caption)
+                                .padding(.leading, 5)
+                        }
                 }
                 .chartYAxis {
                     AxisMarks(values: .automatic) { _ in
                         AxisGridLine()
                     }
                 }
-                Spacer()
-                Button {
-                    isShowGoalSheet = true
-                } label: {
-                    Text("Цель: \(unit == 0 ? (dataWeight.last?.goal ?? 0).toStringKg : (dataWeight.last?.goal ?? 0).toStringPounds)")
+                HStack {
+                    Button {
+                        isPressedImpact.toggle()
+                        isShowBMISheet = true
+                    } label: {
+                        Text("ИМТ: \(String(format: "%.1f", calculateBMI(weightKg: profile[0].weightKg, heightCm: profile[0].heightCm)))")
+                    }
+                    .frame(width: 120, height: 30)
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.white)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 2)
+                            .stroke(.white.opacity(0.4), style: StrokeStyle(lineWidth: 1.0))
+                            .frame(width: 120, height: 30)
+                    }
+                    .sensoryFeedback(.impact, trigger: isPressedImpact)
+                    .sheet(isPresented: $isShowBMISheet) {
+                        BodyMassIndexView()
+                            .presentationDetents([.large])
+                    }
+                    Spacer()
+                    Button {
+                        isPressedImpact.toggle()
+                        isShowGoalSheet = true
+                    } label: {
+                        Text("Цель: \(unit == 0 ? (dataWeight.last?.goal ?? 0).toStringKg : (dataWeight.last?.goal ?? 0).toStringPounds)")
+                    }
+                    .frame(width: 120, height: 30)
+                    .buttonStyle(.plain)
+                    .foregroundStyle(.white)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 2)
+                            .stroke(.white.opacity(0.4), style: StrokeStyle(lineWidth: 1.0))
+                            .frame(width: 120, height: 30)
+                    }
+                    .sensoryFeedback(.impact, trigger: isPressedImpact)
+                    .sheet(isPresented: $isShowGoalSheet) {
+                        ReadingsGoalView(dataWeight: dataWeight, pressedButton: "Goal", isShowKeyboardView: $isShowGoalSheet)
+                            .presentationDetents([.fraction(0.85)])
+                    }
                 }
-                .buttonStyle(.plain)
-                .foregroundStyle(.white)
-                .overlay {
-                    Rectangle()
-                        .stroke(.white.opacity(0.4), style: StrokeStyle(lineWidth: 1.0))
-                        .frame(width: 120, height: 30)
-                }
-                .sheet(isPresented: $isShowGoalSheet) {
-                    ReadingsGoalView(pressedButton: "Goal", isShowKeyboardView: $isShowGoalSheet)
-                        .presentationDetents([.fraction(0.85)])
-                }
-                .padding(.vertical)
-                Button {
-                    isShowWeightSheet = true
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.system(size: 25, weight: .bold))
-                        .foregroundColor(.white)
-                        .frame(width: 85, height: 85)
-                        .background(.orange)
-                        .clipShape(Circle())
-                        .shadow(color: .black.opacity(0.2), radius: 10, x: 0, y: 5)
-                }
-                .padding(.bottom, 20)
-                .sheet(isPresented: $isShowWeightSheet) {
-                    ReadingsWeightView(pressedButton: "Weight", isShowKeyboardView: $isShowWeightSheet)
-                        .presentationDetents([.fraction(0.85)])
-                }
+                .padding(.top, 20)
+                .padding(.bottom, 30)
+                .padding(.horizontal)
+                Image(systemName: "plus")
+                    .font(.system(size: 25, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(width: 85, height: 85)
+                    .background(backgroundViewColor)
+                    .clipShape(Circle())
+                    .shadow(color: .white.opacity(isShadowVisible ? 0.6 : 0.4), radius: 10, x: 0, y: 0)
+                    .padding(.bottom, 20)
+                    .scaleEffect(isDrinkedPressed ? 0.5 : 1.0)
+                    .animation(.linear(duration: 0.2), value: isDrinkedPressed)
+                    .onAppear {
+                        withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                            isShadowVisible.toggle()
+                        }
+                    }
+                    .onTapGesture {
+                        isDrinkedPressed = true
+                        isPressedImpact.toggle()
+                        DispatchQueue.main.async {
+                            isShowWeightSheet = true
+                            isDrinkedPressed = false
+                        }
+                    }
+                    .sensoryFeedback(.impact, trigger: isPressedImpact)
+                    .sheet(isPresented: $isShowWeightSheet) {
+                        ReadingsWeightView(pressedButton: "Weight", isShowKeyboardView: $isShowWeightSheet)
+                            .presentationDetents([.fraction(0.85)])
+                    }
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -152,4 +197,34 @@ struct MainWeightView: View {
 #Preview {
     MainWeightView(unit: 0)
         .modelContainer(PreviewContainer.previewContainer)
+}
+
+extension MainWeightView {
+    private func calculateBMI(weightKg: Double, heightCm: Double) -> Double {
+        let heightMeters = heightCm / 100
+        let bmi = weightKg / (heightMeters * heightMeters)
+        return bmi
+    }
+    
+    private func calculateDifferenseValue() -> String {
+        var result: String = ""
+        if dataWeight.last!.weightGoalType == 0 {
+            if !dataWeight.isEmpty && dataWeight.last!.weight <= dataWeight.last!.goal {
+                result = "Цель достигнута!"
+            } else {
+                let weight = unit == 0 ? (dataWeight.last?.weight ?? 0) : (dataWeight.last?.weight ?? 0)
+                let goal = unit == 0 ? (dataWeight.last?.goal ?? 0) : (dataWeight.last?.goal ?? 0)
+                result = "\(unit == 0 ? (weight - goal).toStringKg : (weight - goal).toStringPounds) до цели"
+            }
+        } else {
+            if !dataWeight.isEmpty && dataWeight.last!.weight >= dataWeight.last!.goal {
+                result = "Цель достигнута!"
+            } else {
+                let weight = unit == 0 ? (dataWeight.last?.weight ?? 0) : (dataWeight.last?.weight ?? 0)
+                let goal = unit == 0 ? (dataWeight.last?.goal ?? 0) : (dataWeight.last?.goal ?? 0)
+                result = "\(unit == 0 ? (goal - weight).toStringKg : (goal - weight).toStringPounds) до цели"
+            }
+        }
+        return result
+    }
 }

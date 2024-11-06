@@ -13,6 +13,7 @@ struct HistoryWeightView: View {
     
     @State private var selectedDate: Date = Date()
     @State var unit: Int
+    @State var fff: Int = 0
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     
     var body: some View {
@@ -22,17 +23,22 @@ struct HistoryWeightView: View {
             VStack {
                 HStack {
                     Text("История веса")
-                        .font(.largeTitle)
+                        .font(Constants.Design.Fonts.BodyTitle2Font)
+                        .foregroundStyle(.white)
                     Spacer()
                 }
                 .padding([.top, .leading])
                 YearMonthPickerView(selectedDate: $selectedDate)
-                ScrollView {
-                    ForEach(dataWeight) { item in
-                        if item.date.monthYear() == selectedDate.monthYear() {
-                            HistoryWeightItemView(unit: unit, weight: item.weight, date: item.date, goal: item.goal, difference: item.difference)
+                if let _ = dataWeight.first(where: { $0.date.monthYear().compareDate(date: selectedDate.monthYear()) }) {
+                    ScrollView {
+                        ForEach(dataWeight) { item in
+                            if item.date.monthYear() == selectedDate.monthYear() {
+                                HistoryWeightItemView(unit: unit, weight: item.weight, date: item.date, goal: item.goal, difference: item.difference)
+                            }
                         }
                     }
+                } else {
+                    ContentUnavailableView("Упс! Пока здесь ничего нет...", systemImage: "vial.viewfinder")
                 }
             }
         }

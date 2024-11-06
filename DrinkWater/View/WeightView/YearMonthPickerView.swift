@@ -10,6 +10,7 @@ import AppMetricaCore
 
 struct YearMonthPickerView: View {
     @Binding var selectedDate: Date
+    @State private var isPressedImpact = false
     
     let months: [String] = Calendar.current.shortStandaloneMonthSymbols
     let columns = [
@@ -81,7 +82,7 @@ struct YearMonthPickerView: View {
                         .bold()
                         .foregroundStyle(.white)
                         .background(Color(white: 1, opacity: 0.1))
-                        .background(item == selectedDate.monthShortStandalone ?  Color.green.opacity(0.5) : Color(white: 1, opacity: 0.1))
+                        .background(item == selectedDate.monthShortStandalone ? Color(#colorLiteral(red: 0.9254901961, green: 0.7647058824, blue: 0.3176470588, alpha: 1)) : Color(white: 1, opacity: 0.1))
                         .cornerRadius(8)
                         .onTapGesture {
                             var dateComponent = DateComponents()
@@ -89,7 +90,9 @@ struct YearMonthPickerView: View {
                             dateComponent.month =  months.firstIndex(of: item)! + 1
                             dateComponent.year = Int(selectedDate.year)
                             selectedDate = Calendar.current.date(from: dateComponent)!
+                            isPressedImpact.toggle()
                         }
+                        .sensoryFeedback(.selection, trigger: isPressedImpact)
                 }
             }
             .padding(.horizontal, 10)
