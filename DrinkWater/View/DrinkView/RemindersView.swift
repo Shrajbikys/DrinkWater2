@@ -31,6 +31,7 @@ struct RemindersView: View {
     @State private var selectedStartTime = Date()
     @State private var selectedFinishTime = Date()
     @State private var selectedNextTime = Date()
+    @State private var intervalReminder: TimeInterval = 7200
     @State private var selectedInterval: String = "2 часа"
     @State private var localizedNameInterval: [String: LocalizedStringKey] = Constants.Back.Reminder.localizedNameInterval
     @State private var selectedSound: String = "Звук 2"
@@ -120,7 +121,8 @@ struct RemindersView: View {
                             IntervalModalView(reminder: reminder, isIntervalShowingModal: $isIntervalShowingModal, selectedInterval: $selectedInterval)
                                 .presentationDetents([.height(250)])
                         }
-                        .onChange(of: selectedInterval) { _, _ in
+                        .onChange(of: selectedInterval) { _, newValue in
+                            remindersViewModel.updateReminders(reminder: reminder, intervalReminder: calcStringToTimeInterval(value: newValue))
                             removeAndAddNotification()
                         }
                     }
@@ -133,24 +135,30 @@ struct RemindersView: View {
                         Text("Звук уведомления")
                             .font(Constants.Design.Fonts.BodyMediumFont)
                         Spacer()
-                        Button(action: {
-                            if purchaseManager.hasPremium {
-                                isSoundShowingModal = true
-                            } else {
-                                isPurchaseViewModal = true
+                        if !purchaseManager.hasPremium {
+                            Text("Премиум-доступ")
+                                .font(Constants.Design.Fonts.BodyMiniFont)
+                            Image(systemName: "lock")
+                        } else {
+                            Button(action: {
+                                if purchaseManager.hasPremium {
+                                    isSoundShowingModal = true
+                                } else {
+                                    isPurchaseViewModal = true
+                                }
+                            }) {
+                                Text(localizedNameSound[selectedSound]!)
+                                    .font(Constants.Design.Fonts.BodyMediumFont)
+                                    .bold()
+                                    .foregroundStyle(.link)
                             }
-                        }) {
-                            Text(localizedNameSound[selectedSound]!)
-                                .font(Constants.Design.Fonts.BodyMediumFont)
-                                .bold()
-                                .foregroundStyle(.link)
-                        }
-                        .sheet(isPresented: $isSoundShowingModal) {
-                            SoundModalView(reminder: reminder, isSoundShowingModal: $isSoundShowingModal, selectedSound: $selectedSound)
-                                .presentationDetents([.height(250)])
-                        }
-                        .onChange(of: selectedSound) { _, _ in
-                            removeAndAddNotification()
+                            .sheet(isPresented: $isSoundShowingModal) {
+                                SoundModalView(reminder: reminder, isSoundShowingModal: $isSoundShowingModal, selectedSound: $selectedSound)
+                                    .presentationDetents([.height(250)])
+                            }
+                            .onChange(of: selectedSound) { _, _ in
+                                removeAndAddNotification()
+                            }
                         }
                     }
                 } header: {
@@ -167,10 +175,13 @@ struct RemindersView: View {
                 getDataFromReminder()
             }
             .sheet(isPresented: $isPurchaseViewModal) {
-                PurchaseView(isPurchaseViewModal: $isPurchaseViewModal)
+                PurchaseViewWrapper(isPresented: $isPurchaseViewModal)
             }
         }
     }
+}
+
+extension RemindersView {
     
     private func getPermissionSystemNotifications() {
         let notificationsCenter = UNUserNotificationCenter.current()
@@ -209,7 +220,7 @@ struct RemindersView: View {
         selectedFinishTime = reminder[0].finishTimeReminder
         soundName = reminder[0].soundReminder
         
-        let intervalReminder = reminder[0].intervalReminder
+        intervalReminder = reminder[0].intervalReminder
         selectedInterval = calcTimeIntervalToString(value: intervalReminder)
         
         let soundTextArray: [String: String] = ["Sound off": "Без звука", "Default": "По умолчанию", "Sound-1.aiff": "Звук 1", "Sound-2.aiff": "Звук 2", "Sound-3.aiff": "Звук 3", "Sound-4.aiff": "Звук 4", "Sound-5.aiff": "Звук 5", "Sound-6.aiff": "Звук 6"]
@@ -218,18 +229,27 @@ struct RemindersView: View {
     
     private func updateStartTimeDate(_ date: Date) {
         let finishTime = selectedFinishTime
+        
+        let calendar = Calendar.current
+        let currentDate = Date()
+        
+        var components = calendar.dateComponents([.hour, .minute], from: date)
+        components.year = calendar.component(.year, from: currentDate)
+        components.month = calendar.component(.month, from: currentDate)
+        components.day = calendar.component(.day, from: currentDate)
+        
         if date > finishTime {
-            selectedStartTime = date
-            selectedFinishTime = date
+            selectedStartTime = calendar.date(from: components) ?? date
             
             DispatchQueue.main.async {
                 self.remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: selectedStartTime)
-                self.remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: selectedFinishTime)
+                self.remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: selectedStartTime)
                 self.removeAndAddNotification()
             }
         } else {
             DispatchQueue.main.async {
                 self.remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: selectedStartTime)
+                print("Update Start date \(calendar.date(from: components) ?? date)")
                 self.removeAndAddNotification()
             }
         }
@@ -237,18 +257,27 @@ struct RemindersView: View {
     
     private func updateFinishTimeDate(_ date: Date) {
         let startTime = selectedStartTime
+        
+        let calendar = Calendar.current
+        let currentDate = Date()
+        
+        var components = calendar.dateComponents([.hour, .minute], from: date)
+        components.year = calendar.component(.year, from: currentDate)
+        components.month = calendar.component(.month, from: currentDate)
+        components.day = calendar.component(.day, from: currentDate)
+        
         if date < startTime {
-            selectedStartTime = date
-            selectedFinishTime = date
+            selectedFinishTime = calendar.date(from: components) ?? date
             
             DispatchQueue.main.async {
-                self.remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: selectedStartTime)
+                self.remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: selectedFinishTime)
                 self.remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: selectedFinishTime)
                 self.removeAndAddNotification()
             }
         } else {
             DispatchQueue.main.async {
                 self.remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: selectedFinishTime)
+                print("Update Finish date \(calendar.date(from: components) ?? date)")
                 self.removeAndAddNotification()
             }
         }
@@ -296,14 +325,21 @@ struct RemindersView: View {
         }
     }
     
-    private func removeAndAddNotification() {
+    func disableRemindersForToday(startDay: Date, endDay: Date, interval: TimeInterval) {
         if isRemindersEnabled {
             removeOldNotifications()
-            addNotification()
+            scheduleNotificationsForDateRange(startDay: startDay, endDay: endDay, interval: interval)
         }
     }
     
-    private func addNotification() {
+    private func removeAndAddNotification() {
+        if isRemindersEnabled {
+            removeOldNotifications()
+            scheduleNotificationsForDateRange(startDay: selectedStartTime, endDay: selectedFinishTime, interval: calcStringToTimeInterval(value: selectedInterval))
+        }
+    }
+    
+    private func scheduleDailyNotifications(startDate: Date, endDate: Date, interval: TimeInterval) {
         var soundNotifications: UNNotificationSound? = .default
         if soundName == "Sound off" {
             soundNotifications = .none
@@ -311,41 +347,58 @@ struct RemindersView: View {
             soundNotifications = soundName == "Default" ? .default : UNNotificationSound(named: UNNotificationSoundName(rawValue: soundName))
         }
         
-        var interval = 0
-        var startDate = selectedStartTime
-        let amountInterval = getAmountInterval()
-        let timeInterval = calcStringToTimeInterval(value: selectedInterval)
-        let content = UNMutableNotificationContent()
-        let title = String(localized: Constants.Back.Reminder.titleNotificationText)
-        let body = String(localized: Constants.Back.Reminder.bodyNotificationText.randomElement()!)
+        let calendar = Calendar.current
+        var currentDate = startDate
         
-        while interval != amountInterval {
-            content.title = title
-            content.body = body
+        while currentDate <= endDate {
+            let triggerDateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: currentDate)
+            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDateComponents, repeats: false)
+            
+            let content = UNMutableNotificationContent()
+            content.title = String(localized: Constants.Back.Reminder.titleNotificationText)
+            content.body = String(localized: Constants.Back.Reminder.bodyNotificationText.randomElement()!)
             content.sound = soundNotifications
             
-            let triggerDaily = Calendar.current.dateComponents([. hour, .minute, .second ], from: startDate)
-            let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDaily, repeats: true)
+            let request = UNNotificationRequest(
+                identifier: UUID().uuidString,
+                content: content,
+                trigger: trigger
+            )
             
-            let uuidString = UUID().uuidString
-            let request = UNNotificationRequest(identifier: uuidString, content: content, trigger: trigger)
-            
-            UNUserNotificationCenter.current().add(request) { (_) in
-                // check the error parameter and check errors
+            UNUserNotificationCenter.current().add(request) { error in
+                if let error = error {
+                    print("Ошибка при добавлении уведомления: \(error.localizedDescription)")
+                } else {
+                    print(trigger)
+                }
             }
-            interval += 1
-            startDate += timeInterval
+            
+            currentDate = currentDate.addingTimeInterval(interval)
         }
     }
     
-    private func getAmountInterval() -> Int {
-        let startDate = selectedStartTime
-        let finishDate = selectedFinishTime
+    private func scheduleNotificationsForDateRange(startDay: Date, endDay: Date, interval: TimeInterval) {
+        var currentDay = startDay
+        let calendar = Calendar.current
         
-        let timeInterval = calcStringToTimeInterval(value: selectedInterval)
-        let amountInterval = Int(((finishDate.timeIntervalSinceNow - startDate.timeIntervalSinceNow) / timeInterval)) + 1
+        let finishDate = Calendar.current.date(byAdding: .day, value: 30, to: startDay)!
+        let startDailyHourMinute = Calendar.current.dateComponents([. hour, .minute], from: startDay)
+        let endDailyHourMinute = Calendar.current.dateComponents([. hour, .minute], from: endDay)
         
-        return amountInterval
+        while currentDay <= finishDate {
+            let startDate = calendar.date(bySettingHour: startDailyHourMinute.hour!,
+                                          minute: startDailyHourMinute.minute!,
+                                          second: 0,
+                                          of: currentDay)!
+            let endDate = calendar.date(bySettingHour: endDailyHourMinute.hour!,
+                                        minute: endDailyHourMinute.minute!,
+                                        second: 0,
+                                        of: currentDay)!
+            
+            scheduleDailyNotifications(startDate: startDate, endDate: endDate, interval: interval)
+            
+            currentDay = calendar.date(byAdding: .day, value: 1, to: currentDay)!
+        }
     }
     
     private func removePendingNotifications(identifiers: [String]) {

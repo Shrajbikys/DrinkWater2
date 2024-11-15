@@ -28,14 +28,12 @@ struct Constants {
     
     struct Back {
         struct Drink {
-            static let nameDrink: [String] = ["Water", "Coffee", "Tea", "Milk", "Juice", "Soda"]
-            static let localizedNameDrink: [LocalizedStringKey] = ["Water", "Coffee", "Tea", "Milk", "Juice", "Soda"]
-            static let nameDrinkPremium: [String] = ["Water", "Coffee", "Tea", "Milk", "Juice", "Soda", "Cocoa", "Smoothie", "Yogurt", "Beer", "NonalcoholicBeer", "Wine"]
-            static let localizedNameDrinkPremium: [LocalizedStringKey] = ["Water", "Coffee", "Tea", "Milk", "Juice", "Soda", "Cocoa", "Smoothie", "Yogurt", "Beer", "NonalcoholicBeer", "Wine"]
+            static let nameDrink: [String] = ["Water", "Coffee", "Tea", "Milk", "Juice", "Soda", "Cocoa", "Smoothie", "Yogurt", "Beer", "NonalcoholicBeer", "Wine"]
+            static let localizedNameDrink: [LocalizedStringKey] = ["Water", "Coffee", "Tea", "Milk", "Juice", "Soda", "Cocoa", "Smoothie", "Yogurt", "Beer", "NonalcoholicBeer", "Wine"]
+            static let imageDrink: [String] = ["WaterSD", "CoffeeSD", "TeaSD", "MilkSD", "JuiceSD", "SodaSD", "CocoaSD", "SmoothieSD", "YogurtSD", "BeerSD", "NonalcoholicBeerSD", "WineSD"]            
             static let localizedNameDrinkHistory: [String: LocalizedStringKey] = ["Water": "Water", "Coffee": "Coffee", "Tea": "Tea", "Milk": "Milk", "Juice": "Juice", "Soda": "Soda", "Cocoa": "Cocoa", "Smoothie": "Smoothie", "Yogurt": "Yogurt", "Beer": "Beer", "NonalcoholicBeer": "NonalcoholicBeer", "Wine": "Wine"]
-            static let imageDrink: [String] = ["WaterSD", "CoffeeSD", "TeaSD", "MilkSD", "JuiceSD", "SodaSD"]
-            static let imageDrinkPremium: [String] = ["WaterSD", "CoffeeSD", "TeaSD", "MilkSD", "JuiceSD", "SodaSD", "CocoaSD", "SmoothieSD", "YogurtSD", "BeerSD", "NonalcoholicBeerSD", "WineSD"]
-            static let hydration: [String: Double] = ["Water": 1.0, "Coffee": 0.8, "Tea": 0.9, "Milk": 0.9, "Juice": 0.8, "Soda": 0.9, "Cocoa": 0.7, "Smoothie": 0.3, "Yogurt": 0.5, "Beer": -0.6, "NonalcoholicBeer": 0.6, "Wine": -1.6]
+
+            static let hydration: [String: Double] = ["Water": 1.0, "Coffee": 0.7, "Tea": 0.8, "Milk": 1.1, "Juice": 0.9, "Soda": 0.7, "Cocoa": 0.8, "Smoothie": 0.9, "Yogurt": 0.5, "Beer": 0.7, "NonalcoholicBeer": 0.9, "Wine": 0.5]
         }
         
         struct Reminder {
@@ -45,7 +43,6 @@ struct Constants {
             static let soundNameArray = ["Без звука": "Sound off", "По умолчанию": "Default", "Звук 1": "Sound-1.aiff", "Звук 2": "Sound-2.aiff", "Звук 3": "Sound-3.aiff", "Звук 4": "Sound-4.aiff", "Звук 5": "Sound-5.aiff", "Звук 6": "Sound-6.aiff"]
             
             static let nameInterval = ["30 минут", "1 час", "1 час 30 минут", "2 часа", "2 часа 30 минут", "3 часа"]
-            static let nameToTimeInterval: [String: TimeInterval] = ["30 минут": 1800, "1 час": 3600, "1 час 30 минут": 5400, "2 часа": 7200, "2 часа 30 минут": 9000, "3 часа": 10800]
             static let localizedNameInterval: [String: LocalizedStringKey] = ["30 минут": "30 минут", "1 час": "1 час", "1 час 30 минут": "1 час 30 минут", "2 часа": "2 часа", "2 часа 30 минут": "2 часа 30 минут", "3 часа": "3 часа"]
             
             static let localizedTitleNotificationText: LocalizedStringKey = "Пора выпить воды"

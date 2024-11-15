@@ -17,6 +17,7 @@ struct CustomAmountView: View {
     
     @Query var profile: [Profile]
     @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
+    @Query var reminder: [Reminder]
     
     @State private var healthKitManager = HealthKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
@@ -24,6 +25,7 @@ struct CustomAmountView: View {
     @State var profileViewModel = ProfileViewModel()
     @State var dataDrinkingViewModel = DataDrinkingViewModel()
     @State var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
+    @State private var remindersViewModel = RemindersViewModel()
     
     @State private var networkMonitor = NetworkMonitor()
     
@@ -31,18 +33,19 @@ struct CustomAmountView: View {
     @State private var selectedNumber: Int = 250
     @State private var selectedDrink: String = ""
     @State private var isImageDisabled: Bool = true
-    @State private var isPremium: Bool = false
     @State private var isPressedImpact: Bool = false
     @State private var normDrink: Double = 2000
     @State private var unit: Int = 0
     
+    @State private var isNormExceeding = false
+    @Binding var isNormExceedingShowModal: Bool
+    @Binding var isNormDoneShowModal: Bool
+    
     @State private var imageDrink: [String] = Constants.Back.Drink.imageDrink
-    @State private var imageDrinkPremium: [String] = Constants.Back.Drink.imageDrinkPremium
     @State private var nameDrink: [String] = Constants.Back.Drink.nameDrink
-    private let nameDrinkPremium: [String] = Constants.Back.Drink.nameDrinkPremium
     @State private var localizedNameDrink: [LocalizedStringKey] = Constants.Back.Drink.localizedNameDrink
-    @State private var localizedNameDrinkPremium: [LocalizedStringKey] = Constants.Back.Drink.localizedNameDrinkPremium
-    @State private var selectedImages: [String] = Constants.Back.Drink.imageDrinkPremium
+    @State private var selectedImages: [String] = Constants.Back.Drink.imageDrink
+    
     private let hydration: [String: Double] = Constants.Back.Drink.hydration
     
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
@@ -62,7 +65,7 @@ struct CustomAmountView: View {
                                 HStack(spacing: 15) {
                                     ForEach(nameDrink.indices, id: \.self) { index in
                                         Button(action: {
-                                            selectedImages = isPremium ? imageDrinkPremium : imageDrink
+                                            selectedImages = imageDrink
                                             selectedImages[index] = "\(nameDrink[index])SD" == "\(nameDrink[index])SD" ? "\(nameDrink[index])HighlightedSD" : "\(nameDrink[index])SD"
                                             selectedDrink = nameDrink[index]
                                             isImageDisabled = false
@@ -75,6 +78,32 @@ struct CustomAmountView: View {
                                                 Text(localizedNameDrink[index])
                                                     .font(.subheadline)
                                                     .foregroundStyle(.white)
+                                            }
+                                        }
+                                        .padding(.vertical, index > 5 && !purchaseManager.hasPremium ? 5 : 0)
+                                        .disabled(index > 5 && !purchaseManager.hasPremium)
+                                        .blur(radius: index > 5 && !purchaseManager.hasPremium ? 3 : 0)
+                                        .overlay {
+                                            if index > 5 && !purchaseManager.hasPremium {
+                                                ZStack {
+                                                    RoundedRectangle(cornerRadius: 10)
+                                                        .blur(radius: 3)
+                                                        .foregroundStyle(.white)
+                                                        .opacity(0.1)
+                                                    VStack {
+                                                        Image(systemName: "lock")
+                                                            .font(Constants.Design.Fonts.BodyLargeFont)
+                                                        VStack {
+                                                            Text("Премиум-")
+                                                                .font(Constants.Design.Fonts.BodyMiniFont)
+                                                                .multilineTextAlignment(.center)
+                                                            Text("доступ")
+                                                                .font(Constants.Design.Fonts.BodyMiniFont)
+                                                                .multilineTextAlignment(.center)
+                                                        }
+                                                    }
+                                                    .foregroundStyle(.white)
+                                                }
                                             }
                                         }
                                     }
@@ -136,13 +165,6 @@ struct CustomAmountView: View {
                 } else {
                     normDrink = profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz
                 }
-                
-                isPremium = purchaseManager.hasPremium
-                if isPremium {
-                    nameDrink = nameDrinkPremium
-                    localizedNameDrink = localizedNameDrinkPremium
-                }
-                selectedImages = imageDrinkPremium
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden()
@@ -169,12 +191,6 @@ struct CustomAmountView: View {
     }
 }
 
-#Preview {
-    CustomAmountView(isShowingModal: .constant(false))
-        .modelContainer(PreviewContainer.previewContainer)
-        .environment(PurchaseManager())
-}
-
 extension CustomAmountView {
     private func sizeButton(for width: CGFloat) -> CGFloat {
         return width > 402 ? 80 : 70
@@ -186,27 +202,57 @@ extension CustomAmountView {
     
     private func drinkWater(amountDrink: Int) {
         let now = Date()
+        let todayID = now.yearMonthDay
+        
         DispatchQueue.main.async {
             profileViewModel.updateProfileDrinkData(profile: profile, lastNameDrink: selectedDrink, lastAmountDrink: amountDrink)
             dataDrinkingViewModel.updateDataDrinking(modelContext: modelContext, nameDrink: selectedDrink, amountDrink: amountDrink, dateDrink: now)
             dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: Int(Double(amountDrink) * (hydration[selectedDrink] ?? 1.0)), dateDrinkOfTheDay: now, percentDrinking: (Double(amountDrink) * (hydration[selectedDrink] ?? 1.0) / normDrink * 100))
             
-            let percentDrinkNew = (dataDrinkingOfTheDay.last?.percentDrinking ?? 0).rounded(.toNearestOrAwayFromZero)
+            let percentDrink: Double = dataDrinkingOfTheDay.first(where: { $0.dayID == todayID } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0
             let amountDrinkingOfTheDay = dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.amountDrinkOfTheDay ?? 0
             let lastNameDrink = profile[0].lastNameDrink
-            WidgetManager.sendDataToWidget(normDrink, amountDrinkingOfTheDay, percentDrinkNew, lastNameDrink, unit, isPremium)
+            WidgetManager.sendDataToWidget(normDrink, amountDrinkingOfTheDay, percentDrink, lastNameDrink, unit, purchaseManager.hasPremium)
             
             let dateLastDrink = Date().dateFormatForWidgetAndWatch
             let amountUnit = unit == 0 ? "250" : "8"
             let iPhoneAppContext = ["normDrink": String(Int(normDrink)),
                                     "amountDrink": String(amountDrinkingOfTheDay),
-                                    "percentDrink": String(Int(percentDrinkNew)),
+                                    "percentDrink": String(Int(percentDrink)),
                                     "amountUnit": amountUnit,
                                     "unit": unit,
                                     "dateLastDrink": dateLastDrink,
-                                    "isPremium": isPremium] as [String: Any]
+                                    "isPremium": purchaseManager.hasPremium] as [String: Any]
             PhoneSessionManager.shared.sendAppContextToWatch(iPhoneAppContext)
             PhoneSessionManager.shared.transferCurrentComplicationUserInfo(iPhoneAppContext)
+            
+            // Проверка на превышение нормы
+            if percentDrink >= 140 && !isNormExceeding {
+                isNormExceeding = true
+                isNormExceedingShowModal = true
+                userDefaultsManager.setValueForUserDefaults(true, "normExceeding")
+            }
+            
+            // Проверка на достижение нормы
+            let normDone = userDefaultsManager.getBoolValueForUserDefaults("normDone") ?? false
+            if percentDrink >= 100 && !normDone {
+                if let numberOfTheNorm = userDefaultsManager.getValueForUserDefaults("numberNorm") {
+                    userDefaultsManager.setValueForUserDefaults(numberOfTheNorm + 1, "numberNorm")
+                }
+                userDefaultsManager.setValueForUserDefaults(true, "normDone")
+                
+                let calendar = Calendar.current
+                let isRemindersEnabled = reminder[0].reminderEnabled
+                let interval = reminder[0].intervalReminder
+                let nextStartDay = calendar.date(byAdding: .day, value: 1, to: reminder[0].startTimeReminder)!
+                let nextEndDay = calendar.date(byAdding: .day, value: 1, to: reminder[0].finishTimeReminder)!
+                remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: nextStartDay)
+                remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: nextEndDay)
+                let remindersView = RemindersView(isRemindersEnabled: .constant(isRemindersEnabled))
+                remindersView.disableRemindersForToday(startDay: nextStartDay, endDay: nextEndDay, interval: interval)
+                
+                isNormDoneShowModal = true
+            }
             
             if userDefaultsManager.isAuthorizationHealthKit {
                 let amountOfTheHealthKit = Double(amountDrink) * (hydration[selectedDrink] ?? 1.0)
@@ -218,4 +264,10 @@ extension CustomAmountView {
             }
         }
     }
+}
+
+#Preview {
+    CustomAmountView(isShowingModal: .constant(false), isNormExceedingShowModal: .constant(false), isNormDoneShowModal: .constant(false))
+        .modelContainer(PreviewContainer.previewContainer)
+        .environment(PurchaseManager())
 }

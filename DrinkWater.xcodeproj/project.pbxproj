@@ -108,6 +108,7 @@
 		2CBDF4452CC199A500CB449B /* ReadingsGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBDF4442CC199A500CB449B /* ReadingsGoalView.swift */; };
 		2CC67D962CBBB21700A7FBE4 /* DataWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC67D952CBBB21100A7FBE4 /* DataWeight.swift */; };
 		2CC67D9A2CBC184E00A7FBE4 /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC67D992CBC184400A7FBE4 /* CustomKeyboard.swift */; };
+		2CD1E8692CDEAE9D001A7C33 /* PurchaseViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD1E8682CDEAE9D001A7C33 /* PurchaseViewWrapper.swift */; };
 		2CFC0D2D2C7C910200DBAF62 /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFC0D2C2C7C910200DBAF62 /* LaunchScreenView.swift */; };
 		2CFCE4C52C6E8F5500EA5393 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CFCE4C42C6E8F5500EA5393 /* Localizable.xcstrings */; };
 		2CFCE4C82C70A6DD00EA5393 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CFCE4C62C70A6C900EA5393 /* Localizable.xcstrings */; };
@@ -281,6 +282,7 @@
 		2CBDF4442CC199A500CB449B /* ReadingsGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadingsGoalView.swift; sourceTree = "<group>"; };
 		2CC67D952CBBB21100A7FBE4 /* DataWeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataWeight.swift; sourceTree = "<group>"; };
 		2CC67D992CBC184400A7FBE4 /* CustomKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyboard.swift; sourceTree = "<group>"; };
+		2CD1E8682CDEAE9D001A7C33 /* PurchaseViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseViewWrapper.swift; sourceTree = "<group>"; };
 		2CFC0D2C2C7C910200DBAF62 /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 		2CFCE4C42C6E8F5500EA5393 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2CFCE4C62C70A6C900EA5393 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -573,6 +575,7 @@
 				2CBB29C32C0F4A0300C8C2FA /* AchievementsView.swift */,
 				2C725E922C10F92D005359CB /* AchievementsModalView.swift */,
 				2C725E992C178539005359CB /* PurchaseView.swift */,
+				2CD1E8682CDEAE9D001A7C33 /* PurchaseViewWrapper.swift */,
 			);
 			path = DrinkView;
 			sourceTree = "<group>";
@@ -835,6 +838,7 @@
 				2C725EAA2C1A2AC9005359CB /* DateForDrinkWater.swift in Sources */,
 				2CC67D962CBBB21700A7FBE4 /* DataWeight.swift in Sources */,
 				2C725E9A2C178539005359CB /* PurchaseView.swift in Sources */,
+				2CD1E8692CDEAE9D001A7C33 /* PurchaseViewWrapper.swift in Sources */,
 				2CBB29C02C0F420A00C8C2FA /* SoundModalView.swift in Sources */,
 				2CBB29C42C0F4A0300C8C2FA /* AchievementsView.swift in Sources */,
 				2C725E932C10F92D005359CB /* AchievementsModalView.swift in Sources */,
@@ -910,7 +914,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch ComplicationsExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWaterWatch Complications/Info.plist";
@@ -922,7 +926,7 @@
 					"@executable_path/../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -941,7 +945,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch ComplicationsExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWaterWatch Complications/Info.plist";
@@ -953,7 +957,7 @@
 					"@executable_path/../../Frameworks",
 					"@executable_path/../../../../Frameworks",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp.watchkitextension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -972,7 +976,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = DrinkWaterWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWaterWidget Extension/Info.plist";
@@ -984,7 +988,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.DrinkWaterWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1005,7 +1009,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = DrinkWaterWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWaterWidget Extension/Info.plist";
@@ -1017,7 +1021,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.DrinkWaterWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -1038,7 +1042,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch Watch App/DrinkWaterWatch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWaterWatch Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
@@ -1051,7 +1055,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1070,7 +1074,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch Watch App/DrinkWaterWatch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWaterWatch Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
@@ -1083,7 +1087,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -1225,7 +1229,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWater/Supporting Files/DrinkWater.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWater/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
@@ -1244,7 +1248,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				OTHER_SWIFT_FLAGS = "-DTARGET_IS_MAIN_APP";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1265,7 +1269,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWater/Supporting Files/DrinkWater.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 0;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWater/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
@@ -1284,7 +1288,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 3.7;
+				MARKETING_VERSION = 3.8;
 				OTHER_SWIFT_FLAGS = "-DTARGET_IS_MAIN_APP";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexander.l.DrinkWater;
 				PRODUCT_NAME = "$(TARGET_NAME)";

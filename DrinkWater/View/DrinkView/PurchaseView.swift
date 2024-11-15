@@ -13,7 +13,11 @@ struct PurchaseView: View {
     private let purchaseTitle2 = Constants.Back.Purchase.purchaseTitle2
     
     @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
+    @Environment(\.presentationMode) private var presentationMode
     @Binding var isPurchaseViewModal: Bool
+    private var isPresentedInSheet: Bool {
+        return isPurchaseViewModal
+    }
     
     @State private var networkMonitor = NetworkMonitor()
     
@@ -102,13 +106,20 @@ struct PurchaseView: View {
             }
         }
     }
+}
+
+extension PurchaseView {
     
     private func joinPremium() {
         Task {
             do {
                 if try await purchaseManager.purchasePremium() {
                     withAnimation {
-                        isPurchaseViewModal = false
+                        if isPresentedInSheet {
+                            isPurchaseViewModal = false
+                        } else {
+                            presentationMode.wrappedValue.dismiss()
+                        }
                     }
                 }
             } catch {

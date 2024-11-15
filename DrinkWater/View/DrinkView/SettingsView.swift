@@ -48,6 +48,9 @@ struct SettingsView: View {
     @State private var isActivateAutoCalcSwitch = true
     @State private var isRemindersEnabled = false
     
+    @State private var isAnimationPremium = true
+    @State private var animationKey = UUID()
+    
     @State private var alertCloudMessage: LocalizedStringKey = ""
     
     @State private var isCloudExportAlert = false
@@ -72,9 +75,50 @@ struct SettingsView: View {
     let genderSegments: Array<LocalizedStringKey> = ["Женский", "Мужской"]
     let unitSegments: Array<LocalizedStringKey> = ["кг | мл", "фн | унц"]
     
+    let translations: [String: [String: String]] = [
+        "premiumText": [
+            "ru": "Премиум-доступ",
+            "en": "Premium Access",
+            "uk": "Premium Access",
+            "it": "Accesso Premium",
+            "es": "Acceso Premium"
+        ]
+    ]
+    
     var body: some View {
         NavigationStack {
             List {
+                if !purchaseManager.hasPremium {
+                    Section {
+                        NavigationLink {
+                            PurchaseViewWrapper(isPresented: .constant(nil))
+                        } label: {
+                            HStack(spacing: 0) {
+                                ForEach(Array(localizedText(for: "premiumText").enumerated()), id: \.offset) { index, letter in
+                                    Text(String(letter))
+                                        .font(Constants.Design.Fonts.BodyMainFont)
+                                        .foregroundStyle(.blue)
+                                        .hueRotation(.degrees(isAnimationPremium ? 220 : 0))
+                                        .opacity(isAnimationPremium ? 0 : 1)
+                                        .scaleEffect(isAnimationPremium ? 1.5 : 1, anchor: .bottom)
+                                        .animation(.easeInOut(duration: 0.5).delay(1).repeatForever(autoreverses: false).delay(Double(index) / 20), value: isAnimationPremium)
+                                }
+                            }
+                            .id(animationKey)
+                        }
+                    } header: {
+                        Text("Расширенные возможности")
+                            .textCase(.uppercase)
+                    }
+                    .listRowBackground(colorScheme == .dark ?  settingsListRowBackground : .clear)
+                    .onAppear {
+                        animationKey = UUID()
+                        isAnimationPremium = false
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                            isAnimationPremium = true
+                        }
+                    }
+                }
                 Section {
                     HStack {
                         Text("Вес")
@@ -83,9 +127,12 @@ struct SettingsView: View {
                         Button(action: {
                             isWeightShowingModal = true
                         }) {
-                            Text(profile[0].unit == 0 ? profile[0].weightKg.toStringKg : profile[0].weightPounds.toStringPounds)
+                            let weight = profile[0].unit == 0 ? profile[0].weightKg.toStringKg : profile[0].weightPounds.toStringPounds
+                            Text(weight)
                                 .bold()
                                 .foregroundStyle(.link)
+                                .contentTransition(.numericText())
+                                .animation(.default.speed(0.6), value: weight)
                         }
                         .sheet(isPresented: $isWeightShowingModal) {
                             let weight = profile[0].unit == 0 ? profile[0].weightKg : profile[0].weightPounds
@@ -93,7 +140,7 @@ struct SettingsView: View {
                             let parts = numberString.split(separator: ".")
                             let wholePart = Int(String(parts[0]))!
                             let fractionalPart = Int(String(parts[1]))!
-
+                            
                             WeightModalView(profile: profile, dataDrinkingOfTheDay: dataDrinkingOfTheDay, isWeightShowingModal: $isWeightShowingModal, selectedWeight: wholePart, selectedWeightFractional: fractionalPart, unitValue: selectedUnitSegment)
                                 .presentationDetents([.height(250)])
                         }
@@ -196,13 +243,19 @@ struct SettingsView: View {
                             }
                         }) {
                             if profile[0].unit == 0 {
-                                Text("\((profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl).toStringMilli)")
+                                let normMl = profile[0].autoCalc ? profile[0].autoNormMl : profile[0].customNormMl
+                                Text("\((normMl).toStringMilli)")
                                     .bold()
                                     .foregroundStyle(.link)
+                                    .contentTransition(.numericText())
+                                    .animation(.default.speed(0.6), value: normMl)
                             } else {
-                                Text("\((profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz).toStringOunces)")
+                                let normOz = profile[0].autoCalc ? profile[0].autoNormOz : profile[0].customNormOz
+                                Text("\((normOz).toStringOunces)")
                                     .bold()
                                     .foregroundStyle(.link)
+                                    .contentTransition(.numericText())
+                                    .animation(.default.speed(0.6), value: normOz)
                             }
                         }
                         .sheet(isPresented: $isNormShowingModal) {
@@ -241,11 +294,22 @@ struct SettingsView: View {
                 .listRowBackground(colorScheme == .dark ?  settingsListRowBackground : .clear)
                 Section {
                     HStack {
-                        Toggle(isOn: $isAuthorizationHealthKit) {
-                            Text("Здоровье")
-                                .font(Constants.Design.Fonts.BodyMediumFont)
+                        if !purchaseManager.hasPremium {
+                            HStack {
+                                Text("Здоровье")
+                                    .font(Constants.Design.Fonts.BodyMediumFont)
+                                Spacer()
+                                Text("Премиум-доступ")
+                                    .font(Constants.Design.Fonts.BodyMiniFont)
+                                Image(systemName: "lock")
+                            }
+                        } else {
+                            Toggle(isOn: $isAuthorizationHealthKit) {
+                                Text("Здоровье")
+                                    .font(Constants.Design.Fonts.BodyMediumFont)
+                            }
+                            .tint(healthPickerColor)
                         }
-                        .tint(healthPickerColor)
                     }
                 } header: {
                     Text("Подключение Apple Health")
@@ -272,62 +336,78 @@ struct SettingsView: View {
                     Text("Чтобы изменить разрешения для приложения 'Здоровье', пожалуйста предоставьте доступ: 'Настройки -> Здоровье -> Доступ к данным и устройства'.")
                 }
                 Section {
-                    Button("Экспорт в iCloud") {
-                        if purchaseManager.hasPremium {
-                            isCloudExportAlert = true
-                        } else {
-                            isPurchaseViewModal = true
+                    HStack {
+                        Button("Экспорт в iCloud") {
+                            if purchaseManager.hasPremium {
+                                isCloudExportAlert = true
+                            } else {
+                                isPurchaseViewModal = true
+                            }
+                        }
+                        .font(Constants.Design.Fonts.BodyMediumFont)
+                        .foregroundStyle(.link)
+                        .alert("Предупреждение", isPresented: $isCloudExportAlert) {
+                            Button("Да", role: .destructive) {
+                                isCloudExportAlert = false
+                                exportToCloud()
+                            }
+                            Button("Нет", role: .cancel) {
+                                isCloudExportAlert = false
+                            }
+                        } message: {
+                            Text("Сейчас будет запущен процесс экспорта данных в iCloud. Вы хотите продолжить?")
+                        }
+                        .alert("iCloud", isPresented: $isCloudExportedAlert, actions: {
+                            Button("OK", role: .cancel) {
+                                isCloudExportedAlert = false
+                            }
+                        }, message: {
+                            Text(alertCloudMessage)
+                        })
+                        Spacer()
+                        if !purchaseManager.hasPremium {
+                            Text("Премиум-доступ")
+                                .font(Constants.Design.Fonts.BodyMiniFont)
+                            Image(systemName: "lock")
                         }
                     }
-                    .font(Constants.Design.Fonts.BodyMediumFont)
-                    .foregroundStyle(.link)
-                    .alert("Предупреждение", isPresented: $isCloudExportAlert) {
-                        Button("Да", role: .destructive) {
-                            isCloudExportAlert = false
-                            exportToCloud()
+                    HStack {
+                        Button("Импорт из iCloud") {
+                            if purchaseManager.hasPremium {
+                                isCloudImportAlert = true
+                            } else {
+                                isPurchaseViewModal = true
+                            }
                         }
-                        Button("Нет", role: .cancel) {
-                            isCloudExportAlert = false
+                        .font(Constants.Design.Fonts.BodyMediumFont)
+                        .foregroundStyle(.link)
+                        .alert("Предупреждение", isPresented: $isCloudImportAlert) {
+                            Button("Да", role: .destructive) {
+                                isCloudImportAlert = false
+                                importFromCloud()
+                            }
+                            Button("Нет", role: .cancel) {
+                                isCloudImportAlert = false
+                            }
+                        } message: {
+                            VStack {
+                                Text("Сейчас будет запущен процесс импорта данных из iCloud. Убедитесь, что ранее вы сделали экспорт в iCloud. Иначе вы можете потерять не сохраненные данные. Вы хотите продолжить?")
+                            }
                         }
-                    } message: {
-                        Text("Сейчас будет запущен процесс экспорта данных в iCloud. Вы хотите продолжить?")
-                    }
-                    .alert("iCloud", isPresented: $isCloudExportedAlert, actions: {
-                        Button("OK", role: .cancel) {
-                            isCloudExportedAlert = false
-                        }
-                    }, message: {
-                        Text(alertCloudMessage)
-                    })
-                    Button("Импорт из iCloud") {
-                        if purchaseManager.hasPremium {
-                            isCloudImportAlert = true
-                        } else {
-                            isPurchaseViewModal = true
-                        }
-                    }
-                    .font(Constants.Design.Fonts.BodyMediumFont)
-                    .foregroundStyle(.link)
-                    .alert("Предупреждение", isPresented: $isCloudImportAlert) {
-                        Button("Да", role: .destructive) {
-                            isCloudImportAlert = false
-                            importFromCloud()
-                        }
-                        Button("Нет", role: .cancel) {
-                            isCloudImportAlert = false
-                        }
-                    } message: {
-                        VStack {
-                            Text("Сейчас будет запущен процесс импорта данных из iCloud. Убедитесь, что ранее вы сделали экспорт в iCloud. Иначе вы можете потерять не сохраненные данные. Вы хотите продолжить?")
+                        .alert("iCloud", isPresented: $isCloudImportedAlert, actions: {
+                            Button("OK", role: .cancel) {
+                                isCloudImportedAlert = false
+                            }
+                        }, message: {
+                            Text(alertCloudMessage)
+                        })
+                        Spacer()
+                        if !purchaseManager.hasPremium {
+                            Text("Премиум-доступ")
+                                .font(Constants.Design.Fonts.BodyMiniFont)
+                            Image(systemName: "lock")
                         }
                     }
-                    .alert("iCloud", isPresented: $isCloudImportedAlert, actions: {
-                        Button("OK", role: .cancel) {
-                            isCloudImportedAlert = false
-                        }
-                    }, message: {
-                        Text(alertCloudMessage)
-                    })
                 } header: {
                     Text("Синхронизация с ICloud")
                         .textCase(.uppercase)
@@ -389,7 +469,7 @@ struct SettingsView: View {
             }
         }
         .sheet(isPresented: $isPurchaseViewModal) {
-            PurchaseView(isPurchaseViewModal: $isPurchaseViewModal)
+            PurchaseViewWrapper(isPresented: $isPurchaseViewModal)
         }
         .overlay(content: {
             if isCloudExported || isCloudImported {
@@ -428,8 +508,10 @@ struct SettingsView: View {
         )
         .animation(.easeInOut, value: isCloudExported || isCloudImported)
     }
-    
-    func openAppStore() {
+}
+
+extension SettingsView {
+    private func openAppStore() {
         let rateAppURL = "itms-apps://itunes.apple.com/us/app/id1555483060?action=write-review"
         if let url = URL(string: rateAppURL), UIApplication.shared.canOpenURL(url) { UIApplication.shared.open(url) }
     }
@@ -529,6 +611,11 @@ struct SettingsView: View {
                 print(error)
             }
         }
+    }
+    
+    func localizedText(for key: String) -> String {
+        let currentLocale = Locale.current.language.languageCode?.identifier ?? "ru"
+        return translations[key]?[currentLocale] ?? translations[key]?["ru"] ?? key
     }
 }
 

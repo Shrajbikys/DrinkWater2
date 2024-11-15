@@ -15,7 +15,6 @@ struct IntervalModalView: View {
     @State private var remindersViewModel = RemindersViewModel()
     
     private let nameInterval: [String] = Constants.Back.Reminder.nameInterval
-    private let nameToTimeInterval: [String: TimeInterval] = Constants.Back.Reminder.nameToTimeInterval
     private let localizedNameInterval: [String: LocalizedStringKey] = Constants.Back.Reminder.localizedNameInterval
     
     var body: some View {
@@ -30,7 +29,6 @@ struct IntervalModalView: View {
             }
             .pickerStyle(.wheel)
             Button("Готово") {
-                remindersViewModel.updateReminders(reminder: reminder, intervalReminder: nameToTimeInterval[selectedInterval]!)
                 isIntervalShowingModal = false
             }
             .font(Constants.Design.Fonts.BodyMainFont)

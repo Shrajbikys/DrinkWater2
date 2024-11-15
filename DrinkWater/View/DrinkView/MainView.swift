@@ -17,13 +17,15 @@ struct MainView: View {
     @Query var profile: [Profile]
     @Query(sort: \DataDrinking.dateDrink, order: .forward) var dataDrinking: [DataDrinking]
     @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
+    @Query var reminder: [Reminder]
     
     @State private var healthKitManager = HealthKitManager()
     private let userDefaultsManager = UserDefaultsManager.shared
     
-    var profileViewModel = ProfileViewModel()
-    var dataDrinkingViewModel = DataDrinkingViewModel()
-    var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
+    @State private var profileViewModel = ProfileViewModel()
+    @State private var dataDrinkingViewModel = DataDrinkingViewModel()
+    @State private var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
+    @State private var remindersViewModel = RemindersViewModel()
     
     @State private var networkMonitor = NetworkMonitor()
     
@@ -35,13 +37,13 @@ struct MainView: View {
     
     @State private var stopNorm = 0
     @State private var isShowingModal = false
-    @State private var isAchievementShowingModal = false
-    @State private var showAchievementsModal = false
+    @State private var isAchievementShowModal = false
+    @State private var isNormDoneShowModal = false
     @State private var isShowingCancelButton = false
     @State private var isDrinkedPressed = false
     @State private var isPressedImpact = false
     @State private var isNormExceeding = false
-    @State private var isNormExceedingModal = false
+    @State private var isNormExceedingShowModal = false
     @State private var isAnimationAchievement = false
     @State private var isShowMainWidthView = false
     @State private var isAnimationMainWidth = false
@@ -142,7 +144,7 @@ struct MainView: View {
                 GeometryReader { geometry in
                     Button(action: {
                         if purchaseManager.hasPremium {
-                            isAchievementShowingModal = true
+                            isAchievementShowModal = true
                         } else {
                             isPurchaseViewModal = true
                         }
@@ -157,8 +159,8 @@ struct MainView: View {
                                 isAnimationAchievement = true
                             }
                     }
-                    .sheet(isPresented: $isAchievementShowingModal) {
-                        AchievementsView(isAchievementShowingModal: $isAchievementShowingModal)
+                    .sheet(isPresented: $isAchievementShowModal) {
+                        AchievementsView(isAchievementShowingModal: $isAchievementShowModal)
                     }
                     .position(x: geometry.size.width / 10, y: geometry.size.height / 2)
                 }
@@ -246,7 +248,7 @@ struct MainView: View {
                             .sensoryFeedback(.impact, trigger: isPressedImpact)
                             .scaleEffect(isDrinkedPressed ? 0.5 : 1.0)
                             .animation(.linear(duration: 0.2), value: isDrinkedPressed)
-                            .alert("Предупреждение", isPresented: $isNormExceedingModal) {
+                            .alert("Предупреждение", isPresented: $isNormExceedingShowModal) {
                                 Button(role: .cancel) {} label: {
                                     Text("OK")
                                 }
@@ -271,11 +273,11 @@ struct MainView: View {
             }
             .blur(radius: isShowingModal ? 10 : 0)
             .sheet(isPresented: $isShowingModal) {
-                SelectDrinkView(isShowingModal: $isShowingModal)
+                SelectDrinkView(isShowingModal: $isShowingModal, isNormExceedingShowModal: $isNormExceedingShowModal, isNormDoneShowModal: $isNormDoneShowModal)
                     .presentationDetents([.medium])
             }
             .sheet(isPresented: $isPurchaseViewModal) {
-                PurchaseView(isPurchaseViewModal: $isPurchaseViewModal)
+                PurchaseViewWrapper(isPresented: $isPurchaseViewModal)
             }
             .onChange(of: PhoneSessionManager.shared.idOperation, {
                 let drinkName = PhoneSessionManager.shared.nameDrink
@@ -316,22 +318,25 @@ struct MainView: View {
                 }
             }
             .animation(.easeInOut, value: isShowingModal)
-            .blur(radius: showAchievementsModal ? 10 : 0)
+            .blur(radius: isNormDoneShowModal ? 10 : 0)
             .overlay(content: {
-                if showAchievementsModal {
+                if isNormDoneShowModal {
                     Color.black.opacity(0.4)
                         .ignoresSafeArea()
                         .onTapGesture {
                             withAnimation {
-                                showAchievementsModal = false
+                                isNormDoneShowModal = false
                             }
                         }
-                    AchievementsModalView(showAchievementsModal: $showAchievementsModal, imageAchievement: "Winning", nameAchievementFirst: "Поздравляем!", nameAchievementSecond: "Вы достигли цели!")
+                    AchievementsModalView(showAchievementsModal: $isNormDoneShowModal, imageAchievement: "Winning", nameAchievementFirst: "Поздравляем!", nameAchievementSecond: "Вы достигли цели!")
                 }
             })
         }
         .navigationBarBackButtonHidden()
     }
+}
+
+extension MainView {
     
     private func sendDataToWidgetAndWatch(amountDrinkingOfTheDay: Int, percentDrink: Double) {
         let isPremium = purchaseManager.hasPremium
@@ -378,21 +383,31 @@ struct MainView: View {
             sendDataToWidgetAndWatch(amountDrinkingOfTheDay: amountDrinkingOfTheDay, percentDrink: percentDrink)
             
             // Проверка на превышение нормы
-            let percentDrinkNew: Double = dataDrinkingOfTheDay.first(where: { $0.dayID == todayID } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0
-            if percentDrinkNew >= 140 && !isNormExceeding {
+            if percentDrink >= 140 && !isNormExceeding {
                 isNormExceeding = true
-                isNormExceedingModal = true
+                isNormExceedingShowModal = true
                 userDefaultsManager.setValueForUserDefaults(true, "normExceeding")
             }
             
             // Проверка на достижение нормы
             let normDone = userDefaultsManager.getBoolValueForUserDefaults("normDone") ?? false
-            if percentDrinkNew >= 100 && !normDone {
+            if percentDrink >= 100 && !normDone {
                 if let numberOfTheNorm = userDefaultsManager.getValueForUserDefaults("numberNorm") {
                     userDefaultsManager.setValueForUserDefaults(numberOfTheNorm + 1, "numberNorm")
                 }
                 userDefaultsManager.setValueForUserDefaults(true, "normDone")
-                showAchievementsModal = true
+                
+                let calendar = Calendar.current
+                let isRemindersEnabled = reminder[0].reminderEnabled
+                let interval = reminder[0].intervalReminder
+                let nextStartDay = calendar.date(byAdding: .day, value: 1, to: reminder[0].startTimeReminder)!
+                let nextEndDay = calendar.date(byAdding: .day, value: 1, to: reminder[0].finishTimeReminder)!
+                remindersViewModel.updateReminders(reminder: reminder, startTimeReminder: nextStartDay)
+                remindersViewModel.updateReminders(reminder: reminder, finishTimeReminder: nextEndDay)
+                let remindersView = RemindersView(isRemindersEnabled: .constant(isRemindersEnabled))
+                remindersView.disableRemindersForToday(startDay: nextStartDay, endDay: nextEndDay, interval: interval)
+                
+                isNormDoneShowModal = true
             }
         }
     }
