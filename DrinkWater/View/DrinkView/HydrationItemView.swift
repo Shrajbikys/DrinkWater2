@@ -48,5 +48,5 @@ struct HydrationItemView: View {
 }
 
 #Preview {
-    HydrationItemView(nameDrink: "Water", imageDrink: "WaterSD", hydration: 1.0)
+    HydrationItemView(nameDrink: "Water", imageDrink: "Water", hydration: 1.0)
 }

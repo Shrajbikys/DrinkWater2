@@ -43,12 +43,15 @@
 		2C08692C2C5008E600FFC519 /* SheetNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869272C5008E600FFC519 /* SheetNavigator.swift */; };
 		2C0869372C5590AE00FFC519 /* DrinkWaterProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C0869352C5590A500FFC519 /* DrinkWaterProvider.swift */; };
 		2C0869392C5595DC00FFC519 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C6CB4662C31C867004E4FA6 /* UserDefaultsManager.swift */; };
-		2C1ADC9B2C724BF7004D9203 /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2C1ADC9A2C724BF7004D9203 /* AppMetricaCore */; };
-		2C1ADC9D2C724BF7004D9203 /* AppMetricaCrashes in Frameworks */ = {isa = PBXBuildFile; productRef = 2C1ADC9C2C724BF7004D9203 /* AppMetricaCrashes */; };
 		2C3AB4062C5975E4002A7DDD /* ComplicationsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3AB4052C5975E4002A7DDD /* ComplicationsProvider.swift */; };
 		2C3AB4092C5978B4002A7DDD /* ComplicationsEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3AB4082C5978B4002A7DDD /* ComplicationsEntry.swift */; };
 		2C3E585A2C66542E00A92A5C /* PreviewContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3E58592C66542E00A92A5C /* PreviewContainer.swift */; };
 		2C3F825B2CB9BF2200C7D26B /* HistoryWeightItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C3F825A2CB9BF2200C7D26B /* HistoryWeightItemView.swift */; };
+		2C43114C2CEBDF83003C9B52 /* Drinks_ru.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C43114A2CEBDF83003C9B52 /* Drinks_ru.json */; };
+		2C43114D2CEBDF83003C9B52 /* Drinks_it.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C4311492CEBDF83003C9B52 /* Drinks_it.json */; };
+		2C43114E2CEBDF83003C9B52 /* Drinks_en.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C4311472CEBDF83003C9B52 /* Drinks_en.json */; };
+		2C43114F2CEBDF83003C9B52 /* Drinks_es.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C4311482CEBDF83003C9B52 /* Drinks_es.json */; };
+		2C4311502CEBDF83003C9B52 /* Drinks_uk.json in Resources */ = {isa = PBXBuildFile; fileRef = 2C43114B2CEBDF83003C9B52 /* Drinks_uk.json */; };
 		2C47C3452C395A5B00692E1D /* CloudKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C47C3442C395A5B00692E1D /* CloudKitManager.swift */; };
 		2C55567F2CD8E6D200F441E1 /* BodyMassIndexView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C55567E2CD8E6D200F441E1 /* BodyMassIndexView.swift */; };
 		2C5556812CD928D800F441E1 /* PickerHeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5556802CD928D800F441E1 /* PickerHeightView.swift */; };
@@ -109,6 +112,9 @@
 		2CC67D962CBBB21700A7FBE4 /* DataWeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC67D952CBBB21100A7FBE4 /* DataWeight.swift */; };
 		2CC67D9A2CBC184E00A7FBE4 /* CustomKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC67D992CBC184400A7FBE4 /* CustomKeyboard.swift */; };
 		2CD1E8692CDEAE9D001A7C33 /* PurchaseViewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD1E8682CDEAE9D001A7C33 /* PurchaseViewWrapper.swift */; };
+		2CD1E86C2CE7DF60001A7C33 /* AppMetricaCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2CD1E86B2CE7DF60001A7C33 /* AppMetricaCore */; };
+		2CD1E86E2CE7DF60001A7C33 /* AppMetricaCrashes in Frameworks */ = {isa = PBXBuildFile; productRef = 2CD1E86D2CE7DF60001A7C33 /* AppMetricaCrashes */; };
+		2CD1E8742CEB7E21001A7C33 /* DrinkDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD1E8732CEB7E14001A7C33 /* DrinkDataProvider.swift */; };
 		2CFC0D2D2C7C910200DBAF62 /* LaunchScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CFC0D2C2C7C910200DBAF62 /* LaunchScreenView.swift */; };
 		2CFCE4C52C6E8F5500EA5393 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CFCE4C42C6E8F5500EA5393 /* Localizable.xcstrings */; };
 		2CFCE4C82C70A6DD00EA5393 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 2CFCE4C62C70A6C900EA5393 /* Localizable.xcstrings */; };
@@ -221,6 +227,11 @@
 		2C3AB4082C5978B4002A7DDD /* ComplicationsEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationsEntry.swift; sourceTree = "<group>"; };
 		2C3E58592C66542E00A92A5C /* PreviewContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewContainer.swift; sourceTree = "<group>"; };
 		2C3F825A2CB9BF2200C7D26B /* HistoryWeightItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryWeightItemView.swift; sourceTree = "<group>"; };
+		2C4311472CEBDF83003C9B52 /* Drinks_en.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Drinks_en.json; sourceTree = "<group>"; };
+		2C4311482CEBDF83003C9B52 /* Drinks_es.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Drinks_es.json; sourceTree = "<group>"; };
+		2C4311492CEBDF83003C9B52 /* Drinks_it.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Drinks_it.json; sourceTree = "<group>"; };
+		2C43114A2CEBDF83003C9B52 /* Drinks_ru.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Drinks_ru.json; sourceTree = "<group>"; };
+		2C43114B2CEBDF83003C9B52 /* Drinks_uk.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Drinks_uk.json; sourceTree = "<group>"; };
 		2C47C33F2C373EA100692E1D /* DrinkWater.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = DrinkWater.entitlements; sourceTree = "<group>"; };
 		2C47C3442C395A5B00692E1D /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
 		2C55567E2CD8E6D200F441E1 /* BodyMassIndexView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BodyMassIndexView.swift; sourceTree = "<group>"; };
@@ -283,6 +294,7 @@
 		2CC67D952CBBB21100A7FBE4 /* DataWeight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataWeight.swift; sourceTree = "<group>"; };
 		2CC67D992CBC184400A7FBE4 /* CustomKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyboard.swift; sourceTree = "<group>"; };
 		2CD1E8682CDEAE9D001A7C33 /* PurchaseViewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseViewWrapper.swift; sourceTree = "<group>"; };
+		2CD1E8732CEB7E14001A7C33 /* DrinkDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrinkDataProvider.swift; sourceTree = "<group>"; };
 		2CFC0D2C2C7C910200DBAF62 /* LaunchScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenView.swift; sourceTree = "<group>"; };
 		2CFCE4C42C6E8F5500EA5393 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		2CFCE4C62C70A6C900EA5393 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -319,9 +331,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C1ADC9D2C724BF7004D9203 /* AppMetricaCrashes in Frameworks */,
+				2CD1E86E2CE7DF60001A7C33 /* AppMetricaCrashes in Frameworks */,
 				2C0200032C4D716A00F8BD73 /* StoreKit.framework in Frameworks */,
-				2C1ADC9B2C724BF7004D9203 /* AppMetricaCore in Frameworks */,
+				2CD1E86C2CE7DF60001A7C33 /* AppMetricaCore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -480,6 +492,7 @@
 		2C6CB4652C31C848004E4FA6 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				2CD1E8732CEB7E14001A7C33 /* DrinkDataProvider.swift */,
 				2C6CB46C2C349F3C004E4FA6 /* HealthKitManager.swift */,
 				2C6CB4662C31C867004E4FA6 /* UserDefaultsManager.swift */,
 				2C6CB4682C349D47004E4FA6 /* MailComposeViewController.swift */,
@@ -489,6 +502,7 @@
 				2C9B91812C4E6A0F00947007 /* WidgetManager.swift */,
 				2C9B91B02C4FA20E00947007 /* PhoneSessionManager.swift */,
 				2C6147792CCABC6000FB375E /* NetworkMonitor.swift */,
+				2CD1E8682CDEAE9D001A7C33 /* PurchaseViewWrapper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -548,6 +562,11 @@
 		2CA3CC272C443947003BC364 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				2C4311472CEBDF83003C9B52 /* Drinks_en.json */,
+				2C4311482CEBDF83003C9B52 /* Drinks_es.json */,
+				2C4311492CEBDF83003C9B52 /* Drinks_it.json */,
+				2C43114A2CEBDF83003C9B52 /* Drinks_ru.json */,
+				2C43114B2CEBDF83003C9B52 /* Drinks_uk.json */,
 				2C02FFE02C47DCF600F8BD73 /* ReminderSounds */,
 			);
 			path = Resources;
@@ -575,7 +594,6 @@
 				2CBB29C32C0F4A0300C8C2FA /* AchievementsView.swift */,
 				2C725E922C10F92D005359CB /* AchievementsModalView.swift */,
 				2C725E992C178539005359CB /* PurchaseView.swift */,
-				2CD1E8682CDEAE9D001A7C33 /* PurchaseViewWrapper.swift */,
 			);
 			path = DrinkView;
 			sourceTree = "<group>";
@@ -670,8 +688,8 @@
 			);
 			name = DrinkWater;
 			packageProductDependencies = (
-				2C1ADC9A2C724BF7004D9203 /* AppMetricaCore */,
-				2C1ADC9C2C724BF7004D9203 /* AppMetricaCrashes */,
+				2CD1E86B2CE7DF60001A7C33 /* AppMetricaCore */,
+				2CD1E86D2CE7DF60001A7C33 /* AppMetricaCrashes */,
 			);
 			productName = DrinkWater;
 			productReference = 2C5EFC5C2C07D6B4004B1AE0 /* DrinkWater.app */;
@@ -715,7 +733,7 @@
 			);
 			mainGroup = 2C5EFC532C07D6B4004B1AE0;
 			packageReferences = (
-				2C1ADC992C724BF7004D9203 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */,
+				2CD1E86A2CE7DF60001A7C33 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */,
 			);
 			productRefGroup = 2C5EFC5D2C07D6B4004B1AE0 /* Products */;
 			projectDirPath = "";
@@ -763,6 +781,11 @@
 			files = (
 				2C5EFC692C07D6B6004B1AE0 /* Preview Assets.xcassets in Resources */,
 				2CA3CC312C44396A003BC364 /* Sound-5.aiff in Resources */,
+				2C43114C2CEBDF83003C9B52 /* Drinks_ru.json in Resources */,
+				2C43114D2CEBDF83003C9B52 /* Drinks_it.json in Resources */,
+				2C43114E2CEBDF83003C9B52 /* Drinks_en.json in Resources */,
+				2C43114F2CEBDF83003C9B52 /* Drinks_es.json in Resources */,
+				2C4311502CEBDF83003C9B52 /* Drinks_uk.json in Resources */,
 				2CA3CC2E2C44396A003BC364 /* Sound-3.aiff in Resources */,
 				2CA3CC322C44396A003BC364 /* Sound-6.aiff in Resources */,
 				2CA3CC302C44396A003BC364 /* Sound-2.aiff in Resources */,
@@ -848,6 +871,7 @@
 				2C9B91822C4E6A0F00947007 /* WidgetManager.swift in Sources */,
 				2C9B91842C4E800200947007 /* AppIntent.swift in Sources */,
 				2C3F825B2CB9BF2200C7D26B /* HistoryWeightItemView.swift in Sources */,
+				2CD1E8742CEB7E21001A7C33 /* DrinkDataProvider.swift in Sources */,
 				2C5EFC7A2C07D732004B1AE0 /* MainView.swift in Sources */,
 				2CA3CC352C445104003BC364 /* PurchaseManager.swift in Sources */,
 				2C725EA82C1A2A5D005359CB /* Calender+Dates.swift in Sources */,
@@ -914,7 +938,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch ComplicationsExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWaterWatch Complications/Info.plist";
@@ -945,7 +969,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch ComplicationsExtension.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWaterWatch Complications/Info.plist";
@@ -976,7 +1000,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = DrinkWaterWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWaterWidget Extension/Info.plist";
@@ -1009,7 +1033,7 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = DrinkWaterWidgetExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DrinkWaterWidget Extension/Info.plist";
@@ -1042,7 +1066,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch Watch App/DrinkWaterWatch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWaterWatch Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
@@ -1074,7 +1098,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWaterWatch Watch App/DrinkWaterWatch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWaterWatch Watch App/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
@@ -1229,7 +1253,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWater/Supporting Files/DrinkWater.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWater/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
@@ -1269,7 +1293,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "DrinkWater/Supporting Files/DrinkWater.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 0;
+				COPY_PHASE_STRIP = YES;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"DrinkWater/Preview Content\"";
 				DEVELOPMENT_TEAM = U3ZYMWGFAG;
 				ENABLE_PREVIEWS = YES;
@@ -1353,25 +1378,25 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		2C1ADC992C724BF7004D9203 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */ = {
+		2CD1E86A2CE7DF60001A7C33 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/appmetrica/appmetrica-sdk-ios";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.7.0;
+				minimumVersion = 5.8.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2C1ADC9A2C724BF7004D9203 /* AppMetricaCore */ = {
+		2CD1E86B2CE7DF60001A7C33 /* AppMetricaCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2C1ADC992C724BF7004D9203 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			package = 2CD1E86A2CE7DF60001A7C33 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
 			productName = AppMetricaCore;
 		};
-		2C1ADC9C2C724BF7004D9203 /* AppMetricaCrashes */ = {
+		2CD1E86D2CE7DF60001A7C33 /* AppMetricaCrashes */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 2C1ADC992C724BF7004D9203 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
+			package = 2CD1E86A2CE7DF60001A7C33 /* XCRemoteSwiftPackageReference "appmetrica-sdk-ios" */;
 			productName = AppMetricaCrashes;
 		};
 /* End XCSwiftPackageProductDependency section */

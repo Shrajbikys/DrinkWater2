@@ -9,13 +9,13 @@ import SwiftUI
 import AppMetricaCore
 
 struct HydrationView: View {
-    let hydration: [String: Double] = Constants.Back.Drink.hydration
+    @EnvironmentObject var drinkProvider: DrinkDataProvider
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                ForEach(hydration.sorted(by: <), id: \.key) { key, value in
-                    HydrationItemView(nameDrink: key, imageDrink: "\(key)SD" , hydration: value)
+                ForEach(drinkProvider.drinks.sorted(by: {$0.name < $1.name})) { drink in
+                    HydrationItemView(nameDrink: drink.name, imageDrink: drink.key , hydration: drink.hydration)
                 }
             }
         }
@@ -26,4 +26,5 @@ struct HydrationView: View {
 
 #Preview {
     HydrationView()
+        .environmentObject(DrinkDataProvider())
 }

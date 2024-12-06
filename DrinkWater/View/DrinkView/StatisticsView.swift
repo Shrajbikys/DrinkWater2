@@ -15,6 +15,7 @@ struct StatisticsView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
+    @EnvironmentObject var drinkProvider: DrinkDataProvider
     
     @Query var profile: [Profile]
     @Query(sort: \DataDrinking.dateDrink, order: .forward) private var dataDrinking: [DataDrinking]
@@ -41,7 +42,6 @@ struct StatisticsView: View {
     private let backgroundInternalCircleColor: Color = Color(#colorLiteral(red: 0.933318913, green: 0.9332848787, blue: 0.9375355244, alpha: 1))
     
     @State private var normDrink: Double = 2000
-    let hydration: [String: Double] = Constants.Back.Drink.hydration
     
     let segments: Array<LocalizedStringKey> = ["Неделя", "Месяц"]
     
@@ -224,7 +224,7 @@ struct StatisticsView: View {
                         List {
                             ForEach(dataDrinking) { itemDataDrinking in
                                 if itemDataDrinking.dateDrink.yearMonthDay == selectedDate.yearMonthDay {
-                                    HistoryItemView(dataDrinking: itemDataDrinking, hydration: hydration[itemDataDrinking.nameDrink] ?? 1.0, unit: profile[0].unit)
+                                    HistoryItemView(dataDrinking: itemDataDrinking, hydration: drinkProvider.hydration(forKey: itemDataDrinking.nameDrink) ?? 1.0, unit: profile[0].unit)
                                 }
                             }
                             .onDelete(perform: { indexSet in
@@ -320,8 +320,8 @@ struct StatisticsView: View {
                 DispatchQueue.main.async {
                     let dataDrinkingItem = dataDrinking[offset]
                     let dataDrinkingOfTheDayItem = dataDrinkingOfTheDay.first(where: { $0.dayID == dataDrinkingItem.dateDrink.yearMonthDay } )
-                    let amountDrinkOfTheDay = Int(Double(dataDrinkingItem.amountDrink) * (hydration[dataDrinkingItem.nameDrink] ?? 1.0))
-                    let percentDrinking = (Double(dataDrinkingItem.amountDrink) * (hydration[dataDrinkingItem.nameDrink] ?? 1.0)) / normDrink * 100
+                    let amountDrinkOfTheDay = Int(Double(dataDrinkingItem.amountDrink) * (drinkProvider.hydration(forKey: dataDrinkingItem.nameDrink) ?? 1.0))
+                    let percentDrinking = (Double(dataDrinkingItem.amountDrink) * (drinkProvider.hydration(forKey: dataDrinkingItem.nameDrink) ?? 1.0)) / normDrink * 100
                     dataDrinkingOfTheDayItem?.amountDrinkOfTheDay -= amountDrinkOfTheDay
                     dataDrinkingOfTheDayItem?.percentDrinking -= percentDrinking
                     
@@ -342,4 +342,5 @@ struct StatisticsView: View {
     StatisticsView()
         .modelContainer(PreviewContainer.previewContainer)
         .environment(PurchaseManager())
+        .environmentObject(DrinkDataProvider())
 }

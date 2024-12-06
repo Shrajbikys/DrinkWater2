@@ -5,12 +5,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "Wine@2x.png",
+      "filename" : "WineSD@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Wine@3x.png",
+      "filename" : "WineSD@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

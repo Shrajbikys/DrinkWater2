@@ -1,0 +1,137 @@
+[
+    {
+        "key": "Water",
+        "name": "Вода",
+        "hydration": 1.0
+    },
+    {
+        "key": "Coffee",
+        "name": "Кофе",
+        "hydration": 0.7
+    },
+    {
+        "key": "Tea",
+        "name": "Чай",
+        "hydration": 0.8
+    },
+    {
+        "key": "Milk",
+        "name": "Молоко",
+        "hydration": 1.1
+    },
+    {
+        "key": "Juice",
+        "name": "Сок",
+        "hydration": 0.9
+    },
+    {
+        "key": "Soda",
+        "name": "Содовая",
+        "hydration": 0.7
+    },
+    {
+        "key": "Cocoa",
+        "name": "Какао",
+        "hydration": 0.8
+    },
+    {
+        "key": "Smoothie",
+        "name": "Смузи",
+        "hydration": 0.9
+    },
+    {
+        "key": "Yogurt",
+        "name": "Йогурт",
+        "hydration": 0.5
+    },
+    {
+        "key": "Beer",
+        "name": "Пиво",
+        "hydration": 0.7
+    },
+    {
+        "key": "NonalcoholicBeer",
+        "name": "Безалк. пиво",
+        "hydration": 0.9
+    },
+    {
+        "key": "Wine",
+        "name": "Вино",
+        "hydration": 0.5
+    },
+    {
+        "key": "Lemonade",
+        "name": "Лимонад",
+        "hydration": 0.8
+    },
+    {
+        "key": "Chicory",
+        "name": "Цикорий",
+        "hydration": 0.85
+    },
+    {
+        "key": "AmericanoCoffee",
+        "name": "Американо",
+        "hydration": 0.7
+    },
+    {
+        "key": "Espresso",
+        "name": "Эспрессо",
+        "hydration": 0.6
+    },
+    {
+        "key": "Kefir",
+        "name": "Кефир",
+        "hydration": 0.95
+    },
+    {
+        "key": "TomatoJuice",
+        "name": "Томатный сок",
+        "hydration": 0.85
+    },
+    {
+        "key": "HotChocolate",
+        "name": "Гор. шоколад",
+        "hydration": 0.75
+    },
+    {
+        "key": "Kvass",
+        "name": "Квас",
+        "hydration": 0.8
+    },
+    {
+        "key": "LatteCoffee",
+        "name": "Латте",
+        "hydration": 0.75
+    },
+    {
+        "key": "Cappuccino",
+        "name": "Капучино",
+        "hydration": 0.75
+    },
+    {
+        "key": "GinTonic",
+        "name": "Джин-тоник",
+        "hydration": 0.5
+    },
+    {
+        "key": "WhiskeyCola",
+        "name": "Виски с колой",
+        "hydration": 0.3
+    },
+    {
+        "key": "Cola",
+        "name": "Кола",
+        "hydration": 0.6
+    },
+    {
+        "key": "EnergyDrink",
+        "name": "Энергетик",
+        "hydration": 0.6
+    },
+    {
+        "key": "AlternativeMilk",
+        "name": "Альт. молоко",
+        "hydration": 0.9
+    }
+]

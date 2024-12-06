@@ -11,7 +11,6 @@ import SwiftData
 struct HistoryWeightItemView: View {
     @Query(sort: \DataWeight.date, order: .forward) var dataWeight: [DataWeight]
     
-    private let localizedNameDrinkHistory: [String: LocalizedStringKey] = Constants.Back.Drink.localizedNameDrinkHistory
     private let backgroundDateDrinkTimeColor: Color = Color(#colorLiteral(red: 0.3333333433, green: 0.3333333433, blue: 0.3333333433, alpha: 1))
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     

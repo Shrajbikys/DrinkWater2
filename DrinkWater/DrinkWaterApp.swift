@@ -11,6 +11,7 @@ import AppMetricaCore
 
 @main
 struct DrinkWaterApp: App {
+    @StateObject private var drinkProvider = DrinkDataProvider()
     @State private var networkMonitor = NetworkMonitor()
     @State private var purchases: PurchaseManager = .init()
     private let appMetricaConfiguration = AppMetricaConfiguration(apiKey: "57af5786-bb55-453d-b5c3-13b63b49fc6b")
@@ -48,6 +49,7 @@ struct DrinkWaterApp: App {
         }
         .modelContainer(sharedModelContainer)
         .environment(purchases)
+        .environmentObject(drinkProvider)
     }
 }
 

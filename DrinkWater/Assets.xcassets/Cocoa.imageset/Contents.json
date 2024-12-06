@@ -5,12 +5,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "Cocoa@2x.png",
+      "filename" : "CocoaSD@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Cocoa@3x.png",
+      "filename" : "CocoaSD@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

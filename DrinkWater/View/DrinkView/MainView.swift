@@ -13,6 +13,7 @@ import AppMetricaCore
 struct MainView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
+    @EnvironmentObject var drinkProvider: DrinkDataProvider
     
     @Query var profile: [Profile]
     @Query(sort: \DataDrinking.dateDrink, order: .forward) var dataDrinking: [DataDrinking]
@@ -55,8 +56,6 @@ struct MainView: View {
     private let backgroundDrinkHeaderValueColor: Color = Color(#colorLiteral(red: 0.4352941176, green: 0.6196078431, blue: 0.831372549, alpha: 0.6))
     
     @State private var isPurchaseViewModal = false
-    
-    let hydration: [String: Double] = Constants.Back.Drink.hydration
     
     enum DrinkAction {
         case drink
@@ -224,7 +223,7 @@ struct MainView: View {
                             Button(action: {
                                 isShowingModal = true
                             }) {
-                                Image("\(profile[0].lastNameDrink)Main")
+                                Image(profile[0].lastNameDrink)
                                     .resizable()
                                     .aspectRatio(contentMode: .fit)
                                     .frame(width: 60, height: 60)
@@ -443,13 +442,13 @@ extension MainView {
             lastNameDrink = nameDrink
         }
         
-        var amountDrinkOfTheDay = Int(Double(lastAmountDrink) * (hydration[lastNameDrink] ?? 1.0))
+        var amountDrinkOfTheDay = Int(Double(lastAmountDrink) * (drinkProvider.hydration(forKey: lastNameDrink) ?? 1.0))
         if let amountDrink = amountDrink {
             lastAmountDrink = amountDrink
-            amountDrinkOfTheDay = Int(Double(amountDrink) * (hydration[lastNameDrink] ?? 1.0))
+            amountDrinkOfTheDay = Int(Double(amountDrink) * (drinkProvider.hydration(forKey: lastNameDrink) ?? 1.0))
         }
         
-        let percentDrinking = (Double(lastAmountDrink) * (hydration[lastNameDrink] ?? 1.0)) / normDrink * 100
+        let percentDrinking = (Double(lastAmountDrink) * (drinkProvider.hydration(forKey: lastNameDrink) ?? 1.0)) / normDrink * 100
         let lastNameDrinkProfile = dataDrinking.count > 1 ? dataDrinking[dataDrinking.count - 2].nameDrink : dataDrinking.last?.nameDrink ?? "Water"
         let lastAmountDrinkProfile = dataDrinking.count > 1 ? dataDrinking[dataDrinking.count - 2].amountDrink : dataDrinking.last?.amountDrink ?? 100
         
@@ -470,4 +469,5 @@ extension MainView {
     MainView()
         .modelContainer(PreviewContainer.previewContainer)
         .environment(PurchaseManager())
+        .environmentObject(DrinkDataProvider())
 }

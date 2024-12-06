@@ -27,15 +27,6 @@ struct Constants {
     }
     
     struct Back {
-        struct Drink {
-            static let nameDrink: [String] = ["Water", "Coffee", "Tea", "Milk", "Juice", "Soda", "Cocoa", "Smoothie", "Yogurt", "Beer", "NonalcoholicBeer", "Wine"]
-            static let localizedNameDrink: [LocalizedStringKey] = ["Water", "Coffee", "Tea", "Milk", "Juice", "Soda", "Cocoa", "Smoothie", "Yogurt", "Beer", "NonalcoholicBeer", "Wine"]
-            static let imageDrink: [String] = ["WaterSD", "CoffeeSD", "TeaSD", "MilkSD", "JuiceSD", "SodaSD", "CocoaSD", "SmoothieSD", "YogurtSD", "BeerSD", "NonalcoholicBeerSD", "WineSD"]            
-            static let localizedNameDrinkHistory: [String: LocalizedStringKey] = ["Water": "Water", "Coffee": "Coffee", "Tea": "Tea", "Milk": "Milk", "Juice": "Juice", "Soda": "Soda", "Cocoa": "Cocoa", "Smoothie": "Smoothie", "Yogurt": "Yogurt", "Beer": "Beer", "NonalcoholicBeer": "NonalcoholicBeer", "Wine": "Wine"]
-
-            static let hydration: [String: Double] = ["Water": 1.0, "Coffee": 0.7, "Tea": 0.8, "Milk": 1.1, "Juice": 0.9, "Soda": 0.7, "Cocoa": 0.8, "Smoothie": 0.9, "Yogurt": 0.5, "Beer": 0.7, "NonalcoholicBeer": 0.9, "Wine": 0.5]
-        }
-        
         struct Reminder {
             static let nameSound = ["Без звука", "По умолчанию", "Звук 1", "Звук 2", "Звук 3", "Звук 4", "Звук 5", "Звук 6"]
             static let localizedNameSound: [String: LocalizedStringKey] = ["Без звука": "Без звука", "По умолчанию": "По умолчанию", "Звук 1": "Звук 1", "Звук 2": "Звук 2", "Звук 3": "Звук 3", "Звук 4": "Звук 4", "Звук 5": "Звук 5", "Звук 6": "Звук 6"]
@@ -74,5 +65,18 @@ struct Constants {
                 case pounds
             }
         }
+    }
+}
+
+struct Drinks: Codable, Identifiable {
+    let id = UUID()
+    let key: String
+    let name: String
+    let hydration: Double
+
+    enum CodingKeys: String, CodingKey {
+        case key
+        case name
+        case hydration = "hydration"
     }
 }

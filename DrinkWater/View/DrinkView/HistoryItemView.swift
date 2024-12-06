@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct HistoryItemView: View {
+    @EnvironmentObject var drinkProvider: DrinkDataProvider
+    
     @State var dataDrinking: DataDrinking
     @State var hydration: Double
     @State var unit: Int
     
-    private let localizedNameDrinkHistory: [String: LocalizedStringKey] = Constants.Back.Drink.localizedNameDrinkHistory
     private let backgroundDateDrinkTimeColor: Color = Color(#colorLiteral(red: 0.3333333433, green: 0.3333333433, blue: 0.3333333433, alpha: 1))
     
     var body: some View {
@@ -28,7 +29,7 @@ struct HistoryItemView: View {
                         .frame(height: 50)
                 }.padding(.leading, 5)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(localizedNameDrinkHistory[dataDrinking.nameDrink]!)
+                    Text(drinkProvider.localizedName(forKey: dataDrinking.nameDrink)!)
                         .lineLimit(1)
                         .font(Constants.Design.Fonts.BodyMediumFont)
                         .foregroundStyle(.white)
@@ -55,4 +56,5 @@ struct HistoryItemView: View {
 
 #Preview {
     HistoryItemView(dataDrinking: DataDrinking(nameDrink: "Water", amountDrink: 250, dateDrink: Date()), hydration: 1.0, unit: 0)
+        .environmentObject(DrinkDataProvider())
 }

@@ -5,12 +5,12 @@
       "scale" : "1x"
     },
     {
-      "filename" : "Juice@2x.png",
+      "filename" : "JuiceSD@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Juice@3x.png",
+      "filename" : "JuiceSD@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

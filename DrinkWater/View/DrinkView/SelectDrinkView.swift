@@ -14,6 +14,7 @@ struct SelectDrinkView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
+    @EnvironmentObject var drinkProvider: DrinkDataProvider
     
     @Binding var isShowingModal: Bool
     
@@ -31,12 +32,9 @@ struct SelectDrinkView: View {
     @State var dataDrinkingOfTheDayViewModel = DataDrinkingOfTheDayViewModel()
     @State private var remindersViewModel = RemindersViewModel()
     
-    @State private var nameDrink: [String] = Constants.Back.Drink.nameDrink
-    @State private var localizedNameDrink: [LocalizedStringKey] = Constants.Back.Drink.localizedNameDrink
-    
     private let nameButtonCustomAmountMl: [Double] = [250, 300, 350, 500]
     private let nameButtonCustomAmountOz: [Double] = [8, 10, 11, 16]
-    private let hydration: [String: Double] = Constants.Back.Drink.hydration
+
     @State private var normDrink: Double = 2000
     @State private var unit: Int = 0
     
@@ -106,22 +104,22 @@ struct SelectDrinkView: View {
                             .frame(width: geometry.size.width, height: 85)
                             ScrollView {
                                 LazyVStack(spacing: 15) {
-                                    ForEach(0..<nameDrink.count, id: \.self) { index in
+                                    ForEach(drinkProvider.drinks.indices, id: \.self) { index in
                                         if index % 3 == 0 {
                                             HStack(spacing: 25) {
-                                                ForEach(index..<min(index + 3, nameDrink.count), id: \.self) { innerIndex in
+                                                ForEach(index..<min(index + 3, drinkProvider.drinks.count), id: \.self) { innerIndex in
                                                     VStack {
                                                         ZStack {
                                                             Button(action: {
-                                                                selectedDrink = nameDrink[innerIndex]
+                                                                selectedDrink = drinkProvider.drinks[innerIndex].key
                                                             }) {
                                                                 VStack(spacing: 10) {
-                                                                    Image(selectedDrink == nameDrink[innerIndex]
-                                                                          ? "\(nameDrink[innerIndex])HighlightedSD"
-                                                                          : "\(nameDrink[innerIndex])SD")
+                                                                    Image(selectedDrink == drinkProvider.drinks[innerIndex].key
+                                                                          ? "\(drinkProvider.drinks[innerIndex].key)Highlighted"
+                                                                          : drinkProvider.drinks[innerIndex].key)
                                                                     .resizable()
                                                                     .scaledToFit()
-                                                                    Text(localizedNameDrink[innerIndex])
+                                                                    Text(drinkProvider.drinks[innerIndex].name)
                                                                         .font(.subheadline)
                                                                         .foregroundStyle(.white)
                                                                 }
@@ -225,7 +223,7 @@ extension SelectDrinkView {
             let amountDrink = unit == 0 ? nameButtonCustomAmountMl[index] : nameButtonCustomAmountOz[index]
             profileViewModel.updateProfileDrinkData(profile: profile, lastNameDrink: selectedDrink, lastAmountDrink: Int(amountDrink))
             dataDrinkingViewModel.updateDataDrinking(modelContext: modelContext, nameDrink: selectedDrink, amountDrink: Int(amountDrink), dateDrink: now)
-            dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: Int(amountDrink * (hydration[selectedDrink] ?? 1.0)), dateDrinkOfTheDay: now, percentDrinking: (amountDrink * (hydration[selectedDrink] ?? 1.0) / normDrink * 100))
+            dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: Int(amountDrink * (drinkProvider.hydration(forKey: selectedDrink) ?? 1.0)), dateDrinkOfTheDay: now, percentDrinking: (amountDrink * (drinkProvider.hydration(forKey: selectedDrink) ?? 1.0) / normDrink * 100))
             
             let percentDrink: Double = dataDrinkingOfTheDay.first(where: { $0.dayID == todayID } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0
             let amountDrinkingOfTheDay = dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.amountDrinkOfTheDay ?? 0
@@ -273,7 +271,7 @@ extension SelectDrinkView {
             }
             
             if userDefaultsManager.isAuthorizationHealthKit {
-                let amountOfTheHealthKit = amountDrink * (hydration[selectedDrink] ?? 1.0)
+                let amountOfTheHealthKit = amountDrink * (drinkProvider.hydration(forKey: selectedDrink) ?? 1.0)
                 healthKitManager.saveWaterIntake(amount: amountOfTheHealthKit, date: now, unit: unit) { (success, error) in
                     let successMessage = "Water intake saved successfully"
                     let errorMessage = "Error saving water intake: \(error?.localizedDescription ?? "Unknown error")"
@@ -288,4 +286,5 @@ extension SelectDrinkView {
     SelectDrinkView(isShowingModal: .constant(false), isNormExceedingShowModal: .constant(false), isNormDoneShowModal: .constant(false))
         .modelContainer(PreviewContainer.previewContainer)
         .environment(PurchaseManager())
+        .environmentObject(DrinkDataProvider())
 }

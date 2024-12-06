@@ -14,6 +14,7 @@ struct CustomAmountView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     @Environment(PurchaseManager.self) private var purchaseManager: PurchaseManager
+    @EnvironmentObject var drinkProvider: DrinkDataProvider
     
     @Query var profile: [Profile]
     @Query(sort: \DataDrinkingOfTheDay.dateDrinkOfTheDay, order: .forward) var dataDrinkingOfTheDay: [DataDrinkingOfTheDay]
@@ -41,13 +42,6 @@ struct CustomAmountView: View {
     @Binding var isNormExceedingShowModal: Bool
     @Binding var isNormDoneShowModal: Bool
     
-    @State private var imageDrink: [String] = Constants.Back.Drink.imageDrink
-    @State private var nameDrink: [String] = Constants.Back.Drink.nameDrink
-    @State private var localizedNameDrink: [LocalizedStringKey] = Constants.Back.Drink.localizedNameDrink
-    @State private var selectedImages: [String] = Constants.Back.Drink.imageDrink
-    
-    private let hydration: [String: Double] = Constants.Back.Drink.hydration
-    
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     
     var body: some View {
@@ -63,19 +57,19 @@ struct CustomAmountView: View {
                         VStack {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 15) {
-                                    ForEach(nameDrink.indices, id: \.self) { index in
+                                    ForEach(drinkProvider.drinks.indices, id: \.self) { index in
                                         Button(action: {
-                                            selectedImages = imageDrink
-                                            selectedImages[index] = "\(nameDrink[index])SD" == "\(nameDrink[index])SD" ? "\(nameDrink[index])HighlightedSD" : "\(nameDrink[index])SD"
-                                            selectedDrink = nameDrink[index]
+                                            selectedDrink = drinkProvider.drinks[index].key
                                             isImageDisabled = false
                                         }) {
                                             VStack(spacing: 10) {
-                                                Image(selectedImages[index])
+                                                Image(selectedDrink == drinkProvider.drinks[index].key
+                                                      ? "\(drinkProvider.drinks[index].key)Highlighted"
+                                                      : drinkProvider.drinks[index].key)
                                                     .resizable()
                                                     .aspectRatio(contentMode: .fit)
                                                     .frame(width: sizeButton(for: geometry.size.width), height: sizeButton(for: geometry.size.width))
-                                                Text(localizedNameDrink[index])
+                                                Text(drinkProvider.drinks[index].name)
                                                     .font(.subheadline)
                                                     .foregroundStyle(.white)
                                             }
@@ -207,7 +201,7 @@ extension CustomAmountView {
         DispatchQueue.main.async {
             profileViewModel.updateProfileDrinkData(profile: profile, lastNameDrink: selectedDrink, lastAmountDrink: amountDrink)
             dataDrinkingViewModel.updateDataDrinking(modelContext: modelContext, nameDrink: selectedDrink, amountDrink: amountDrink, dateDrink: now)
-            dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: Int(Double(amountDrink) * (hydration[selectedDrink] ?? 1.0)), dateDrinkOfTheDay: now, percentDrinking: (Double(amountDrink) * (hydration[selectedDrink] ?? 1.0) / normDrink * 100))
+            dataDrinkingOfTheDayViewModel.updateDataDrinkingOfTheDay(modelContext: modelContext, dataDrinkingOfTheDay: dataDrinkingOfTheDay, amountDrinkOfTheDay: Int(Double(amountDrink) * (drinkProvider.hydration(forKey: selectedDrink) ?? 1.0)), dateDrinkOfTheDay: now, percentDrinking: (Double(amountDrink) * (drinkProvider.hydration(forKey: selectedDrink) ?? 1.0) / normDrink * 100))
             
             let percentDrink: Double = dataDrinkingOfTheDay.first(where: { $0.dayID == todayID } )?.percentDrinking.rounded(.toNearestOrAwayFromZero) ?? 0
             let amountDrinkingOfTheDay = dataDrinkingOfTheDay.first(where: { $0.dayID == Date().yearMonthDay } )?.amountDrinkOfTheDay ?? 0
@@ -255,7 +249,7 @@ extension CustomAmountView {
             }
             
             if userDefaultsManager.isAuthorizationHealthKit {
-                let amountOfTheHealthKit = Double(amountDrink) * (hydration[selectedDrink] ?? 1.0)
+                let amountOfTheHealthKit = Double(amountDrink) * (drinkProvider.hydration(forKey: selectedDrink) ?? 1.0)
                 healthKitManager.saveWaterIntake(amount: amountOfTheHealthKit, date: now, unit: unit) { (success, error) in
                     let successMessage = "Water intake saved successfully"
                     let errorMessage = "Error saving water intake: \(error?.localizedDescription ?? "Unknown error")"
@@ -270,4 +264,5 @@ extension CustomAmountView {
     CustomAmountView(isShowingModal: .constant(false), isNormExceedingShowModal: .constant(false), isNormDoneShowModal: .constant(false))
         .modelContainer(PreviewContainer.previewContainer)
         .environment(PurchaseManager())
+        .environmentObject(DrinkDataProvider())
 }
