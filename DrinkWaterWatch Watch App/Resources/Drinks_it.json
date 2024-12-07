@@ -1,0 +1,137 @@
+[
+    {
+        "key": "Water",
+        "name": "Acqua",
+        "hydration": 1.0
+    },
+    {
+        "key": "Coffee",
+        "name": "Caffè",
+        "hydration": 0.7
+    },
+    {
+        "key": "Tea",
+        "name": "Tè",
+        "hydration": 0.8
+    },
+    {
+        "key": "Milk",
+        "name": "Latte",
+        "hydration": 1.1
+    },
+    {
+        "key": "Juice",
+        "name": "Succo",
+        "hydration": 0.9
+    },
+    {
+        "key": "Soda",
+        "name": "Bibita gassata",
+        "hydration": 0.7
+    },
+    {
+        "key": "Cocoa",
+        "name": "Cacao",
+        "hydration": 0.8
+    },
+    {
+        "key": "Smoothie",
+        "name": "Frullato",
+        "hydration": 0.9
+    },
+    {
+        "key": "Yogurt",
+        "name": "Yogurt",
+        "hydration": 0.5
+    },
+    {
+        "key": "Beer",
+        "name": "Birra",
+        "hydration": 0.7
+    },
+    {
+        "key": "NonalcoholicBeer",
+        "name": "Birra analcolica",
+        "hydration": 0.9
+    },
+    {
+        "key": "Wine",
+        "name": "Vino",
+        "hydration": 0.5
+    },
+    {
+        "key": "Lemonade",
+        "name": "Limonata",
+        "hydration": 0.8
+    },
+    {
+        "key": "Chicory",
+        "name": "Cicoria",
+        "hydration": 0.85
+    },
+    {
+        "key": "AmericanoCoffee",
+        "name": "Americano",
+        "hydration": 0.7
+    },
+    {
+        "key": "Espresso",
+        "name": "Espresso",
+        "hydration": 0.6
+    },
+    {
+        "key": "Kefir",
+        "name": "Kefir",
+        "hydration": 0.95
+    },
+    {
+        "key": "TomatoJuice",
+        "name": "Pomodoro",
+        "hydration": 0.85
+    },
+    {
+        "key": "HotChocolate",
+        "name": "Cioccolata",
+        "hydration": 0.75
+    },
+    {
+        "key": "Kvass",
+        "name": "Kvas",
+        "hydration": 0.8
+    },
+    {
+        "key": "LatteCoffee",
+        "name": "Caffè Latte",
+        "hydration": 0.75
+    },
+    {
+        "key": "Cappuccino",
+        "name": "Cappuccino",
+        "hydration": 0.75
+    },
+    {
+        "key": "GinTonic",
+        "name": "Gin tonic",
+        "hydration": 0.5
+    },
+    {
+        "key": "WhiskeyCola",
+        "name": "Whisky e cola",
+        "hydration": 0.3
+    },
+    {
+        "key": "Cola",
+        "name": "Cola",
+        "hydration": 0.6
+    },
+    {
+        "key": "EnergyDrink",
+        "name": "Energetica",
+        "hydration": 0.6
+    },
+    {
+        "key": "AlternativeMilk",
+        "name": "Latte di",
+        "hydration": 0.9
+    }
+]

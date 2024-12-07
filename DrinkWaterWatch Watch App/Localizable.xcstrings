@@ -86,6 +86,7 @@
       }
     },
     "Beer" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -120,6 +121,7 @@
       }
     },
     "Cocoa" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -154,6 +156,7 @@
       }
     },
     "Coffee" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -188,6 +191,7 @@
       }
     },
     "Juice" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -222,6 +226,7 @@
       }
     },
     "Milk" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -256,6 +261,7 @@
       }
     },
     "NonalcoholicBeer" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -290,6 +296,7 @@
       }
     },
     "Smoothie" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -324,6 +331,7 @@
       }
     },
     "Soda" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -358,6 +366,7 @@
       }
     },
     "Tea" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -392,6 +401,7 @@
       }
     },
     "Water" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -426,6 +436,7 @@
       }
     },
     "Wine" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -460,6 +471,7 @@
       }
     },
     "Yogurt" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

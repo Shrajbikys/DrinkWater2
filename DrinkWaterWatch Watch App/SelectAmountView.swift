@@ -14,7 +14,7 @@ struct SelectAmountView: View {
     @Binding var isShowingModal: Bool
     
     @State var nameDrink: String
-    @State var localizedNameDrink: LocalizedStringKey
+    @State var localizedNameDrink: String
     
     var body: some View {
         VStack(alignment: .center, spacing: 10) {
