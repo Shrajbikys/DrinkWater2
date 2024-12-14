@@ -1,5 +1,5 @@
 //
-//  DataWeightView.swift
+//  HistoryWeightView.swift
 //  DrinkWater
 //
 //  Created by Alexander Lyubimov on 09.10.2024.
@@ -13,7 +13,6 @@ struct HistoryWeightView: View {
     
     @State private var selectedDate: Date = Date()
     @State var unit: Int
-    @State var fff: Int = 0
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     
     var body: some View {

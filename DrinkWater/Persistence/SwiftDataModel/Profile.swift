@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 final class Profile {
-    var genderName: String = "Water"
+    var genderName: String = "Женщина"
     var gender: Constants.Back.Types.Gender {
         Constants.Back.Types.Gender(rawValue: genderName)!
     }

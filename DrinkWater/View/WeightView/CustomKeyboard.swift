@@ -70,7 +70,7 @@ struct CustomKeyboard: View {
                     handleOK()
                     isPressedImpact.toggle()
                     if Double(input) ?? 0 > 0 {
-                        if dataWeight.last!.date.yearMonthDay == Date().yearMonthDay {
+                        if !dataWeight.isEmpty && dataWeight.last!.date.yearMonthDay == Date().yearMonthDay {
                             if pressedButton == "Weight" {
                                 let newWeight = input.isEmpty ? 0 : Double(input)!
                                 dataWeight.last!.weight = newWeight
@@ -87,8 +87,8 @@ struct CustomKeyboard: View {
                             let dataWeightItem = DataWeight()
                             dataWeightItem.date = Date()
                             if pressedButton == "Weight" {
-                                let lastGoal = dataWeight.last!.goal
-                                let lastWeight = dataWeight.last!.weight
+                                let lastGoal = dataWeight.last?.goal ?? 0
+                                let lastWeight = dataWeight.last?.weight ?? 0
                                 let newWeight = input.isEmpty ? 0 : Double(input)!
                                 dataWeightItem.weight = newWeight
                                 dataWeightItem.goal = lastGoal

@@ -24,6 +24,7 @@ struct MainWeightView: View {
     @State private var isShowGoalSheet = false
     @State private var isShowBMISheet = false
     @State private var isShowDataWeightSheet = false
+    @State private var isShowDataMetricsSheet = false
     @State private var isDrinkedPressed = false
     @State private var isPressedImpact = false
     @State private var isShadowVisible = false
@@ -55,22 +56,12 @@ struct MainWeightView: View {
                     .font(.system(size: 100))
                     .foregroundStyle(.white)
                 Text(calculateDifferenseValue())
-                        .font(.system(size: 40).bold())
-                        .foregroundStyle(colorFontGoal)
-                Button("Последняя запись \((dataWeight.last?.date ?? Date()).formatted(.dateTime))") {
-                    isPressedImpact.toggle()
-                    isShowDataWeightSheet = true
-                }
-                .font(.system(.caption))
-                .buttonStyle(.bordered)
-                .padding(.top, -20)
-                .shadow(radius: 5)
-                .foregroundStyle(.white).opacity(0.6)
-                .sensoryFeedback(.impact, trigger: isPressedImpact)
-                .sheet(isPresented: $isShowDataWeightSheet) {
-                    HistoryWeightView(unit: unit)
-                        .presentationDetents([.large])
-                }
+                    .font(.system(size: 40).bold())
+                    .foregroundStyle(colorFontGoal)
+                Text("Последняя запись \((dataWeight.last?.date ?? Date()).formatted(.dateTime))")
+                    .font(.system(.caption))
+                    .foregroundStyle(.white).opacity(0.6)
+                    .padding(.top, -20)
                 Chart {
                     let last14DaysDates = Date().last14DaysDates()
                     ForEach(0..<last14DaysDates.count, id: \.self) { index in
@@ -150,34 +141,72 @@ struct MainWeightView: View {
                 .padding(.top, 20)
                 .padding(.bottom, 30)
                 .padding(.horizontal)
-                Image(systemName: "plus")
-                    .font(.system(size: 25, weight: .bold))
-                    .foregroundColor(.white)
-                    .frame(width: 85, height: 85)
-                    .background(backgroundViewColor)
-                    .clipShape(Circle())
-                    .shadow(color: .white.opacity(isShadowVisible ? 0.6 : 0.4), radius: 10, x: 0, y: 0)
-                    .padding(.bottom, 20)
-                    .scaleEffect(isDrinkedPressed ? 0.5 : 1.0)
-                    .animation(.linear(duration: 0.2), value: isDrinkedPressed)
-                    .onAppear {
-                        withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
-                            isShadowVisible.toggle()
-                        }
-                    }
-                    .onTapGesture {
-                        isDrinkedPressed = true
+                HStack {
+                    Button {
                         isPressedImpact.toggle()
-                        DispatchQueue.main.async {
-                            isShowWeightSheet = true
-                            isDrinkedPressed = false
-                        }
+                        isShowDataMetricsSheet = true
+                    } label: {
+                        Image(systemName: "figure.mixed.cardio.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
+                            .foregroundStyle(.white)
+                            .fontWeight(.thin)
                     }
+                    .padding(.horizontal, 40)
                     .sensoryFeedback(.impact, trigger: isPressedImpact)
-                    .sheet(isPresented: $isShowWeightSheet) {
-                        ReadingsWeightView(pressedButton: "Weight", isShowKeyboardView: $isShowWeightSheet)
-                            .presentationDetents([.fraction(0.85)])
+                    .sheet(isPresented: $isShowDataMetricsSheet) {
+                        HistoryBodyMetricsView(unit: unit)
+                            .presentationDetents([.large])
                     }
+                    Spacer()
+                    Image(systemName: "plus")
+                        .font(.system(size: 30, weight: .bold))
+                        .foregroundColor(.white)
+                        .frame(width: 85, height: 85)
+                        .background(backgroundViewColor)
+                        .clipShape(Circle())
+                        .shadow(color: .white.opacity(isShadowVisible ? 0.6 : 0.4), radius: 10, x: 0, y: 0)
+                        .padding(.bottom, 20)
+                        .scaleEffect(isDrinkedPressed ? 0.5 : 1.0)
+                        .animation(.linear(duration: 0.2), value: isDrinkedPressed)
+                        .onAppear {
+                            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                                isShadowVisible.toggle()
+                            }
+                        }
+                        .onTapGesture {
+                            isDrinkedPressed = true
+                            isPressedImpact.toggle()
+                            DispatchQueue.main.async {
+                                isShowWeightSheet = true
+                                isDrinkedPressed = false
+                            }
+                        }
+                        .sensoryFeedback(.impact, trigger: isPressedImpact)
+                        .sheet(isPresented: $isShowWeightSheet) {
+                            ReadingsWeightView(pressedButton: "Weight", isShowKeyboardView: $isShowWeightSheet)
+                                .presentationDetents([.fraction(0.85)])
+                        }
+                    Spacer()
+                    Button {
+                        isPressedImpact.toggle()
+                        isShowDataWeightSheet = true
+                    } label: {
+                        Image(systemName: "calendar.circle")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
+                            .foregroundStyle(.white)
+                            .fontWeight(.thin)
+                    }
+                    .padding(.horizontal, 40)
+                    .sensoryFeedback(.impact, trigger: isPressedImpact)
+                    .sheet(isPresented: $isShowDataWeightSheet) {
+                        HistoryWeightView(unit: unit)
+                            .presentationDetents([.large])
+                    }
+                }
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -194,11 +223,6 @@ struct MainWeightView: View {
     }
 }
 
-#Preview {
-    MainWeightView(unit: 0)
-        .modelContainer(PreviewContainer.previewContainer)
-}
-
 extension MainWeightView {
     private func calculateBMI(weightKg: Double, heightCm: Double) -> Double {
         let heightMeters = heightCm / 100
@@ -208,7 +232,7 @@ extension MainWeightView {
     
     private func calculateDifferenseValue() -> LocalizedStringKey {
         var result: LocalizedStringKey = ""
-        if dataWeight.last!.weightGoalType == 0 {
+        if dataWeight.last?.weightGoalType ?? 0 == 0 {
             if !dataWeight.isEmpty && dataWeight.last!.weight <= dataWeight.last!.goal {
                 result = "Цель достигнута!"
             } else {
@@ -227,4 +251,9 @@ extension MainWeightView {
         }
         return result
     }
+}
+
+#Preview {
+    MainWeightView(unit: 0)
+        .modelContainer(PreviewContainer.previewContainer)
 }

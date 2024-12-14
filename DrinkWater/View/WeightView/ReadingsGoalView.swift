@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct ReadingsGoalView: View {
     @State var dataWeight: [DataWeight]

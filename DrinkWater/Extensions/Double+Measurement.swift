@@ -62,4 +62,30 @@ extension Double {
             return "\(value) \(unit)"
         }
     }
+    
+    var toStringCm: String {
+        let value = Measurement(value: self, unit: UnitLength.centimeters).value.formatted(.number)
+        let unit = Measurement(value: self, unit: UnitLength.centimeters).unit.symbol
+        
+        if Locale.current.identifier.localizedStandardContains("ru") {
+            return ("\(Measurement(value: self, unit: UnitLength.centimeters).formatted(.measurement(width: .abbreviated, usage: .asProvided)))")
+        } else {
+            return "\(value) \(unit)"
+        }
+    }
+    
+    var toStringInches: String {
+        let value = Measurement(value: self, unit: UnitLength.inches).value.formatted(.number)
+        let unit = Measurement(value: self, unit: UnitLength.inches).unit.symbol
+        
+        if Locale.current.identifier.localizedStandardContains("ru") {
+            if Locale.preferredLanguages.first == "ru-RU" {
+                return ("\(Measurement(value: self, unit: UnitLength.inches).value.formatted(.number)) дюйм")
+            } else {
+                return ("\(Measurement(value: self, unit: UnitLength.inches).value.formatted(.number)) inch")
+            }
+        } else {
+            return "\(value) \(unit)"
+        }
+    }
 }

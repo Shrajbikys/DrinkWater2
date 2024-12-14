@@ -52,7 +52,10 @@ struct HistoryWeightItemView: View {
                             .foregroundStyle(.white)
                             .padding(2)
                         Image(systemName: difference > 0 ? "arrow.up" : "arrow.down")
-                            .foregroundColor(difference > 0 ? .red : .green)
+                        .foregroundColor(difference > 0 ?
+                                         dataWeight.last!.weightGoalType == 0 ? .red : .green :
+                                            dataWeight.last!.weightGoalType == 0 ? .green : .red
+                        )
                     }
                     Text("Цель = \(unit == 0 ? goal.toStringKg : goal.toStringPounds)")
                         .font(Constants.Design.Fonts.BodyMiniFont)
@@ -67,4 +70,5 @@ struct HistoryWeightItemView: View {
 
 #Preview {
     HistoryWeightItemView(unit: 0, weight: 98, date: Date(), goal: 78, difference: -1.5)
+        .modelContainer(PreviewContainer.previewContainer)
 }

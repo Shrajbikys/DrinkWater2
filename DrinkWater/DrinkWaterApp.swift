@@ -22,7 +22,8 @@ struct DrinkWaterApp: App {
             DataDrinking.self,
             DataDrinkingOfTheDay.self,
             Reminder.self,
-            DataWeight.self
+            DataWeight.self,
+            BodyMetric.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
         
