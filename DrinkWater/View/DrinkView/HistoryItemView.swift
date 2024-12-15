@@ -29,7 +29,7 @@ struct HistoryItemView: View {
                         .frame(height: 50)
                 }.padding(.leading, 5)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(drinkProvider.localizedName(forKey: dataDrinking.nameDrink)!)
+                    Text(drinkProvider.localizedName(forKey: dataDrinking.nameDrink) ?? "Water")
                         .lineLimit(1)
                         .font(Constants.Design.Fonts.BodyMediumFont)
                         .foregroundStyle(.white)

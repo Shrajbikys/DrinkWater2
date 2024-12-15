@@ -87,9 +87,9 @@ struct CustomKeyboard: View {
                             let dataWeightItem = DataWeight()
                             dataWeightItem.date = Date()
                             if pressedButton == "Weight" {
-                                let lastGoal = dataWeight.last?.goal ?? 0
-                                let lastWeight = dataWeight.last?.weight ?? 0
                                 let newWeight = input.isEmpty ? 0 : Double(input)!
+                                let lastGoal = dataWeight.last?.goal ?? 0
+                                let lastWeight = dataWeight.last?.weight ?? newWeight
                                 dataWeightItem.weight = newWeight
                                 dataWeightItem.goal = lastGoal
                                 dataWeightItem.difference = newWeight - lastWeight

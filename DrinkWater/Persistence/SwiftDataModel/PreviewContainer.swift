@@ -52,7 +52,13 @@ struct SampleData {
     }()
     
     static let dataDrinkingOfTheDay: [DataDrinkingOfTheDay] = {
-        return (1...5).map { value in DataDrinkingOfTheDay(amountDrinkOfTheDay: 200 * value, dateDrinkOfTheDay: Date(), percentDrinking: 10 * Double(value)) }
+        return [
+            DataDrinkingOfTheDay(amountDrinkOfTheDay: 250, dateDrinkOfTheDay: Date(), percentDrinking: 20),
+            DataDrinkingOfTheDay(amountDrinkOfTheDay: 280, dateDrinkOfTheDay: Calendar.current.date(byAdding: .day, value: -1, to: Date())!, percentDrinking: 23),
+            DataDrinkingOfTheDay(amountDrinkOfTheDay: 300, dateDrinkOfTheDay: Calendar.current.date(byAdding: .day, value: -2, to: Date())!, percentDrinking: 27),
+            DataDrinkingOfTheDay(amountDrinkOfTheDay: 350, dateDrinkOfTheDay: Calendar.current.date(byAdding: .day, value: -3, to: Date())!, percentDrinking: 30),
+            DataDrinkingOfTheDay(amountDrinkOfTheDay: 250, dateDrinkOfTheDay: Calendar.current.date(byAdding: .day, value: -4, to: Date())!, percentDrinking: 35)
+        ]
     }()
     
     static let reminder: [Reminder] = {
