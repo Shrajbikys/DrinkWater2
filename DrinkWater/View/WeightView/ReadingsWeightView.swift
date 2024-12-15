@@ -48,7 +48,7 @@ struct ReadingsWeightView: View {
                     .padding(.trailing, 20)
                     .sensoryFeedback(.selection, trigger: isPressedImpact)
                 }
-                CustomKeyboard(input: $value, isShowKeyboardView: $isShowKeyboardView, pressedButton: pressedButton)
+                CustomKeyboard(input: $value, weightGoalType: .constant(nil), isShowKeyboardView: $isShowKeyboardView, pressedButton: pressedButton)
                     .padding(.horizontal)
                 Spacer()
             }

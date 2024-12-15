@@ -15,6 +15,7 @@ struct CustomKeyboard: View {
     
     var profileViewModel = ProfileViewModel()
     @Binding var input: String
+    @Binding var weightGoalType: Int?
     @Binding var isShowKeyboardView: Bool
     let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 3)
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
@@ -82,6 +83,7 @@ struct CustomKeyboard: View {
                                 }
                             } else if pressedButton == "Goal" {
                                 dataWeight.last!.goal = input.isEmpty ? 0 : Double(input)!
+                                dataWeight.last!.weightGoalType = weightGoalType ?? 0
                             }
                         } else {
                             let dataWeightItem = DataWeight()
@@ -97,8 +99,9 @@ struct CustomKeyboard: View {
                                     profileViewModel.updateProfileWeightData(profile: profile, weight: newWeight)
                                 }
                             } else if pressedButton == "Goal" {
-                                dataWeightItem.weight = dataWeight.last!.weight
+                                dataWeightItem.weight = dataWeight.last?.weight ?? 0
                                 dataWeightItem.goal = input.isEmpty ? 0 : Double(input)!
+                                dataWeightItem.weightGoalType = weightGoalType ?? 0
                             }
                             modelContext.insert(dataWeightItem)
                         }

@@ -12,7 +12,7 @@ struct ReadingsGoalView: View {
     private let backgroundViewColor: Color = Color(#colorLiteral(red: 0.3882352941, green: 0.6196078431, blue: 0.8509803922, alpha: 1))
     @State private var value: String = ""
     @State var pressedButton: String
-    @State private var selectedSegment: Int = 0
+    @State private var selectedSegment: Int? = 0
     @Binding var isShowKeyboardView: Bool
     @State private var isPressedImpact = false
     let segments: Array<LocalizedStringKey> = ["Сбросить вес", "Набрать вес"]
@@ -59,11 +59,12 @@ struct ReadingsGoalView: View {
                     .pickerStyle(.segmented)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 5)
-                    .onChange(of: selectedSegment) { _, newValue in
-                        dataWeight.last!.weightGoalType = newValue
-                    }
+//                    .onChange(of: selectedSegment) { _, newValue in
+//                        
+//                        dataWeight.last!.weightGoalType = newValue
+//                    }
                 }
-                CustomKeyboard(input: $value, isShowKeyboardView: $isShowKeyboardView, pressedButton: pressedButton)
+                CustomKeyboard(input: $value, weightGoalType: $selectedSegment, isShowKeyboardView: $isShowKeyboardView, pressedButton: pressedButton)
                     .padding(.horizontal)
                 Spacer()
             }

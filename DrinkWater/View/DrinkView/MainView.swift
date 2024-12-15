@@ -165,14 +165,7 @@ struct MainView: View {
                 }
                 GeometryReader { geometry in
                     Button {
-                        if !userDefaultsManager.isFirstSignWidth {
-                            let dataWeight = DataWeight()
-                            let weight = profile[0].weightKg
-                            dataWeight.weight = weight
-                            dataWeight.goal = weight
-                            modelContext.insert(dataWeight)
-                        }
-                        if purchaseManager.hasPremium {
+                        if !purchaseManager.hasPremium {
                             isShowMainWidthView = true
                         } else {
                             isPurchaseViewModal = true
