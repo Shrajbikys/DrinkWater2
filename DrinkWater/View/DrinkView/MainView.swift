@@ -165,7 +165,7 @@ struct MainView: View {
                 }
                 GeometryReader { geometry in
                     Button {
-                        if !purchaseManager.hasPremium {
+                        if purchaseManager.hasPremium {
                             isShowMainWidthView = true
                         } else {
                             isPurchaseViewModal = true
